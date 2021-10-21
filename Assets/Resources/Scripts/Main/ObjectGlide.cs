@@ -340,7 +340,7 @@ public class ObjectGlide : MonoBehaviour
     {
         offset = glideObject.transform.position - destination;
         currDist = offset.sqrMagnitude;
-        objDistMagnitude = new Vector3(Mathf.Abs(startPos.x - glideObject.transform.position.x), 0, Mathf.Abs(startPos.z - glideObject.transform.position.z)).magnitude;
+        objDistMagnitude = new Vector3(Mathf.Abs(destinationPos.transform.position.x - glideObject.transform.position.x), 0, Mathf.Abs(destinationPos.transform.position.z - glideObject.transform.position.z)).magnitude;
 
         if (currDist < arrivedAtDistance  || objDistMagnitude > destMagnitude)
         {

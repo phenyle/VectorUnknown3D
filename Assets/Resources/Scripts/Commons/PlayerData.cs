@@ -91,6 +91,10 @@ public class PlayerData : MonoBehaviour
         public string username;
         public int attemptNum;
         public string usernameAttempt;
+        public string obs_answers1;
+        public string obs_answers2;
+        public string obs_answers3;
+        public string obs_answers4;
     }
     [System.Serializable]
     public struct tbl_P2_1

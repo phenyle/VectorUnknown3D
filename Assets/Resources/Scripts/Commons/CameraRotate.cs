@@ -12,16 +12,26 @@ public class CameraRotate : MonoBehaviour
     public Transform rotCamera;
     private Vector3 cameraTarget;
     public float rotateSpeed = 1.0f;
-    public float zoomSpeed = 2.0f;
-    public float maxZoomOut = 150.0f;
+    public float zoomSpeed = 0.1f;
+    public float maxZoomOut = 175.0f;
     private CameraDragSurface dragController;
+
+    private float distanceToTarget = 10;
+    private Vector3 previousPosition;
 
 
     void Start()
     {
         dragController = GameObject.FindGameObjectWithTag("cameraTools").GetComponent<CameraDragSurface>();
         rotCamera = GameObject.FindGameObjectWithTag("PuzzleCamera").transform;
+        distanceToTarget = (this.transform.position - cameraTarget).magnitude;
  //       this.enabled = false;
+    }
+
+
+    public void OnEnable()
+    {
+        distanceToTarget = (rotCamera.position - cameraTarget).magnitude;
     }
 
     public void OnDisable()
@@ -43,55 +53,66 @@ public class CameraRotate : MonoBehaviour
     void Update()
     {
         //Mouse Camera Movement and Zoom Controls
-        if (dragController.isCameraDragging())
-        {
-            RotateCamera();
-        }
+
+        distanceToTarget = (rotCamera.position - cameraTarget).magnitude;
+
+
+        if (Input.GetMouseButtonDown(1))
+            previousPosition = rotCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
+        else if (Input.GetMouseButton(1))
+            MouseRotate();
+
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f && (rotCamera.position - cameraTarget).magnitude > 5)
         {
-            rotCamera.position += Vector3.Normalize(rotCamera.forward) * zoomSpeed;
+            //rotCamera.position += Vector3.Normalize(rotCamera.forward) * zoomSpeed;
+            rotCamera.Translate(new Vector3(0, 0, zoomSpeed));
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0f && (rotCamera.position - cameraTarget).magnitude < maxZoomOut)
         {
-            rotCamera.position -= Vector3.Normalize(rotCamera.forward) * zoomSpeed;
+            //rotCamera.position -= Vector3.Normalize(rotCamera.forward) * zoomSpeed;
+            rotCamera.Translate(new Vector3(0, 0, -zoomSpeed));
         }
 
         //Keyboard Camera Movement and Zoom Controls
         if (Input.GetKey(KeyCode.J))
         {
-            rotCamera.LookAt(cameraTarget);
-            rotCamera.RotateAround(cameraTarget, Vector3.up, rotateSpeed * 0.5f);
+            //rotCamera.LookAt(cameraTarget);
+            //rotCamera.RotateAround(cameraTarget, Vector3.up, rotateSpeed * 0.5f);
+            KeyboardRotate(Vector3.left * GameRoot.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.L))
         {
-            rotCamera.LookAt(cameraTarget);
-            rotCamera.RotateAround(cameraTarget, Vector3.up, -rotateSpeed * 0.5f);
+            //rotCamera.LookAt(cameraTarget);
+            //rotCamera.RotateAround(cameraTarget, Vector3.up, -rotateSpeed * 0.5f);
+            KeyboardRotate(Vector3.right * GameRoot.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.I))
         {
-            rotCamera.LookAt(cameraTarget);
-            rotCamera.RotateAround(cameraTarget, Vector3.left, -rotateSpeed * 0.5f);
+            //rotCamera.LookAt(cameraTarget);
+            //rotCamera.RotateAround(cameraTarget, Vector3.left, -rotateSpeed * 0.5f);
+            KeyboardRotate(Vector3.up * GameRoot.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.K))
         {
-            rotCamera.LookAt(cameraTarget);
-            rotCamera.RotateAround(cameraTarget, Vector3.left, rotateSpeed * 0.5f);
+            //rotCamera.LookAt(cameraTarget);
+            //rotCamera.RotateAround(cameraTarget, Vector3.left, rotateSpeed * 0.5f);
+            KeyboardRotate(Vector3.down * GameRoot.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.U) && (rotCamera.position - cameraTarget).magnitude > 5)
         {
-            rotCamera.position += Vector3.Normalize(rotCamera.forward) * zoomSpeed * 0.25f;
+            rotCamera.Translate(new Vector3(0, 0, GameRoot.player.users.mouseSense * 0.45f));
         }
 
         if (Input.GetKey(KeyCode.O) && (rotCamera.position - cameraTarget).magnitude < 150)
         {
-            rotCamera.position -= Vector3.Normalize(rotCamera.forward) * zoomSpeed * 0.25f;
-        } 
+            rotCamera.Translate(new Vector3(0, 0, -GameRoot.player.users.mouseSense * 0.45f));
+        }
     }
 
     private void RotateCamera()
@@ -101,6 +122,42 @@ public class CameraRotate : MonoBehaviour
         rotCamera.RotateAround(cameraTarget, Vector3.up, Input.GetAxis("Mouse X") * rotateSpeed);
         rotCamera.RotateAround(cameraTarget, Vector3.left, Input.GetAxis("Mouse Y") * rotateSpeed);
 
+    }
+
+    private void KeyboardRotate(Vector3 position)
+    {
+        Vector3 newPosition = rotCamera.position + position;
+
+        float rotationAroundYAxis = -position.x * 180; // camera moves horizontally
+        float rotationAroundXAxis = position.y * 180; // camera moves vertically
+
+        rotCamera.position = cameraTarget;
+
+        rotCamera.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis * rotateSpeed);
+        rotCamera.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis * rotateSpeed, Space.World); // <— This is what makes it work!
+
+        rotCamera.Translate(new Vector3(0, 0, -distanceToTarget));
+
+        previousPosition = newPosition;
+    }
+
+
+    private void MouseRotate()
+    {
+        Vector3 newPosition = rotCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
+        Vector3 direction = previousPosition - newPosition;
+
+        float rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
+        float rotationAroundXAxis = direction.y * 180; // camera moves vertically
+
+        rotCamera.position = cameraTarget;
+
+        rotCamera.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis * rotateSpeed);
+        rotCamera.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis * rotateSpeed, Space.World); // <— This is what makes it work!
+
+        rotCamera.Translate(new Vector3(0, 0, -distanceToTarget));
+
+        previousPosition = newPosition;
     }
 
     public void SetRotCamera(Transform camera)

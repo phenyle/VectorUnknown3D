@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     public float dstFromTarget = 3f;
     public Vector2 verticalMinMax = new Vector2(-30, 60);
     public float keyboardRotatedSpeed = 50.0f;
+    public bool enableMovement = true;
 
     [HideInInspector]
     //public bool isLock = false;
@@ -29,6 +30,7 @@ public class CameraController : MonoBehaviour
 
         isLock = true;
         postPuzzleLock = false;
+        enableMovement = true;
         rotatedSpeed = GameRoot.player.users.mouseSense;
     }
 
@@ -37,8 +39,9 @@ public class CameraController : MonoBehaviour
         if (isLock)
         {
             MouseMovement();
+            CameraMovement();
         }
-        CameraMovement();
+
         if(!puzzle04hack)
             toggleMouse();
     }
@@ -54,19 +57,19 @@ public class CameraController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.J))
         {
-            horizontal -= Time.deltaTime * keyboardRotatedSpeed;
+            horizontal -= Time.deltaTime * keyboardRotatedSpeed * rotatedSpeed;
         }
         if(Input.GetKey(KeyCode.L))
         {
-            horizontal += Time.deltaTime * keyboardRotatedSpeed;
+            horizontal += Time.deltaTime * keyboardRotatedSpeed * rotatedSpeed;
         }
         if(Input.GetKey(KeyCode.I))
         {
-            vertical -= Time.deltaTime * keyboardRotatedSpeed;
+            vertical -= Time.deltaTime * keyboardRotatedSpeed * rotatedSpeed;
         }
         if(Input.GetKey(KeyCode.K))
         {
-            vertical += Time.deltaTime * keyboardRotatedSpeed;
+            vertical += Time.deltaTime * keyboardRotatedSpeed * rotatedSpeed;
         }
 
 
@@ -84,8 +87,8 @@ public class CameraController : MonoBehaviour
         {
             Debug.Log("mouse hidden:" + isLock);
             isLock = !isLock;
-            if(SceneManager.GetActiveScene().name == Constants.puzzle03SceneName)
-                GameRoot.isPuzzleLock = !GameRoot.isPuzzleLock;
+            //if(SceneManager.GetActiveScene().name == Constants.puzzle03SceneName)
+            //    GameRoot.isPuzzleLock = !GameRoot.isPuzzleLock;
         }
 
         //if (DialogueManager.isPuzzleLock && newScene == true)

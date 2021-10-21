@@ -4,31 +4,24 @@ public class QuestionTrigger : MonoBehaviour
 {
     private GameControllerPuzzle03 GCP03;
     public int convoNumber;
+    public bool exiting;
+    private float timeOutMax = 1.0f;
+    private float currTime = 0.0f;
 
     private void Start()
     {
         GCP03 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle03>();
+        exiting = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
-            GCP03.isInQuestion = true;
-            GameRoot.ShowTips("Please press \"E\" to answer the question", true, false);
-            GCP03.conversation(convoNumber);
-
-            GCP03.player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = true;
-
-            GCP03.CamGlideToPuzzle();
-            GCP03.isTriggerQuestion = true;
-            GameRoot.instance.IsLock(true);
-            GameRoot.isPuzzleLock = true;
-            GCP03.P03W.ShowChoicePanel(true);
-            GCP03.P03W.quitPanel.gameObject.SetActive(true);
-            GameObject.FindGameObjectWithTag("Player").GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = true;
-            GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03TriggerQuestion);
-
+            if (exiting)
+                alarmCollider();
+            else
+                GCP03.enterPuzzle();
         }
     }
 
@@ -40,18 +33,23 @@ public class QuestionTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    public void Update()
     {
-        if(other.tag == "Player")
+        if (exiting)
         {
-            if(GCP03.isTriggerQuestion)
+            currTime += Time.deltaTime;
+            if(currTime > timeOutMax)
             {
-                GameRoot.ShowTips("", false, false);
-            }
-            else
-            {
-                GameRoot.ShowTips("Please press \"E\" to answer the question", true, false);
+                this.GetComponent<Collider>().enabled = true;
+                if (currTime > timeOutMax + 0.2f)
+                    exiting = false;
             }
         }
+    }
+
+    public void alarmCollider()
+    {
+        currTime = 0.0f;
+        exiting = true;
     }
 }

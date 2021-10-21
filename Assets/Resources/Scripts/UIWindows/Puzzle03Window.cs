@@ -62,7 +62,7 @@ public class Puzzle03Window : WindowRoot
         timeNumber.text = "";
         movesNumber.text = "0";
 
-        ShowChoicePanel(false);
+        TogglePanels(false);
         quitPanel.gameObject.SetActive(false);
         ClearSpanValues("", "");
         SwapFeedbackPanel();
@@ -255,13 +255,14 @@ public class Puzzle03Window : WindowRoot
         Debug.Log("Test");
     }
 
-    public void ShowChoicePanel(bool status)
+    public void TogglePanels(bool status)
     {
         Animation panelChoiceAni = panelChoice.GetComponent<Animation>();
 
         if (status)
         {
             SetActive(panelChoice, true);
+            SetActive(quitPanel, true);
             panelChoiceAni.Play("ChoiceShow");
             PanelAnswer.SetActive(true);
             //PanelInstruction.SetActive(true);
@@ -272,12 +273,12 @@ public class Puzzle03Window : WindowRoot
         else
         {
             //   panelChoiceAni.Play("ChoiceHide");
-            panelChoice.gameObject.SetActive(false);
+            SetActive(panelChoice, false);
+            SetActive(quitPanel, false);
             PanelAnswer.SetActive(false);
             PanelInstruction.SetActive(false);
             PanelFeedback.SetActive(false);
             PanelProgress.SetActive(false);
-            SetActive(panelChoice, false);
         }
     }
 

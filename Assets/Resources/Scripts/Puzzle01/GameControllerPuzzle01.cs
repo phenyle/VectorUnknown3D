@@ -277,6 +277,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
     {
         bool check = DBP01.Calculation(questionNum, scalar, x, y, z);
 
+        AnswerAttempt(scalar, x, y, z);
+
 //        P01W.feedbackPanel.gameObject.SetActive(true);
 
         P01W.answerText.text = scalar + " * ( " + x + ", " + y + ", " + z + " )";
@@ -359,12 +361,41 @@ public class GameControllerPuzzle01 : GameControllerRoot
         else { DBP01.updateLineZ(value, questionNum); }
     }
 
+    public void AnswerAttempt(float scal, float x, float y, float z)
+    {
+        switch(questionNum)
+        {
+            case 1:
+                GameRoot.player.p1_1.obs_answers1 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+                
+                break;
+            case 2:
+                GameRoot.player.p1_1.obs_answers2 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+
+                break;
+            case 3:
+                GameRoot.player.p1_1.obs_answers3 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+
+                break;
+            case 4:
+                GameRoot.player.p1_1.obs_answers4 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+
+                break;
+        }
+    }
+
+
     public void RecordData()
     {
         if (GameRoot.player.users.p1_1clear_time == 0.0f)
             GameRoot.player.users.p1_1clear_time = puzzleTime;
         else if (puzzleTime < GameRoot.player.users.p1_1clear_time)
             GameRoot.player.users.p1_1clear_time = puzzleTime;
+
+        GameRoot.player.p1_1.username = GameRoot.player.users.username;
+        GameRoot.player.users.p1_1attempts++;
+        GameRoot.player.p1_1.attemptNum = GameRoot.player.users.p1_1attempts;
+        GameRoot.player.p1_1.usernameAttempt = GameRoot.player.p1_1.username + GameRoot.player.p1_1.attemptNum.ToString();
     }
 
 }

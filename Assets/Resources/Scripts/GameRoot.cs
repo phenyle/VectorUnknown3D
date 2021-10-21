@@ -199,8 +199,13 @@ public class GameRoot : MonoBehaviour
 
         pauseWindow.btn_Hub.SetActive(!isTutortial);
 
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+
+
+        //Is this still necessary?---------------------------
         // check to change cameras in puzzle 2
-        if(SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
+        if (SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
         {
             Debug.Log("Puzzle 2 Level 1");
             GCP02_01 = GameObject.Find("GameController_Puzzle02_01").GetComponent<GameControllerPuzzle02>();
@@ -226,6 +231,8 @@ public class GameRoot : MonoBehaviour
         IsLock(true);
         Time.timeScale = 0;
         pauseWindow.SetWindowState(true);
+
+        //Show username in top corner of pause menu (if it's loaded)
         try
         {
             pauseWindow.setLoginInfo(player.users.username);
@@ -243,6 +250,10 @@ public class GameRoot : MonoBehaviour
     {
         //Debug.Log(DialogueManager.isInDialogue);
         //Debug.Log(isPuzzleLock);
+
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = false;
+
         if (!DialogueManager.isInDialogue && !isPuzzleLock)
         {
             IsLock(false);
@@ -257,6 +268,8 @@ public class GameRoot : MonoBehaviour
         isPause = false;
         pauseWindow.ResetPauseMenu();
         audioService.ResumeAllAudios();
+
+        //Do we still need this?--------------------------
         // check to change cameras in puzzle 2
         if(SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
         {

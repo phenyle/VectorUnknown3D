@@ -1203,8 +1203,8 @@ public class VisualVector : MonoBehaviour
         getVector1().SetActive(value);
         getVector2().SetActive(value);
         getFinalVector().SetActive(value);
-        vector1ball.SetActive(value);
-        vector2ball.SetActive(value);
+        this.vector1ball.SetActive(value);
+        this.vector2ball.SetActive(value);
 
     }
 

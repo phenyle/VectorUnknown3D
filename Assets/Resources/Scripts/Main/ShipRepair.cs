@@ -44,22 +44,27 @@ public class ShipRepair : MonoBehaviour
     public GameObject explosionFX;
     [Range(1,1000)]
     public int fxFixedInterval = 24;
-    [Range(1,1000)]
-    public int fxMaxTime = 100;
+    [Range(1,10)]
+    [Tooltip("FX animation hang time in seconds")]
+    public float fxMaxTime = 3.0f;
+    private float fxTime = 0.0f;
+    private bool playFX = true;
     [Range(0.0f, 1.0f)]
     [Tooltip("Increasing this Can HUGELY effect performance if there a lot of objects\nSet to 0 to turn off all random effects.")]
-    public float fxRand = 0.2f;
+    public float fxRand = 0.06f;
     private int fxIter = 0;
-    private int waitIter = 0;
-    private int waitTime = 100;
+
+    [Range(1, 10)]
+    [Tooltip("Wait time after animation hang time in seconds")]
+    public float waitMaxTime = 3.0f;
+    private float waitTime = 0.0f;
+
 
     [Header("Sounds")]
     public AudioClip fixedPulseSound;
     public AudioClip[] randomPulseSounds;
     public AudioClip fixedExploSound;
     public AudioClip[] randomExploSounds;
-
-
 
     private GameObject player;
     private GameObject mainCamera;
@@ -68,10 +73,7 @@ public class ShipRepair : MonoBehaviour
     private Vector3 cameraPos;
     private Vector3 targetPos;
 
-
-
     public GameControllerMain GCM;
-    private int animStage = 0;
 
     private bool animate = false;
     private bool fxComplete = false;
@@ -81,9 +83,8 @@ public class ShipRepair : MonoBehaviour
     {
   //      GCM = GameObject.Find("GameController").GetComponent<GameControllerMain>();
 
-        animStage = 0;
         fxIter = 0;
-        waitIter = 0;
+        waitTime = 0;
 
         shipCamera = GameObject.FindGameObjectWithTag("PuzzleCamera");
 
@@ -94,57 +95,35 @@ public class ShipRepair : MonoBehaviour
     }
 
 
-    public void LateUpdate()
+    public void Update()
     {
         if(animate)
-        {
-            switch(animStage)
+        {  
+            if (playFX)
             {
-                case 0: //moving the camera to ship stage
-                    if (GCM.GetComponent<ObjectGlide>().isAtDestination(cameraPos))
-                        animStage = 1;
-                    break;
+                FXSelect(GameRoot.instance.prevStage, GameRoot.instance.prevLevel, fxIter);
+                fxIter++;
 
-                case 1: //doing sparkly FX stage
-                    FXSelect(GameRoot.instance.prevStage, GameRoot.instance.prevLevel, fxIter);
-                    fxIter++;
-
-                    if (fxIter > fxMaxTime)
-                    {
-                        GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
-                        ShipUpdate();
-
-                        animStage = 2;
-                    }
-                    break;
-
-                case 2: //showing the new part for a few seconds
-                    waitIter++;
-                    
-                    if(waitIter > waitTime)
-                    {
-                        waitIter = 0;
-                        animStage = 3;
-                        GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
-                        GameRoot.camEvents.AddListener(camAtPlayer);
-                        GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, mainCamera, player, prevCameraPos, -0.5f);
-                    }
-                    break;
-
-                case 3: //moving the camera back to the player
-                    if(GCM.GetComponent<ObjectGlide>().isAtDestination(mainCamera.transform.position))
-                    {
-                        player.GetComponentInChildren<ThirdPersonCharacter>().enabled = true;
-                        mainCamera.GetComponent<CameraController>().enabled = true;
-
-                        shipCamera.GetComponent<Camera>().enabled = false;
-                        mainCamera.GetComponent<Camera>().enabled = true;
-
-                        fxIter = 0;
-                        animStage = 0;
-                        animate = false;
-                    }
-                    break;
+                fxTime += Time.deltaTime;
+                if (fxTime > fxMaxTime)
+                {
+                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    ShipUpdate();
+                    playFX = false;
+                }
+            }
+            else
+            {
+                waitTime += Time.deltaTime;
+                if (waitTime > waitMaxTime)
+                {
+                    GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
+                    GameRoot.camEvents.AddListener(camAtPlayer);
+                    GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, mainCamera, mainCamera.GetComponent<CameraController>().target.gameObject, shipCamera.transform.position,-5.0f);
+                    waitTime = 0;
+                    playFX = true;
+                    animate = false;
+                }
             }
         }
 
@@ -171,8 +150,8 @@ public class ShipRepair : MonoBehaviour
         this.mainCamera = camera;
         prevCameraPos = mainCamera.transform.position;
 
-        this.player.GetComponentInChildren<ThirdPersonCharacter>().enabled = false;
-        this.player.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
+        player.GetComponent<ThirdPersonUserControl>().isLock = true;
+
         mainCamera.GetComponent<Camera>().enabled = false;
         shipCamera.transform.position = mainCamera.transform.position;
         shipCamera.transform.rotation = mainCamera.transform.rotation;
@@ -238,28 +217,34 @@ public class ShipRepair : MonoBehaviour
         GameRoot.camEvents.AddListener(camAtShip);
         GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(((this.player.transform.position-cameraPos).magnitude / 1400.0f) * 6.0f);
         GCM.GetComponent<ObjectGlide>().GlideAndLook(shipCamera, cameraPos, targetPos, prevCameraPos, 30.0f);
-        animate = true;
     }
 
     public void camAtShip()
     {
-        animStage = 1;
+        animate = true;
+        playFX = true;
+        fxIter = 0;
+        fxTime = 0.0f;
+        waitTime = 0.0f;
         GameRoot.camEvents.RemoveListener(camAtShip);
     }
 
     public void camAtPlayer()
     {
-        player.GetComponentInChildren<ThirdPersonCharacter>().enabled = true;
-        mainCamera.GetComponent<CameraController>().enabled = true;
+        player.GetComponent<ThirdPersonUserControl>().isLock = false;
 
         shipCamera.GetComponent<Camera>().enabled = false;
         mainCamera.GetComponent<Camera>().enabled = true;
 
-        fxIter = 0;
-        animStage = 0;
         animate = false;
+        playFX = true;
+        fxIter = 0;
+        fxTime = 0.0f;
+        waitTime = 0.0f;
         GameRoot.camEvents.RemoveListener(camAtPlayer);
     }
+
+
 
     /// <summary>
     /// This Method determines what parts of the ship to play effects at depending
@@ -278,16 +263,16 @@ public class ShipRepair : MonoBehaviour
                     case 1:
                         FXGlowRings(hullFixed.GetComponent<Renderer>(), iter, true);
 
-                        //special case turn on/off for stage1
-                        //stage1 has to turn an object on AND turn an object off since it's the main hull
-                        //every other stage only has to turn an object on
-                        if(iter == fxMaxTime)
-                        {
-                            hullFixed.SetActive(true);
-                            hullBroken.SetActive(false);
-                        }
-                        //hullBroken.GetComponent<Renderer>().material.color = new Color(brokenMat.r, brokenMat.g, brokenMat.b, (fxSpeed - iter) / fxSpeed);
-                        //hullFixed.GetComponent<Renderer>().material.color = new Color(fixedMat.r, fixedMat.g, fixedMat.b,  iter / fxSpeed);
+                        ////special case turn on/off for stage1
+                        ////stage1 has to turn an object on AND turn an object off since it's the main hull
+                        ////every other stage only has to turn an object on
+                        //if(iter == fxMaxTime)
+                        //{
+                        //    hullFixed.SetActive(true);
+                        //    hullBroken.SetActive(false);
+                        //}
+                        ////hullBroken.GetComponent<Renderer>().material.color = new Color(brokenMat.r, brokenMat.g, brokenMat.b, (fxSpeed - iter) / fxSpeed);
+                        ////hullFixed.GetComponent<Renderer>().material.color = new Color(fixedMat.r, fixedMat.g, fixedMat.b,  iter / fxSpeed);
 
                         break;                        
                 }
@@ -324,17 +309,17 @@ public class ShipRepair : MonoBehaviour
                         //Might be too many objects here to really work
                         //might just make a custom fx method for this one
                         foreach (Renderer treasurRend in treasureStern.GetComponentsInChildren<Renderer>())
-                            FXGlowRings(treasurRend, iter, false);
+                            FXGlowRings(treasurRend, iter, true);
                         break;
 
                     case 2:
                         foreach (Renderer treasurRend in treasureForecastle.GetComponentsInChildren<Renderer>())
-                            FXGlowRings(treasurRend, iter, false);
+                            FXGlowRings(treasurRend, iter, true);
                         break;
 
                     case 3:
                         foreach (Renderer treasurRend in treasureChests.GetComponentsInChildren<Renderer>())
-                            FXGlowRings(treasurRend, iter, false);
+                            FXGlowRings(treasurRend, iter, true);
                         break;
                 }
 
@@ -379,7 +364,7 @@ public class ShipRepair : MonoBehaviour
 
         if (randomEffects)
         {
-            float rand = Random.Range(0.01f, 1.0f);
+            float rand = Random.Range(0.0001f, 1.0f);
             if (rand < fxRand)
             {
                 GameObject randPulse = GameObject.Instantiate(pulseFX);
@@ -399,8 +384,8 @@ public class ShipRepair : MonoBehaviour
     public void ShipUpdate()
     {
         //Stage1 Completed
-        hullBroken.SetActive(!GameRoot.instance.puzzlesDone[1][1]);
-        hullFixed.SetActive(GameRoot.instance.puzzlesDone[1][1]);
+        hullBroken.SetActive(!GameRoot.instance.puzzlesDone[1][1]); //toggle off the broken ship
+        hullFixed.SetActive(GameRoot.instance.puzzlesDone[1][1]); //toggle on the fixed ship
 
 
         //Stage2 Completed

@@ -882,7 +882,6 @@ public class Puzzle04Controller : MonoBehaviour
         
         puzzleCamera.GetComponent<Camera>().enabled = true;
         mainCamera.GetComponent<Camera>().enabled = false;
-
        
 
         cameraGlide.SetObjectMoveSpeed(0.25f);
@@ -890,14 +889,9 @@ public class Puzzle04Controller : MonoBehaviour
         cameraGlide.SetEventSys(GameRoot.camEvents);
         cameraGlide.GlideAndLookMovingTarget(puzzleCamera, CameraStartPosition, cameraTarget, prevCameraPosition);
 
-        GameRoot.camEvents.AddListener(activateCamRotate);
+        GameRoot.camEvents.AddListener(activateCamRotate);       
 
-
-        player.GetComponent<ThirdPersonCharacter>().enabled = false;
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        GCP04.P04W.setPuzzleController(this);
-        
+        GCP04.P04W.setPuzzleController(this);        
 
         //Dialog Trigger
         if (convoTriggerNumber != 0)
@@ -988,11 +982,14 @@ public class Puzzle04Controller : MonoBehaviour
     private void disablePlayer()
     {
         player.GetComponent<ThirdPersonUserControl>().isLock = true;
+        player.GetComponent<ThirdPersonCharacter>().enabled = false;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     private void enablePlayer()
     {
         player.GetComponent<ThirdPersonUserControl>().isLock = false;
+        player.GetComponent<ThirdPersonCharacter>().enabled = true;
     }
 
     #endregion
@@ -1064,7 +1061,7 @@ public class Puzzle04Controller : MonoBehaviour
     {
         GCP04.SetPuzzlePause(false);  
         GameRoot.camEvents.RemoveListener(activateCamRotate);
-        player.GetComponent<ThirdPersonCharacter>().enabled = true;
+ //       player.GetComponent<ThirdPersonCharacter>().enabled = true;
         cameraRotate.enabled = true;
     }
 

@@ -70,7 +70,7 @@ public class Puzzle01Window : WindowRoot
     public void ClickAnswerSubmitBtn()
     {
         float scalarValue;
-        float xValue, yValue, zValue;
+        float xValue, yValue, zValue;        
 
         if (iptScalar.text == "")
         {

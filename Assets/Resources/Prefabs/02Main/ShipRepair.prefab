@@ -813,9 +813,10 @@ MonoBehaviour:
   fromPuzzle4: {fileID: 1041358521092564091}
   pulseFX: {fileID: 7629048309053033500}
   explosionFX: {fileID: 7897787876740641056}
-  fxFixedInterval: 25
-  fxMaxTime: 100
-  fxRand: 0.2
+  fxFixedInterval: 24
+  fxMaxTime: 3
+  fxRand: 0.06
+  waitMaxTime: 3
   fixedPulseSound: {fileID: 8300000, guid: 13d88e1139a700141851740d7f644325, type: 3}
   randomPulseSounds:
   - {fileID: 8300000, guid: c19aad6eadbc97747a55ff752684210c, type: 3}

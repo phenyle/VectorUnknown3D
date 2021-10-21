@@ -187,7 +187,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
             player.transform.localPosition = startPosition;
 
             GameRoot.instance.IsLock(false);
-            P03W.ShowChoicePanel(false);
+            P03W.TogglePanels(false);
             isTriggerQuestion = false;
 
             GameRoot.ShowTips("", true, false);
@@ -441,7 +441,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
     {
         GameRoot.instance.IsLock(false);
         GameRoot.isPuzzleLock = false;
-        P03W.ShowChoicePanel(false);
+        P03W.TogglePanels(false);
         isTriggerQuestion = false;
 
         startingFloor.localScale = new Vector3(10, 1, 300);
@@ -457,15 +457,15 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     //    puzzles[subPuzzleID - 1].SetActive(false);
 
-        if (subPuzzleID < DBP03.subLevelPlanes.Length)
-        {
-            topCamera = ConsoleCamera;
-  //          BtnChoices = P03W.BtnChoices1;
-            P03W.SetPanelChoice(0);
+  //      if (subPuzzleID < DBP03.subLevelPlanes.Length)
+  //      {
+  //          topCamera = ConsoleCamera;
+  ////          BtnChoices = P03W.BtnChoices1;
+  //          P03W.SetPanelChoice(0);
 
-  //          DBP03.SetPuzzleActive(subPuzzleID);
-   //         plane = DBP03.GetSubLevelPlanes(subPuzzleID);
-        }
+  ////          DBP03.SetPuzzleActive(subPuzzleID);
+  // //         plane = DBP03.GetSubLevelPlanes(subPuzzleID);
+  //      }
 
         //if(subPuzzleID == 3)
         //{
@@ -559,35 +559,48 @@ public class GameControllerPuzzle03 : GameControllerRoot
     public void enterPuzzle()
     {
         isInQuestion = true;
-        GameRoot.ShowTips("Please press \"E\" to answer the question", true, false);
         conversation(GameObject.Find("QuestionTrigger").GetComponent<QuestionTrigger>().convoNumber);
 
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = true;
+        disablePlayer();
 
         CamGlideToPuzzle();
         isTriggerQuestion = true;
         GameRoot.instance.IsLock(true);
         GameRoot.isPuzzleLock = true;
-        P03W.ShowChoicePanel(true);
-        P03W.quitPanel.gameObject.SetActive(true);
+        P03W.TogglePanels(true);
         GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03TriggerQuestion);
 
     }
 
     public void exitPuzzle()
     {
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = false;
+        enablePlayer();
         isInQuestion = false;
         GameRoot.ShowTips("", false, false);
+
+        trigger.GetComponent<Collider>().enabled = false;
 
         CamGlideToPlayer();
         GameRoot.instance.IsLock(false);
         GameRoot.isPuzzleLock = false;
-        P03W.ShowChoicePanel(false);
+        P03W.TogglePanels(false);
         isTriggerQuestion = false;
-        P03W.quitPanel.gameObject.SetActive(false);
         GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03ExitQuestion);
 
+    }
+
+    private void disablePlayer()
+    {
+        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = true;
+        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonCharacter>().enabled = false;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    private void enablePlayer()
+    {
+        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = false;
+        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonCharacter>().enabled = true;
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
 
@@ -599,6 +612,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
     public void CamGlideToPuzzle()
     {
         mainCamera.GetComponent<Camera>().enabled = false;
+        mainCamera.GetComponent<CameraController>().isLock = false;
         puzzleCamera.GetComponent<Camera>().enabled = true;
 
         CameraTools.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
@@ -613,7 +627,13 @@ public class GameControllerPuzzle03 : GameControllerRoot
         CameraTools.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
         GameRoot.camEvents.AddListener(CamAtPlayer);
         CameraTools.GetComponent<ObjectGlide>().glideObject = puzzleCamera;
-        CameraTools.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.4f * ((puzzleCamera.transform.position - puzzCamStart.transform.position).magnitude) / (puzzCamStart.transform.position - trigger.transform.position).magnitude);
+
+        float camSpeed = 0.4f * ((puzzleCamera.transform.position - puzzCamStart.transform.position).magnitude) / (puzzCamStart.transform.position - trigger.transform.position).magnitude;
+        if (camSpeed > 0.3f)
+            CameraTools.GetComponent<ObjectGlide>().SetObjectMoveSpeed(camSpeed);
+        else
+            CameraTools.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.3f);
+
         CameraTools.GetComponent<ObjectGlide>().glideObject = puzzleCamera;
         CameraTools.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(puzzleCamera, mainCamera, player, puzzleCamera.transform.position);
         CameraTools.GetComponent<CameraRotate>().enabled = false;
@@ -631,9 +651,12 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void CamAtPlayer()
     {
+        enablePlayer();
         CameraTools.GetComponent<ObjectGlide>().enabled = false;
         mainCamera.GetComponent<Camera>().enabled = true;
+        mainCamera.GetComponent<CameraController>().isLock = true;
         puzzleCamera.GetComponent<Camera>().enabled = false;
+        trigger.GetComponent<QuestionTrigger>().alarmCollider();
         GameRoot.camEvents.RemoveListener(CamAtPlayer);
     }
 
@@ -651,6 +674,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_1.obs = puzzleData;
                 GameRoot.player.p3_1.obs_movesList = movesList;
 
+                GameRoot.player.p3_1.username = GameRoot.player.users.username;
                 GameRoot.player.users.p3_1attempts++;
                 GameRoot.player.p3_1.attemptNum = GameRoot.player.users.p3_1attempts;
                 GameRoot.player.p3_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_1attempts.ToString();
@@ -665,6 +689,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_2.obs = puzzleData;
                 GameRoot.player.p3_2.obs_movesList = movesList;
 
+                GameRoot.player.p3_2.username = GameRoot.player.users.username;
                 GameRoot.player.users.p3_2attempts++;
                 GameRoot.player.p3_2.attemptNum = GameRoot.player.users.p3_2attempts;
                 GameRoot.player.p3_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_2attempts.ToString();
@@ -679,6 +704,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_3.obs = puzzleData;
                 GameRoot.player.p3_3.obs_movesList = movesList;
 
+                GameRoot.player.p3_3.username = GameRoot.player.users.username;
                 GameRoot.player.users.p3_3attempts++;
                 GameRoot.player.p3_3.attemptNum = GameRoot.player.users.p3_3attempts;
                 GameRoot.player.p3_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_3attempts.ToString();

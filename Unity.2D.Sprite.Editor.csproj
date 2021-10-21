@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{87EF3DFF-FBB6-5CC1-7581-DD3B6F468990}</ProjectGuid>
+    <ProjectGuid>{6FB3630B-46AD-1852-1418-08AF748748BC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.2D.Sprite.Editor</AssemblyName>
@@ -303,10 +303,10 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>G:/UnityProjects/Math-Heads/Unity 2019.3.1f1/Vector Unknown/Library/PackageCache/com.unity.render-pipelines.core@7.5.3/Editor/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
+      <HintPath>G:/UnityProjects/VectorUnknown3D/Library/PackageCache/com.unity.render-pipelines.core@7.5.3/Editor/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>G:/UnityProjects/Math-Heads/Unity 2019.3.1f1/Vector Unknown/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
+      <HintPath>G:/UnityProjects/VectorUnknown3D/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.18f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -665,19 +665,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{96E0894D-C810-33D8-6EAE-4B7537C75069}</Project>
+      <Project>{077B7540-95B4-850C-FA64-DB486CC9D00B}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{1C9E3DE2-F6D5-9AC4-5934-88C7B9AA7741}</Project>
+      <Project>{DBE4D6F8-D0B2-0283-3D60-9B6FA134A416}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
-      <Project>{F96E2B32-36A9-8263-F88C-64909D56B1F2}</Project>
+      <Project>{6B326435-21E0-FEB4-BDEA-0EBC852A05E4}</Project>
       <Name>UnityEditor.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{F2D36B23-0966-B41A-9C4B-C19673F0AFAE}</Project>
+      <Project>{77B4EF3F-E4C7-8171-DF97-CCF46528048B}</Project>
       <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
   </ItemGroup>
