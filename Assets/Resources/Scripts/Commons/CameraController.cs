@@ -11,15 +11,14 @@ public class CameraController : MonoBehaviour
     public float keyboardRotatedSpeed = 50.0f;
     public bool enableMovement = true;
 
-    [HideInInspector]
     //public bool isLock = false;
-    public bool isLock = true;
+
+
+    public bool isLock = false;
     private Vector3 rotationSmoothVelocity, currentRotation;
     public float horizontal, vertical;
 
     public bool postPuzzleLock = false;
-    private bool puzzle04hack = false;
-
 
     private void Start()
     {
@@ -28,7 +27,7 @@ public class CameraController : MonoBehaviour
         horizontal = transform.rotation.eulerAngles.y;
         vertical = transform.rotation.eulerAngles.x;
 
-        isLock = true;
+        isLock = false;
         postPuzzleLock = false;
         enableMovement = true;
         rotatedSpeed = GameRoot.player.users.mouseSense;
@@ -36,14 +35,15 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (isLock)
+        if (!isLock)
         {
             MouseMovement();
             CameraMovement();
         }
 
-        if(!puzzle04hack)
-            toggleMouse();
+        if (Input.GetKeyDown(KeyCode.Tab))
+            if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot.isPuzzleLock) && postPuzzleLock == false)
+                toggleMouse();
     }
 
     public void MouseMovement()
@@ -82,37 +82,19 @@ public class CameraController : MonoBehaviour
 
     private void toggleMouse()
     {
-        // press tab to toggle the mouse to interact with games
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-            Debug.Log("mouse hidden:" + isLock);
+        if ((!DialogueManager.isInDialogue || !DialogueManager.isPuzzleLock || !GameRoot.isPuzzleLock) && postPuzzleLock == true)
             isLock = !isLock;
-            //if(SceneManager.GetActiveScene().name == Constants.puzzle03SceneName)
-            //    GameRoot.isPuzzleLock = !GameRoot.isPuzzleLock;
-        }
-
-        //if (DialogueManager.isPuzzleLock && newScene == true)
-        //{
-        //    isLock = false;
-        //    newScene = false;
-        //}
-
-        if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot.isPuzzleLock) && postPuzzleLock == false)
-        {
-            //Debug.Log("free mouse");
-            GameRoot.instance.IsLock(true);
-            isLock = false;          
-        }
 
         if (isLock)
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+
         }
         else
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -121,8 +103,4 @@ public class CameraController : MonoBehaviour
         rotatedSpeed = val;
     }
 
-    public void SetPuzzle04Hack(bool val)
-    {
-        puzzle04hack = val;
-    }
 }

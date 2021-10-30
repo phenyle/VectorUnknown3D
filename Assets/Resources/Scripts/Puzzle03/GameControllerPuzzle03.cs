@@ -85,6 +85,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
     }
 
     public string movesList;
+    public string recordsMoveList;
 
     [HideInInspector]
     public obsData puzzleData;
@@ -95,6 +96,8 @@ public class GameControllerPuzzle03 : GameControllerRoot
         finishArea.SetActive(false);
         puzzleOverall.transform.Rotate(SetPuzzleRandomRotate());
         player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.localPosition;
         movesList = "";
     }
@@ -124,6 +127,8 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
 
         player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.localPosition;
 
         //Get all the buttons of first sub-buttons from window
@@ -186,7 +191,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
         {
             player.transform.localPosition = startPosition;
 
-            GameRoot.instance.IsLock(false);
+            GameRoot.instance.LockPlayerAndCam(false);
             P03W.TogglePanels(false);
             isTriggerQuestion = false;
 
@@ -347,6 +352,12 @@ public class GameControllerPuzzle03 : GameControllerRoot
         finalRotation = temp;
         isFinded = true;
         movesList += CreateAttemptItem(tipsPoint2Pos, tipsPoint3Pos);
+        recordsMoveList += "{[" + tipsPoint2Pos.x.ToString() + ", " +
+                                    tipsPoint2Pos.y.ToString() + ", " +
+                                    tipsPoint2Pos.z.ToString() + "],[" +
+                                    tipsPoint3Pos.x.ToString() + ", " +
+                                    tipsPoint3Pos.y.ToString() + ", " +
+                                    tipsPoint3Pos.z.ToString() + "]}\n";
         P03W.SetMoves(puzzleData.numOfMoves); 
 
 
@@ -439,7 +450,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void FinishSubLevel()
     {
-        GameRoot.instance.IsLock(false);
+        GameRoot.instance.LockPlayerAndCam(false);
         GameRoot.isPuzzleLock = false;
         P03W.TogglePanels(false);
         isTriggerQuestion = false;
@@ -483,12 +494,10 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     //    beatLvl1 = true;
 
-        GameRoot.instance.IsLock(false);
         P03W.ClearSpanValues("", "");
         P03W.SwapFeedbackPanel();
-        isTriggerQuestion = false;
 
-        SetTipsPointsValue(new Vector3(1,0,0),new Vector3(0,1,0));
+        SetTipsPointsValue(new Vector3(0,1,0),new Vector3(1,0,0));
         GameObject.Find("MainCamera").GetComponent<CameraController>().vertical = cameraVertical;
         GameObject.Find("MainCamera").GetComponent<CameraController>().horizontal = cameraHorizontal;
         isShiftPlane = true;
@@ -558,15 +567,16 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void enterPuzzle()
     {
+        GameRoot.instance.LockPlayerAndCam(true);
+        GameRoot.instance.ShowCursor(true);
         isInQuestion = true;
         conversation(GameObject.Find("QuestionTrigger").GetComponent<QuestionTrigger>().convoNumber);
 
-        disablePlayer();
-
         CamGlideToPuzzle();
         isTriggerQuestion = true;
-        GameRoot.instance.IsLock(true);
+        
         GameRoot.isPuzzleLock = true;
+        DialogueManager.isPuzzleLock = true;
         P03W.TogglePanels(true);
         GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03TriggerQuestion);
 
@@ -574,35 +584,22 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void exitPuzzle()
     {
-        enablePlayer();
         isInQuestion = false;
         GameRoot.ShowTips("", false, false);
+        GameRoot.instance.ShowCursor(false);
 
         trigger.GetComponent<Collider>().enabled = false;
 
         CamGlideToPlayer();
-        GameRoot.instance.IsLock(false);
+        GameRoot.instance.LockPlayerAndCam(false);
         GameRoot.isPuzzleLock = false;
+        DialogueManager.isPuzzleLock = false;
+
         P03W.TogglePanels(false);
         isTriggerQuestion = false;
         GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03ExitQuestion);
 
     }
-
-    private void disablePlayer()
-    {
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = true;
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonCharacter>().enabled = false;
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-    }
-
-    private void enablePlayer()
-    {
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = false;
-        player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonCharacter>().enabled = true;
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-    }
-
 
     public int getSubPuzzleID()
     {
@@ -612,7 +609,8 @@ public class GameControllerPuzzle03 : GameControllerRoot
     public void CamGlideToPuzzle()
     {
         mainCamera.GetComponent<Camera>().enabled = false;
-        mainCamera.GetComponent<CameraController>().isLock = false;
+        GameRoot.instance.LockPlayerAndCam(true);
+ //       mainCamera.GetComponent<CameraController>().isLock = true;
         puzzleCamera.GetComponent<Camera>().enabled = true;
 
         CameraTools.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
@@ -641,8 +639,6 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void CamAtPuzzle()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = false;
-
         CameraTools.GetComponent<CameraRotate>().rotCamera = puzzleCamera.transform;
         CameraTools.GetComponent<ObjectGlide>().enabled = false;
         CameraTools.GetComponent<CameraRotate>().enabled = true;
@@ -651,10 +647,10 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     public void CamAtPlayer()
     {
-        enablePlayer();
+        GameRoot.instance.LockPlayerAndCam(false);
+
         CameraTools.GetComponent<ObjectGlide>().enabled = false;
         mainCamera.GetComponent<Camera>().enabled = true;
-        mainCamera.GetComponent<CameraController>().isLock = true;
         puzzleCamera.GetComponent<Camera>().enabled = false;
         trigger.GetComponent<QuestionTrigger>().alarmCollider();
         GameRoot.camEvents.RemoveListener(CamAtPlayer);
@@ -666,50 +662,96 @@ public class GameControllerPuzzle03 : GameControllerRoot
         switch (Difficulty) {
 
             case 1:
-                if (GameRoot.player.users.p3_1clear_time == 0.0f)
-                    GameRoot.player.users.p3_1clear_time = puzzleData.obsTime;
-                else if (puzzleData.obsTime < GameRoot.player.users.p3_1clear_time)
-                    GameRoot.player.users.p3_1clear_time = puzzleData.obsTime;
+                //User Records
+                if (GameRoot.player.records.p3_1_time == 0.0f)
+                {
+//                    GameRoot.player.users.p3_1clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_1_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_1_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_1_movesList = recordsMoveList;
+                }
+                else if (puzzleData.obsTime < GameRoot.player.records.p3_1_time)
+                {
+//                    GameRoot.player.users.p3_1clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_1_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_1_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_1_movesList = recordsMoveList;
+                }
 
+                //Level Records
+                GameRoot.player.records.p3_1_attempts++;
                 GameRoot.player.p3_1.obs = puzzleData;
                 GameRoot.player.p3_1.obs_movesList = movesList;
+                GameRoot.player.p3_1.attemptDate = DateTime.Now.ToString();
+                
 
+                //Attempt Username Construction
                 GameRoot.player.p3_1.username = GameRoot.player.users.username;
-                GameRoot.player.users.p3_1attempts++;
-                GameRoot.player.p3_1.attemptNum = GameRoot.player.users.p3_1attempts;
-                GameRoot.player.p3_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_1attempts.ToString();
+                GameRoot.player.p3_1.attemptNum = GameRoot.player.records.p3_1_attempts;
+                GameRoot.player.p3_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_1.attemptNum.ToString();
                 break;
 
             case 2:
-                if (GameRoot.player.users.p3_2clear_time == 0.0f)
-                    GameRoot.player.users.p3_2clear_time = puzzleData.obsTime;
-                else if (puzzleData.obsTime < GameRoot.player.users.p3_2clear_time)
-                    GameRoot.player.users.p3_2clear_time = puzzleData.obsTime;
+                if (GameRoot.player.records.p3_2_time == 0.0f)
+                {
 
+//                    GameRoot.player.users.p3_2clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_2_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_2_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_2_movesList = recordsMoveList;
+                }
+                else if (puzzleData.obsTime < GameRoot.player.records.p3_2_time)
+                {
+
+//                    GameRoot.player.users.p3_2clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_2_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_2_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_2_movesList = recordsMoveList;
+                }
+
+                GameRoot.player.records.p3_2_attempts++;
                 GameRoot.player.p3_2.obs = puzzleData;
                 GameRoot.player.p3_2.obs_movesList = movesList;
+                GameRoot.player.p3_2.attemptDate = DateTime.Now.ToString();
 
+                //Attempt Username Construction
                 GameRoot.player.p3_2.username = GameRoot.player.users.username;
-                GameRoot.player.users.p3_2attempts++;
-                GameRoot.player.p3_2.attemptNum = GameRoot.player.users.p3_2attempts;
-                GameRoot.player.p3_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_2attempts.ToString();
+                GameRoot.player.p3_2.attemptNum = GameRoot.player.records.p3_2_attempts;
+                GameRoot.player.p3_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_2.attemptNum.ToString();
                 break;
 
             case 3:
-                if (GameRoot.player.users.p3_3clear_time == 0.0f)
-                    GameRoot.player.users.p3_3clear_time = puzzleData.obsTime;
-                else if (puzzleData.obsTime < GameRoot.player.users.p3_3clear_time)
-                    GameRoot.player.users.p3_3clear_time = puzzleData.obsTime;
+                if (GameRoot.player.records.p3_3_time == 0.0f)
+                {
+//                    GameRoot.player.users.p3_3clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_3_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_3_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_3_movesList = recordsMoveList;
+                }
+                else if (puzzleData.obsTime < GameRoot.player.records.p3_3_time)
+                {
 
+ //                   GameRoot.player.users.p3_3clear_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_3_time = puzzleData.obsTime;
+                    GameRoot.player.records.p3_3_numMove = puzzleData.numOfMoves;
+                    GameRoot.player.records.p3_3_movesList = recordsMoveList;
+                }
+
+                GameRoot.player.records.p3_3_attempts++;
                 GameRoot.player.p3_3.obs = puzzleData;
                 GameRoot.player.p3_3.obs_movesList = movesList;
+                GameRoot.player.p3_3.attemptDate = DateTime.Now.ToString();
 
+                //Attempt Username Construction
                 GameRoot.player.p3_3.username = GameRoot.player.users.username;
-                GameRoot.player.users.p3_3attempts++;
-                GameRoot.player.p3_3.attemptNum = GameRoot.player.users.p3_3attempts;
-                GameRoot.player.p3_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p3_3attempts.ToString();
+                GameRoot.player.p3_3.attemptNum = GameRoot.player.records.p3_3_attempts;
+                GameRoot.player.p3_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_3.attemptNum.ToString();
                 break;
 
         }
+
+        GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.p3_totAttempts = GameRoot.player.records.p3_1_attempts + GameRoot.player.records.p3_2_attempts + GameRoot.player.records.p3_3_attempts;
+        GameRoot.player.records.p3_totTime += puzzleData.obsTime;
     }
 }

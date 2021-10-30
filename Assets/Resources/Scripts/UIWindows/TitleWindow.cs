@@ -183,7 +183,7 @@ public class TitleWindow : WindowRoot
                     case 2: //query type: Creating a new Account
                             //call to database for "first.last" to check for duplicates
                         panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
-                        GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", na_first.text + "." + na_last.text, false);
+                        GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", na_first.text.ToLower() + "." + na_last.text.ToLower(), false);
                         creatingAcct = true;
                         break;
 
@@ -248,8 +248,9 @@ public class TitleWindow : WindowRoot
 
                     //load in other player settings
 
-                    GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text, false);
-    
+                    GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text.ToLower(), false);
+                    GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", lg_username.text.ToLower(), false);
+
                     //for (int i = 1; i < GameRoot.player.sheetNames.Length; i++)
                     //{
                     //    GameRoot.GSFU.RetrievePlayerData(GameRoot.player.sheetNames[i], "username", lg_username.text);
@@ -372,7 +373,7 @@ public class TitleWindow : WindowRoot
                     na_login.enabled = true;
 
 
-                    tmp_player.users.first_last = na_first.text + "." + na_last.text;
+                    tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
 
 
                     tmp_player.users.ID_num = 0;
@@ -704,12 +705,12 @@ public class TitleWindow : WindowRoot
                 }
                 else
                 {
-                    if (na_schools.value == 0)
-                    {
-                        errorText.text = "You must select a school";
-                        SetActive(panelError, true);
-                    }
-                    else if (na_otherSel && na_otherSchool.text.CompareTo("") == 0)
+                    //if (na_schools.value == 0)
+                    //{
+                    //    errorText.text = "You must select a school";
+                    //    SetActive(panelError, true);
+                    //}
+                    if (na_otherSel && na_otherSchool.text.CompareTo("") == 0)
                     {
                         errorText.text = "You must enter in your other school's name";
                         SetActive(panelError, true);

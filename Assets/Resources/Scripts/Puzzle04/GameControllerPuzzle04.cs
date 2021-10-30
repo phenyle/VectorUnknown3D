@@ -47,18 +47,28 @@ public class GameControllerPuzzle04 : GameControllerRoot
     private AudioService audio04;
 
     private GameObject player;
+    private GameObject mainCamera;
     private Vector3 startPosition;
     private Vector3 previousPosition;
     public int timer = 0;
     public int numCorrect = 0;
+
+    public string questionsList;
+    public int totMoves;
 
     public void Start()
     {
         P04W = puzzleWindow.GetComponent<Puzzle04Window>();
 
         player = GameObject.FindGameObjectWithTag("Player");
+
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
+
         pausePuzzTime = false;
         tot_puzzleTime = 0.0f;
+        questionsList = "";
+        totMoves = 0;
     }
 
     public override void InitGameController(Puzzle04Window P04W)
@@ -77,6 +87,8 @@ public class GameControllerPuzzle04 : GameControllerRoot
   //      DBP01.InitDatabase();
 
         player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         //Starter Conversation Managment
@@ -243,7 +255,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
             case 1:
                 Camera.main.depth = -1;
                 topCamPlayer.GetComponent<TopCameraPlayer>().isTopCamera = true;
-                GameRoot.instance.IsLock(true);
+                GameRoot.instance.LockPlayerAndCam(true);
                 break;
 
             case -1:
@@ -427,44 +439,97 @@ public class GameControllerPuzzle04 : GameControllerRoot
         switch(Difficulty)
         {
             case 1:
-                if (GameRoot.player.users.p4_1clear_time == 0.0f)
-                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p4_1clear_time)
-                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p4_1_time == 0.0f)
+                {
 
+//                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_1_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_1_numMove = totMoves;
+                    GameRoot.player.records.p4_1_questions = questionsList;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p4_1_time)
+                {
+
+//                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_1_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_1_numMove = totMoves;
+                    GameRoot.player.records.p4_1_questions = questionsList;
+                }
+
+                GameRoot.player.p4_1.attemptDate = System.DateTime.Now.ToString();
+
+                GameRoot.player.records.p4_1_attempts++;
+
+                //Attempt Username Construction
                 GameRoot.player.p4_1.username = GameRoot.player.users.username;
-                GameRoot.player.users.p4_1attempts++;
-                GameRoot.player.p4_1.attemptNum = GameRoot.player.users.p4_1attempts;
-                GameRoot.player.p4_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p4_1attempts.ToString();
+                GameRoot.player.p4_1.attemptNum = GameRoot.player.records.p4_1_attempts;
+                GameRoot.player.p4_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_1.attemptNum.ToString();
 
                 break;
 
             case 2:
-                if (GameRoot.player.users.p4_2clear_time == 0.0f)
-                    GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p4_2clear_time)
-                    GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p4_2_time == 0.0f)
+                {
 
+  //                  GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_2_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_2_numMove = totMoves;
+                    GameRoot.player.records.p4_2_questions = questionsList;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p4_2_time)
+                {
+
+ //                   GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_2_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_2_numMove = totMoves;
+                    GameRoot.player.records.p4_2_questions = questionsList;
+                }
+
+                GameRoot.player.p4_2.attemptDate = System.DateTime.Now.ToString();
+
+                GameRoot.player.records.p4_2_attempts++;
+
+                //Attempt Username Construction
                 GameRoot.player.p4_2.username = GameRoot.player.users.username;
-                GameRoot.player.users.p4_2attempts++;
-                GameRoot.player.p4_2.attemptNum = GameRoot.player.users.p4_2attempts;
-                GameRoot.player.p4_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p4_2attempts.ToString();
+                GameRoot.player.p4_2.attemptNum = GameRoot.player.records.p4_2_attempts;
+                GameRoot.player.p4_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_2.attemptNum.ToString();
 
                 break;
 
             case 3:
-                if (GameRoot.player.users.p4_3clear_time == 0.0f)
-                    GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p4_3clear_time)
-                    GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p4_3_time == 0.0f)
+                {
 
+ //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_3_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_3_numMove = totMoves;
+                    GameRoot.player.records.p4_3_questions = questionsList;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p4_3_time)
+                {
+
+ //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_3_time = tot_puzzleTime;
+                    GameRoot.player.records.p4_3_numMove = totMoves;
+                    GameRoot.player.records.p4_3_questions = questionsList;
+                }
+
+                GameRoot.player.p4_3.attemptDate = System.DateTime.Now.ToString();
+
+                GameRoot.player.records.p4_3_attempts++;
+
+
+                //Attempt Username Construction
                 GameRoot.player.p4_3.username = GameRoot.player.users.username;
-                GameRoot.player.users.p4_3attempts++;
-                GameRoot.player.p4_3.attemptNum = GameRoot.player.users.p4_3attempts;
-                GameRoot.player.p4_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p4_3attempts.ToString();
+                GameRoot.player.p4_3.attemptNum = GameRoot.player.records.p4_3_attempts;
+                GameRoot.player.p4_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_3.attemptNum.ToString();
 
                 break;
         }
+
+        GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.p4_totAttempts = GameRoot.player.records.p4_1_attempts + GameRoot.player.records.p4_2_attempts + GameRoot.player.records.p4_3_attempts;
+        GameRoot.player.records.p4_totTime += tot_puzzleTime;
     }
 
     public void SetPuzzlePause(bool val)

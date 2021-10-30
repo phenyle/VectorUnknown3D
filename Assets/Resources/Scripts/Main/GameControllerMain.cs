@@ -38,6 +38,13 @@ public class GameControllerMain : GameControllerRoot
     private Vector3 previousPosition;
     private int timer = 0;
 
+    public void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
+    }
+
     public override void InitGameController(MainWindow MW)
     {
         Debug.Log("Init GameController Main");
@@ -47,6 +54,8 @@ public class GameControllerMain : GameControllerRoot
         this.MW = MW;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         CheckPlayerDataRecords();
@@ -54,8 +63,7 @@ public class GameControllerMain : GameControllerRoot
         SetUserSettings();
 
 
-
-
+        //Load player in at portals
         switch (GameRoot.instance.exitPuzzle)
         {
             case 0: // new player object is activated and others are turned off
@@ -91,6 +99,8 @@ public class GameControllerMain : GameControllerRoot
 
 
         }
+
+
         //*****************Start of the game 
         if (GameRoot.instance.puzzleCompleted[0] == false)
         {
@@ -102,10 +112,9 @@ public class GameControllerMain : GameControllerRoot
             }
             else
             {
-                mainCamera.GetComponent<CameraController>().isLock = true;
-            }
-
-          
+                GameRoot.instance.LockCamera(false);
+ //               mainCamera.GetComponent<CameraController>().isLock = false;
+            }          
         }
 
         //*****************If player only finish puzzle 01 and not 2
@@ -118,7 +127,8 @@ public class GameControllerMain : GameControllerRoot
             }
             else
             {
-                mainCamera.GetComponent<CameraController>().isLock = true;
+                GameRoot.instance.LockCamera(false);
+                //               mainCamera.GetComponent<CameraController>().isLock = false;
             }
 
             //Set the instructional text and check image
@@ -142,7 +152,8 @@ public class GameControllerMain : GameControllerRoot
             }
             else
             {
-                mainCamera.GetComponent<CameraController>().isLock = true;
+                GameRoot.instance.LockCamera(false);
+                //               mainCamera.GetComponent<CameraController>().isLock = false;
             }
 
             MW.SetInstructionText("Find & enter the pirates' hideout to save villagers.");
@@ -160,7 +171,8 @@ public class GameControllerMain : GameControllerRoot
             }
             else
             {
-                mainCamera.GetComponent<CameraController>().isLock = true;
+                GameRoot.instance.LockCamera(false);
+                //               mainCamera.GetComponent<CameraController>().isLock = false;
             }
 
 
@@ -168,7 +180,8 @@ public class GameControllerMain : GameControllerRoot
             MW.SetCheckImage(1, spriteChecks[1]);
             MW.SetCheckImage(2, spriteChecks[2]);
 
-            mainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+            //               mainCamera.GetComponent<CameraController>().isLock = false;
         }
 
         //***************** if PLayer finishes puzzle 1, 2, 3 and 4
@@ -180,14 +193,16 @@ public class GameControllerMain : GameControllerRoot
             MW.SetCheckImage(2, spriteChecks[2]);
             MW.SetCheckImage(3, spriteChecks[3]);
 
-            mainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+            //               mainCamera.GetComponent<CameraController>().isLock = false;
         }
         //***************** if Player finishes puzzle 2
         if (GameRoot.instance.puzzleCompleted[1] == true)
         {
             MW.SetCheckImage(1, spriteChecks[1]);
 
-            mainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+            //               mainCamera.GetComponent<CameraController>().isLock = false;
         }
         //***************** if PLayer finishes puzzle 3
         if (GameRoot.instance.puzzleCompleted[2] == true)
@@ -195,10 +210,11 @@ public class GameControllerMain : GameControllerRoot
 
             MW.SetCheckImage(2, spriteChecks[2]);
 
-            mainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+            //               mainCamera.GetComponent<CameraController>().isLock = false;
         }
         //***************** if PLayer finishes puzzle 4
-         if (GameRoot.instance.puzzleCompleted[3] == true)
+        if (GameRoot.instance.puzzleCompleted[3] == true)
         {
             if (DialogueManager.showM_01)
             {
@@ -207,12 +223,14 @@ public class GameControllerMain : GameControllerRoot
             }
             else
             {
-                mainCamera.GetComponent<CameraController>().isLock = true;
+                GameRoot.instance.LockCamera(false);
+                //               mainCamera.GetComponent<CameraController>().isLock = false;
             }
-            
+
             MW.SetCheckImage(3, spriteChecks[3]);
 
-            mainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+            //               mainCamera.GetComponent<CameraController>().isLock = false;
         }
         // DialogueManager.isInDialogue = true;
         // DialogueManager.isPuzzleLock = false;
@@ -246,6 +264,15 @@ public class GameControllerMain : GameControllerRoot
         //     timer = 0;
         // }
 
+        if (shipRepair.fxComplete && !DialogueManager.isInDialogue)
+        {
+//            GameRoot.instance.IsLock(false);
+            //    player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = false;
+            //    player.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonCharacter>().enabled = true;
+        }
+
+
+        
         if (Input.GetKeyDown(KeyCode.R))
         {
             player.transform.position = startPosition;
@@ -270,37 +297,38 @@ public class GameControllerMain : GameControllerRoot
     {
         //Puzzle 1-----------
         //legacy puzzle checks:
-        if (GameRoot.player.users.p1_1clear_time != 0.0f)
+        if (GameRoot.player.records.p1_time != 0.0f)
             GameRoot.instance.puzzleCompleted[0] = true;
         else
             GameRoot.instance.puzzleCompleted[0] = false;
 
         //new puzzle checks:
-        if (GameRoot.player.users.p1_1clear_time != 0.0f)
+        if (GameRoot.player.records.p1_time != 0.0f)
             GameRoot.instance.puzzlesDone[1][1] = true;
         else
             GameRoot.instance.puzzlesDone[1][1] = false;
 
         //Puzzle 2------------
         //legacy puzzle checks:
-        if (GameRoot.player.users.p2_1clear_time != 0.0f ||
-            GameRoot.player.users.p2_2clear_time != 0.0f)
+        if (GameRoot.player.records.p2_1_time != 0.0f ||
+            GameRoot.player.records.p2_2_time != 0.0f ||
+            GameRoot.player.records.p2_3_time != 0.0f)
             GameRoot.instance.puzzleCompleted[1] = true;
         else
             GameRoot.instance.puzzleCompleted[1] = false;
 
         //new puzzle checks:
-        if (GameRoot.player.users.p2_1clear_time != 0.0f)
+        if (GameRoot.player.records.p2_1_time != 0.0f)
             GameRoot.instance.puzzlesDone[2][1] = true;
         else
             GameRoot.instance.puzzlesDone[2][1] = false;
 
-        if (GameRoot.player.users.p2_2clear_time != 0.0f)
+        if (GameRoot.player.records.p2_2_time != 0.0f)
             GameRoot.instance.puzzlesDone[2][2] = true;
         else
             GameRoot.instance.puzzlesDone[2][2] = false;
 
-        if (GameRoot.player.users.p2_3clear_time != 0.0f)
+        if (GameRoot.player.records.p2_3_time != 0.0f)
             GameRoot.instance.puzzlesDone[2][3] = true;
         else
             GameRoot.instance.puzzlesDone[2][3] = false;
@@ -308,51 +336,51 @@ public class GameControllerMain : GameControllerRoot
 
         //Puzzle 3-----------
         //legacy puzzle checks:
-        if (GameRoot.player.users.p3_1clear_time != 0.0f ||
-            GameRoot.player.users.p3_2clear_time != 0.0f ||
-            GameRoot.player.users.p3_3clear_time != 0.0f)
+        if (GameRoot.player.records.p3_1_time != 0.0f ||
+            GameRoot.player.records.p3_2_time != 0.0f ||
+            GameRoot.player.records.p3_3_time != 0.0f)
             GameRoot.instance.puzzleCompleted[2] = true;
         else
             GameRoot.instance.puzzleCompleted[2] = false;
 
 
         //new puzzle checks:
-        if (GameRoot.player.users.p3_1clear_time != 0.0f)
+        if (GameRoot.player.records.p3_1_time != 0.0f)
             GameRoot.instance.puzzlesDone[3][1] = true;
         else
             GameRoot.instance.puzzlesDone[3][1] = false;
 
-        if (GameRoot.player.users.p3_2clear_time != 0.0f)
+        if (GameRoot.player.records.p3_2_time != 0.0f)
             GameRoot.instance.puzzlesDone[3][2] = true;
         else
             GameRoot.instance.puzzlesDone[3][2] = false;
 
-        if (GameRoot.player.users.p3_3clear_time != 0.0f)
+        if (GameRoot.player.records.p3_3_time != 0.0f)
             GameRoot.instance.puzzlesDone[3][3] = true;
         else
             GameRoot.instance.puzzlesDone[3][3] = false;
 
         //Puzzle 4-----------
         //legacy puzzle checks:
-        if (GameRoot.player.users.p4_1clear_time != 0.0f ||
-            GameRoot.player.users.p4_2clear_time != 0.0f ||
-            GameRoot.player.users.p4_3clear_time != 0.0f)
+        if (GameRoot.player.records.p4_1_time != 0.0f ||
+            GameRoot.player.records.p4_2_time != 0.0f ||
+            GameRoot.player.records.p4_3_time != 0.0f)
             GameRoot.instance.puzzleCompleted[3] = true;
         else
             GameRoot.instance.puzzleCompleted[3] = false;
 
         //new puzzle checks
-        if (GameRoot.player.users.p4_1clear_time != 0.0f)
+        if (GameRoot.player.records.p4_1_time != 0.0f)
             GameRoot.instance.puzzlesDone[4][1] = true;
         else
             GameRoot.instance.puzzlesDone[4][1] = false;
 
-        if (GameRoot.player.users.p4_2clear_time != 0.0f)
+        if (GameRoot.player.records.p4_2_time != 0.0f)
             GameRoot.instance.puzzlesDone[4][2] = true;
         else
             GameRoot.instance.puzzlesDone[4][2] = false;
 
-        if (GameRoot.player.users.p4_3clear_time != 0.0f)
+        if (GameRoot.player.records.p4_3_time != 0.0f)
             GameRoot.instance.puzzlesDone[4][3] = true;
         else
             GameRoot.instance.puzzlesDone[4][3] = false;

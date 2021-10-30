@@ -607,18 +607,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7024020350406897161}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &684919901 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2008468232842548196, guid: eee79c634ca777149b1a3a7cba30dd5e,
-    type: 3}
-  m_PrefabInstance: {fileID: 7024020350406897161}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &771722902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1670,29 +1658,59 @@ MonoBehaviour:
     mouseSense: 0
     soundVol: 0
     soundFX: 0
-    p1_1clear_time: 0
-    p1_1attempts: 0
-    p2_1clear_time: 0
-    p2_1attempts: 0
-    p2_2clear_time: 0
-    p2_2attempts: 0
-    p2_3clear_time: 0
-    p2_3attempts: 0
-    p3_1clear_time: 0
-    p3_1attempts: 0
-    p3_2clear_time: 0
-    p3_2attempts: 0
-    p3_3clear_time: 0
-    p3_3attempts: 0
-    p4_1clear_time: 0
-    p4_1attempts: 0
-    p4_2clear_time: 0
-    p4_2attempts: 0
-    p4_3clear_time: 0
-    p4_3attempts: 0
+  records:
+    username: 
+    p1_totAttempts: 0
+    p1_totTime: 0
+    p1_time: 0
+    p1_numMove: 0
+    p1_answers: 
+    p2_totAttempts: 0
+    p2_totTime: 0
+    p2_1_attempts: 0
+    p2_1_time: 0
+    p2_1_numMove: 0
+    p2_1_questions: 
+    p2_2_attempts: 0
+    p2_2_time: 0
+    p2_2_numMove: 0
+    p2_2_questions: 
+    p2_3_attempts: 0
+    p2_3_time: 0
+    p2_3_numMove: 0
+    p2_3_questions: 
+    p3_totAttempts: 0
+    p3_totTime: 0
+    p3_1_attempts: 0
+    p3_1_time: 0
+    p3_1_numMove: 0
+    p3_1_movesList: 
+    p3_2_attempts: 0
+    p3_2_time: 0
+    p3_2_numMove: 0
+    p3_2_movesList: 
+    p3_3_attempts: 0
+    p3_3_time: 0
+    p3_3_numMove: 0
+    p3_3_movesList: 
+    p4_totAttempts: 0
+    p4_totTime: 0
+    p4_1_attempts: 0
+    p4_1_time: 0
+    p4_1_numMove: 0
+    p4_1_questions: 
+    p4_2_attempts: 0
+    p4_2_time: 0
+    p4_2_numMove: 0
+    p4_2_questions: 
+    p4_3_attempts: 0
+    p4_3_time: 0
+    p4_3_numMove: 0
+    p4_3_questions: 
   p1_1:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs_answers1: 
     obs_answers2: 
@@ -1701,18 +1719,22 @@ MonoBehaviour:
   p2_1:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
   p2_2:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
   p2_3:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
   p3_1:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs:
       obsID: 0
@@ -1723,6 +1745,7 @@ MonoBehaviour:
   p3_2:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs:
       obsID: 0
@@ -1733,6 +1756,7 @@ MonoBehaviour:
   p3_3:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs:
       obsID: 0
@@ -1743,6 +1767,7 @@ MonoBehaviour:
   p4_1:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs1_time: 0
     obs2_time: 0
@@ -1882,6 +1907,7 @@ MonoBehaviour:
   p4_2:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs1_time: 0
     obs2_time: 0
@@ -2006,6 +2032,7 @@ MonoBehaviour:
   p4_3:
     username: 
     attemptNum: 0
+    attemptDate: 
     usernameAttempt: 
     obs1_time: 0
     obs2_time: 0
@@ -2961,11 +2988,6 @@ PrefabInstance:
       propertyPath: txtFBFormula
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 1892429441944864601, guid: eee79c634ca777149b1a3a7cba30dd5e,
-        type: 3}
-      propertyPath: txtTipsShow
-      value: 
-      objectReference: {fileID: 684919901}
     - target: {fileID: 2012438974594575700, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_IsActive
@@ -4462,7 +4484,7 @@ PrefabInstance:
     - target: {fileID: 5325149698427185699, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5328426674396230035, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -4660,6 +4682,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082979361929595954, guid: eee79c634ca777149b1a3a7cba30dd5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -49.69995
       objectReference: {fileID: 0}
     - target: {fileID: 6129639962178224340, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}

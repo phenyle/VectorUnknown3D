@@ -3647,7 +3647,7 @@ PrefabInstance:
     - target: {fileID: 2123756033255642334, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: FinalDynamicRange
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2123756033255642334, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
@@ -6671,7 +6671,7 @@ PrefabInstance:
     - target: {fileID: 2123756033255642334, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: FinalDynamicRange
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2123756033255642334, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
@@ -43110,3 +43110,5 @@ MonoBehaviour:
       m_Calls: []
   timer: 0
   numCorrect: 0
+  questionsList: 
+  totMoves: 0

@@ -86587,7 +86587,7 @@ Camera:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2113714116 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4622111608930611531, guid: ec5194b2318e9ea49b009e38ee9f416f,
+  m_CorrespondingSourceObject: {fileID: 727676822207293242, guid: ec5194b2318e9ea49b009e38ee9f416f,
     type: 3}
   m_PrefabInstance: {fileID: 2113714112}
   m_PrefabAsset: {fileID: 0}

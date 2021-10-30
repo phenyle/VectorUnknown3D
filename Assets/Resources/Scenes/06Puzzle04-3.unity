@@ -910,6 +910,7 @@ MonoBehaviour:
   dstFromTarget: 15
   verticalMinMax: {x: -30, y: 60}
   keyboardRotatedSpeed: 50
+  enableMovement: 1
   isLock: 1
   horizontal: 0
   vertical: 0
@@ -4820,7 +4821,7 @@ PrefabInstance:
     - target: {fileID: 1746908299292959448, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.56
+      value: 0.71
       objectReference: {fileID: 0}
     - target: {fileID: 1746908299292959448, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
@@ -8220,17 +8221,17 @@ PrefabInstance:
     - target: {fileID: 1746908299292959448, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.95
+      value: 15.29
       objectReference: {fileID: 0}
     - target: {fileID: 1746908299292959448, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.41
+      value: 2.88
       objectReference: {fileID: 0}
     - target: {fileID: 1746908299292959448, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.26
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 2123756033212542151, guid: 2fe55e2abb3cfa946b17cc2c71a8d77e,
         type: 3}

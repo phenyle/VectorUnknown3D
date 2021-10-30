@@ -6,6 +6,9 @@ using UnityEngine;
 public class FaceObject : MonoBehaviour
 {
     public GameObject target;
+    [Range(0,3)]
+    [Tooltip("0: off \n1: lock x \n2: lock y \n3: lock z")]
+    public int lockAxis = 0;
     private Vector3 axis;
 
 
@@ -21,7 +24,23 @@ public class FaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.LookAt(target.transform.position, axis);
+        switch(lockAxis)
+        {
+            case 0:
+                this.transform.LookAt(target.transform.position, axis);
+                break;
+            case 1: //lock x
+                this.transform.LookAt(new Vector3(target.transform.position.x, this.gameObject.transform.position.y, target.transform.position.z), axis);
+                break;
+            case 2: //lock y
+                this.transform.LookAt(new Vector3(this.gameObject.transform.position.x, target.transform.position.y, target.transform.position.z), axis);
+
+                break;
+            case 3:
+                this.transform.LookAt(new Vector3(target.transform.position.x, target.transform.position.y, this.gameObject.transform.position.z), axis);
+
+                break;
+        }
     }
 
     public void SetTarget(GameObject obj)

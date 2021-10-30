@@ -152,6 +152,7 @@ public class Puzzle04Controller : MonoBehaviour
 
     [HideInInspector]
     public obsData puzzleData;
+    [HideInInspector]
     public string attemptsList;
 
     // Awake is called when the Instance is Initialized
@@ -234,6 +235,7 @@ public class Puzzle04Controller : MonoBehaviour
 
 
 
+
             if (!DialogueManager.isInDialogue && !GameRoot.isPause)
                 obstacleTime += Time.deltaTime;
 
@@ -300,6 +302,13 @@ public class Puzzle04Controller : MonoBehaviour
             prevScal2 = scalar2;
             prevVect1 = card1;
             prevVect2 = card2;
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                OnPortalExit();
+                GameRoot.instance.LockPlayerAndCam(false);
+            }
+
         }
         else
         {
@@ -330,14 +339,20 @@ public class Puzzle04Controller : MonoBehaviour
                 {
                     //Zero vectors are allowed here for "extra" vectors
                     case Direction.X:
-                        temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
+                        if(InitFinalVector.x > 0)
+                            temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
+                        else
+                            temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
                         temp.y += 0.0f;
                         temp.z += 0.0f;
                         break;
 
                     case Direction.Y:
                         temp.x += 0.0f;
-                        temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
+                        if(InitFinalVector.y > 0)
+                            temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
+                        else
+                            temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
                         temp.z += 0.0f;
                         break;
                 }
@@ -345,16 +360,35 @@ public class Puzzle04Controller : MonoBehaviour
                 break;
 
             case 2:
+                if (InitFinalVector.x > 0)
                     temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
+                else
+                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
+
+                if (InitFinalVector.y > 0)
                     temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
-                    temp.z += 0.0f;
+                else
+                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                temp.z += 0.0f;
                 break;
 
             case 3:
                 //No zero vectors allowed
-                temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
-                temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
-                temp.z += UnityEngine.Random.Range(0, FinalDynamicRange);
+                if (InitFinalVector.x > 0)
+                    temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
+                else
+                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
+
+                if (InitFinalVector.y > 0)
+                    temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
+                else
+                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
+
+                if(InitFinalVector.z > 0)
+                    temp.z += UnityEngine.Random.Range(0, FinalDynamicRange);
+                else
+                    temp.z -= UnityEngine.Random.Range(0, FinalDynamicRange);
+
                 break;
         }
 
@@ -529,7 +563,46 @@ public class Puzzle04Controller : MonoBehaviour
         //The edge case for this is if Vector1(answer1) is parallel to the answer, in that case
         //Vector2 will also be parallel, and possibly the same values.  If that happens
         //we throw out Vector1 and recalc Vector2.
-        if (!testUnique(answer2))
+        bool minFinalSize = true;
+        switch (GCP04.Difficulty)
+        {
+            case 1:
+                switch (LimitAxis)
+                {
+                    //Zero vectors are allowed here for "extra" vectors
+                    case Direction.X:
+                        if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
+                            minFinalSize = false;
+                        break;
+
+                    case Direction.Y:
+                        if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
+                            minFinalSize = false;
+                        break;
+                }
+
+                break;
+
+            case 2:
+                if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
+                    minFinalSize = false;
+                if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
+                    minFinalSize = false;
+                break;
+
+            case 3:
+                if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
+                    minFinalSize = false;
+                if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
+                    minFinalSize = false;
+                if (Mathf.Abs(scal1 * answer1.z + scal2 * answer2.z) < Mathf.Abs(InitFinalVector.z / 3))
+                    minFinalSize = false;
+                break;
+        }
+
+        // If this Pair vector is the same vector as the first Vector OR the scaled sums results
+        // in some final vector with a ZERO, then start over
+        if (!testUnique(answer2) || !minFinalSize)
         {
             cardVectors.Remove(answer1);
             do { answer1 = VectorGenerator(); } while (answer1 == Vector3.zero || (answer1 * scal1) == InitFinalVector);
@@ -813,6 +886,7 @@ public class Puzzle04Controller : MonoBehaviour
                     GCP04.P04W.SetComplete();
                 correct = true;
 
+                GameRoot.instance.LockCamera(false);
                 grappleKit.InitGrapple(correct, finalAnswerVector, goalPoint, player.transform.position, grappleArcHeight);
                 grappleKit.grappleToGoal(this);
 
@@ -829,7 +903,13 @@ public class Puzzle04Controller : MonoBehaviour
                     puzzleData.e_Vect2 != puzzleData.i_Vect2)
                     puzzleData.userUniqueSolution = true;
                 else
-                    puzzleData.userUniqueSolution = false;                
+                    puzzleData.userUniqueSolution = false;
+
+                GCP04.totMoves += attempts;
+                GCP04.questionsList += "[" +
+                                        finalAnswerVector.x.ToString() + ", " +
+                                        finalAnswerVector.y.ToString() + ", " +
+                                        finalAnswerVector.z.ToString() + "]\n";
 
                 GCP04.SaveLocalPuzzleData(this);
 
@@ -866,7 +946,8 @@ public class Puzzle04Controller : MonoBehaviour
         GCP04.currPuzzle = this;
         GCP04.SetPuzzlePause(true);
 
-        disablePlayer();
+        GameRoot.isPuzzleLock = true;
+        GameRoot.instance.LockPlayerAndCam(true);
 
         visVectCamera.GetComponent<Camera>().enabled = true;
         visVectCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Nothing;
@@ -874,11 +955,7 @@ public class Puzzle04Controller : MonoBehaviour
         cameraRotate.SetCameraTarget(cameraTarget.transform.position);
 
         puzzleCamera.transform.position = mainCamera.transform.position;
-        puzzleCamera.transform.rotation = mainCamera.transform.rotation;
-
-        if (mainCamera.transform.TryGetComponent<CameraController>(out CameraController cam))
-            cam.GetComponent<CameraController>().SetPuzzle04Hack(true);
-      
+        puzzleCamera.transform.rotation = mainCamera.transform.rotation;      
         
         puzzleCamera.GetComponent<Camera>().enabled = true;
         mainCamera.GetComponent<Camera>().enabled = false;
@@ -897,6 +974,7 @@ public class Puzzle04Controller : MonoBehaviour
         if (convoTriggerNumber != 0)
         {
             GCP04.conversation(convoTriggerNumber);
+            DialogueManager.isPuzzleLock = true;
         }
 
         GCP04.P04W.ShowInputPanel(true);
@@ -917,19 +995,19 @@ public class Puzzle04Controller : MonoBehaviour
 
         turnOnVisualVectors();
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        GameRoot.instance.ShowCursor(true);
     }
 
     public void OnPortalExit()
     {
         inPortal = false;
+        isActive = false;
         GCP04.SetPuzzlePause(true);
 
-        visVectCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Depth;
-        visVectCamera.GetComponent<Camera>().enabled = false;
+        GameRoot.isPuzzleLock = false;
 
-        enablePlayer();
+        visVectCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Depth;
+        visVectCamera.GetComponent<Camera>().enabled = false;        
 
         if (getCorrect())
         {
@@ -937,9 +1015,6 @@ public class Puzzle04Controller : MonoBehaviour
             cameraGlide.SetObjectMoveSpeed(6.0f);
             cameraGlide.SetObjectRotateSpeed(0.5f);
         }
-
-        if (mainCamera.transform.TryGetComponent<CameraController>(out CameraController cam))
-            cam.GetComponent<CameraController>().SetPuzzle04Hack(false);
 
         cameraRotate.enabled = false;
         cameraGlide.SetEventSys(GameRoot.camEvents);
@@ -968,8 +1043,9 @@ public class Puzzle04Controller : MonoBehaviour
 
         turnOffVisualVectors();
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        DialogueManager.isPuzzleLock = false;
+
+        GameRoot.instance.ShowCursor(false);
     }
 
     private void assignCards()
@@ -977,19 +1053,6 @@ public class Puzzle04Controller : MonoBehaviour
         GCP04.P04W.setCardValues(getAnswerCards());
         GCP04.P04W.setCardDisplay(this);
         GCP04.P04W.setFeedbackDisplay(this);
-    }
-
-    private void disablePlayer()
-    {
-        player.GetComponent<ThirdPersonUserControl>().isLock = true;
-        player.GetComponent<ThirdPersonCharacter>().enabled = false;
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
-    }
-
-    private void enablePlayer()
-    {
-        player.GetComponent<ThirdPersonUserControl>().isLock = false;
-        player.GetComponent<ThirdPersonCharacter>().enabled = true;
     }
 
     #endregion
@@ -1069,7 +1132,9 @@ public class Puzzle04Controller : MonoBehaviour
     {
         GCP04.SetPuzzlePause(false);
         GameRoot.camEvents.RemoveListener(activateCamPlayer);
-        cameraRotate.enabled = false;    
+        cameraRotate.enabled = false;
+
+        GameRoot.instance.LockPlayerAndCam(false);
 
         visVectCamera.GetComponent<Camera>().enabled = false;
         puzzleCamera.GetComponent<Camera>().enabled = false;

@@ -40,7 +40,7 @@ public class EnterExitSelect : WindowRoot
 
     private void Start() 
     {
-        mainCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+  //      mainCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,13 +52,14 @@ public class EnterExitSelect : WindowRoot
 
         if(other.tag == "Player")
         {
-            mainCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+ //           mainCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
             // playerController.isEnterExit = true;
 
             SetActive(levelSelectUI, true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            mainCamera.isLock = false;
+            GameRoot.instance.LockCamera(true);
+ //           mainCamera.isLock = true;
 
             levelSelectUI.GetComponent<LevelSelectButtons>().setLevel(0);
             levelSelectUI.GetComponent<LevelSelectButtons>().setSceneName(sceneName);
@@ -167,7 +168,8 @@ public class EnterExitSelect : WindowRoot
             SetActive(levelSelectUI, false);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            mainCamera.isLock = true;
+            GameRoot.instance.LockCamera(false);
+//            mainCamera.isLock = false;
 
             GameRoot.ShowTips("", false, false);
         }

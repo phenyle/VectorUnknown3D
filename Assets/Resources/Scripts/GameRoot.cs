@@ -6,9 +6,10 @@ using GoogleSheetsForUnity;
 
 public class GameRoot : MonoBehaviour
 {
-
     public static PlayerData player;
     public static SendToGoogle GSFU;
+    public GameObject scenePlayer;
+    public GameObject sceneCameraMain;
     public static bool isExpo = false;
     public static string expoName;
     public static bool isClass = false;
@@ -17,6 +18,7 @@ public class GameRoot : MonoBehaviour
     public static bool isPause = false;
     public static bool isPuzzleLock = false;
     public static bool isTutortial = false;
+    public static bool showCursor = true;
     
     [Header("Common API")]
     public LoadingWindow loadingWindow;
@@ -131,6 +133,9 @@ public class GameRoot : MonoBehaviour
             }
         }
 
+        if(Input.GetKeyDown(KeyCode.Tab))
+            ToggleCursor();                
+
         if (Input.GetKeyDown(KeyCode.R))
         {
 
@@ -193,14 +198,18 @@ public class GameRoot : MonoBehaviour
         instance.dynamicWindow.ShowTips(tips, state, isReactive);
     }
 
+    public static void ShowTips(string tips, Color color, bool state, bool isReactive)
+    {
+        instance.dynamicWindow.ShowTips(tips, color, state, isReactive);
+    }
+
     public void Pause()
     {
         Debug.Log("Pause");
 
         pauseWindow.btn_Hub.SetActive(!isTutortial);
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        ShowCursor(true);
 
 
         //Is this still necessary?---------------------------
@@ -208,7 +217,7 @@ public class GameRoot : MonoBehaviour
         if (SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
         {
             Debug.Log("Puzzle 2 Level 1");
-            GCP02_01 = GameObject.Find("GameController_Puzzle02_01").GetComponent<GameControllerPuzzle02>();
+            GCP02_01 = GameObject.Find("GameController_Puzzle02").GetComponent<GameControllerPuzzle02>();
             if(GCP02_01.cameraFollow)
             {
                 Debug.Log("Puzzle 2 Level 1 : camera follow");
@@ -228,7 +237,7 @@ public class GameRoot : MonoBehaviour
                 GCP02_02.MainCamera.SetActive(true);
             }
         }
-        IsLock(true);
+        LockPlayerAndCam(true);
         Time.timeScale = 0;
         pauseWindow.SetWindowState(true);
 
@@ -256,11 +265,16 @@ public class GameRoot : MonoBehaviour
 
         if (!DialogueManager.isInDialogue && !isPuzzleLock)
         {
-            IsLock(false);
-
+            LockPlayerAndCam(false);
+            ShowCursor(false);
             Debug.Log("Unlock");
         }
-        IsLock(false);
+        else
+            ShowCursor(true);
+
+        if(!isPuzzleLock)
+            LockPlayerAndCam(false);
+
         Time.timeScale = 1;
         pauseWindow.panelOption.gameObject.SetActive(false);
         pauseWindow.panelPause.gameObject.SetActive(true);
@@ -273,7 +287,7 @@ public class GameRoot : MonoBehaviour
         // check to change cameras in puzzle 2
         if(SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
         {
-            GCP02_01 = GameObject.Find("GameController_Puzzle02_01").GetComponent<GameControllerPuzzle02>();
+            GCP02_01 = GameObject.Find("GameController_Puzzle02").GetComponent<GameControllerPuzzle02>();
             if(GCP02_01.cameraFollow)
             {
                 GCP02_01.MainCamera.SetActive(false);
@@ -291,15 +305,119 @@ public class GameRoot : MonoBehaviour
         }
     }
 
-    public void IsLock(bool state)
+    public void LockPlayer(bool state)
     {
         try
         {
-            Camera.main.GetComponent<CameraController>().isLock = !state;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
+            scenePlayer.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
         }
         catch { }
     }
+
+    public void LockCamera(bool state)
+    {
+        try
+        {
+            sceneCameraMain.GetComponent<CameraController>().isLock = state;
+        }
+        catch
+        {
+            try
+            {
+                sceneCameraMain.GetComponent<Camera2DFollowMod>().isLock = state;
+            }
+            catch { }
+        }
+    }
+
+    public void LockPlayerAndCam(bool state)
+    {
+        if (true)
+        {
+            try
+            {
+                sceneCameraMain.GetComponent<CameraController>().isLock = state;
+            }
+            catch 
+            {
+                try
+                {
+                    sceneCameraMain.GetComponent<Camera2DFollowMod>().isLock = state;
+                }
+                catch { }
+            }
+            try
+            {
+                scenePlayer.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
+            }
+            catch { }
+        }
+
+        //try
+        //{
+        //    Camera.main.GetComponent<CameraController>().isLock = state;
+        //    GameObject.FindGameObjectWithTag("Player").GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
+        //}
+        //catch { }
+    }
+
+    public void SetScenePlayer(GameObject playerObj)
+    {
+        scenePlayer = playerObj;
+    }
+
+    public void SetSceneCamera(GameObject cameraObj)
+    {
+        sceneCameraMain = cameraObj;
+    }
+
+    public void FindPlayerAndCamera()
+    {
+        instance.SetScenePlayer(GameObject.FindGameObjectWithTag("Player"));
+        instance.SetSceneCamera(GameObject.FindGameObjectWithTag("MainCamera"));
+    }
+
+    public void ToggleCursor()
+    {
+        if (isPuzzleLock || DialogueManager.isInDialogue)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        else
+        {
+            showCursor = !showCursor;
+
+            if(showCursor)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
+    }
+
+    public void ShowCursor(bool state)
+    {
+        showCursor = state;
+
+        if (showCursor)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
 
     public static void AddScore(int score)
     {

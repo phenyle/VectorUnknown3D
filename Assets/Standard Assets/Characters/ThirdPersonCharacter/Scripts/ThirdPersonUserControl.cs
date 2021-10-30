@@ -7,7 +7,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
-        [HideInInspector]
+        
         public bool isLock = false;
         [Range(1.0f,3.0f)]
         public float runSpeedMod = 2.0f;

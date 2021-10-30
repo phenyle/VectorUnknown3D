@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class GameControllerPuzzle02 : GameControllerRoot
 {
+    [Range(1, 3)]
     public int Difficulty;
 
     //variables 
@@ -14,15 +15,35 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public int[] selectedVector = new int[] { 0, 0 };
 
 
-    [Header("--------Ship Puzzles---------")]
-    public PuzzleController02 shipPuzzleMaster;
-    public PuzzleController02 airshipPuzzleMaster;
+    [Header("--------Ship Parts---------")]
+    public GameObject shipMaster;
+//    public GameObject airShipMaster;
+    [Range(0,10,order = 1)]
     public int numberOfShips;
-    public int numberOfAirships;
-    private PuzzleController02[] shipPuzzles;
-    private List<GameObject> shipList;
-    private PuzzleController02[] airshipPuzzles;
-    public int minDistApart = 15;
+ //   [Range(0, 10, order = 1)]
+ //   public int numberOfAirships;
+    private List<PuzzleController02> shipPuzzles;
+ //   private List<PuzzleController02> airshipPuzzles;
+    public float minDistApart = 5;
+    private PuzzleController02 currTarget;
+
+
+    [Header("--------Cannon Parts---------")]
+    public List<cannonController> cannons;
+    public cannonController currCannon;
+    public mainCannonController mainCannon;
+
+    [Header("--------Cannonball Parts---------")]
+    public List<cannonballController> balls;
+    public cannonballController currBall;
+
+    [Header("--------Puzzle Parts---------")]
+    public int[] currVector;
+    public bool vectChosen = false;
+    public int[][] currMatrix;
+    public bool matrixChosen = false;
+    public int[] currAnswer;
+
 
     public GameObject firingCannon;
 
@@ -31,9 +52,9 @@ public class GameControllerPuzzle02 : GameControllerRoot
     [HideInInspector]
     public DatabasePuzzle02 DBP02;
     public DatabasePuzzle02_02 DBP02_02;
-    [HideInInspector]
-    public GameRoot GR;
+
     private GameObject player;
+    private GameObject mainCamera;
 
     private Vector3 startPosition;
 
@@ -110,18 +131,25 @@ public class GameControllerPuzzle02 : GameControllerRoot
     //Database Records
     public float tot_puzzleTime = 0;
 
-    public void Awake()
+    public void Start()
     {
-        shipList = new List<GameObject>();
-        IEnumerable<GameObject> targetShips = GameObject.FindGameObjectsWithTag("targetShips");
-        shipList.AddRange(targetShips);
+        player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameRoot.instance.FindPlayerAndCamera();
 
-        shipPuzzles = new PuzzleController02[numberOfShips];
-        airshipPuzzles = new PuzzleController02[numberOfAirships];
-        GenerateShipLocations();
+        cannons = new List<cannonController>();
+        foreach (GameObject cannon in GameObject.FindGameObjectsWithTag("Cannon"))
+            cannons.Add(cannon.GetComponent<cannonController>());
+
+        balls = new List<cannonballController>();
+        foreach (GameObject ball in GameObject.FindGameObjectsWithTag("CannonBall"))
+            balls.Add(ball.GetComponent<cannonballController>());
+
+        shipPuzzles = new List<PuzzleController02>();
+ //       airshipPuzzles = new List<PuzzleController02>();
+
+
     }
-
-
 
     public override void InitGameController(Puzzle02Window P02W)
     {
@@ -150,6 +178,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
         //GR = GameObject.FindGameObjectWithTag("").GetComponent<GameRoot>();
 
         player = GameObject.FindGameObjectWithTag("Player");
+        GameRoot.instance.SetScenePlayer(player);
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         //Show Dialogue once
@@ -163,34 +193,112 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         trailMaterial = trailMaterialWrong;
 
-        foreach (GameObject text in TopViewText) { text.gameObject.SetActive(false); }
-        foreach (GameObject text in TopViewVectors) { text.gameObject.SetActive(false); }
-        foreach (GameObject text in normalText) { text.gameObject.SetActive(false); }
-        normalText[0].gameObject.SetActive(true);
+        //foreach (GameObject text in TopViewText) { text.gameObject.SetActive(false); }
+        //foreach (GameObject text in TopViewVectors) { text.gameObject.SetActive(false); }
+        //foreach (GameObject text in normalText) { text.gameObject.SetActive(false); }
+        //normalText[0].gameObject.SetActive(true);
 
-        //stop particle effects from playing at start
-        cannonBlast.GetComponent<ParticleSystem>().playOnAwake = false;
+        ////stop particle effects from playing at start
+        //cannonBlast.GetComponent<ParticleSystem>().playOnAwake = false;
 
-        maincannonText.gameObject.GetComponent<Text>().text = "0\n0";
+        //maincannonText.gameObject.GetComponent<Text>().text = "0\n0";
 
-        Matrix = P02W.Matrix;
-        Vector = P02W.Vector;
-        shipImages = P02W.shipImages;
+        //Matrix = P02W.Matrix;
+        //Vector = P02W.Vector;
+        //shipImages = P02W.shipImages;
 
-        if (stageNumber == 2 || stageNumber == 1)
-        {
-            Vector.text = "0" + "\n" + "0";
-            Matrix.text = "0" + " " + "0" + "\n" +
-                "0" + " " + "0";
-            foreach (Image ship in shipImages)
-            {
-                ship.sprite = activeBoat;
-            }
-        }
+        //if (stageNumber == 2 || stageNumber == 1)
+        //{
+        //    Vector.text = "0" + "\n" + "0";
+        //    Matrix.text = "0" + " " + "0" + "\n" +
+        //        "0" + " " + "0";
+        //    foreach (Image ship in shipImages)
+        //    {
+        //        ship.sprite = activeBoat;
+        //    }
+        //}
 
         SetActive(endportal, false);
 
+        GenerateShipLocations();
+
+        PickTarget();
+
     }
+
+
+    public void PickTarget()
+    {
+        int random = Random.Range(0, shipPuzzles.Count);
+
+        currTarget = shipPuzzles[random];
+
+        //check that there isn't some other target in the way, and if there is
+        //choose that target instead;
+        Ray check = new Ray(new Vector3(0, 0.5f, 3.5f), currTarget.transform.position);
+        RaycastHit hitcheck;
+
+        if(Physics.Raycast(check, out hitcheck))
+        {
+            currTarget = hitcheck.transform.GetComponentInParent<PuzzleController02>();
+        }    
+
+        P02W.SetTargetShip(currTarget.shipPos);
+        currTarget.ToggleFrontText(true);
+        currTarget.vectText.GetComponent<RubberizeAnim>().ToggleActivate(true);
+        currTarget.vectText.GetComponent<FaceObject>().SetTarget(player);
+        currTarget.vectText.GetComponent<FaceObject>().enabled = true;
+        //set cannon ansVectors and balls ansMatricies
+        for (int i = 0; i < 4; i++)
+        {
+            cannons[i].SetCannon(currTarget.vectorList[i]);
+            balls[i].SetCannonBalls(currTarget.matrixList[i]);
+        }
+    }
+
+    public void SelectCannon(cannonController cannon)
+    {
+        currCannon = cannon;
+        currVector = currCannon.vector;
+        vectChosen = true;
+        P02W.SetVectorSelected(currVector);
+        CalculateAnswer();
+        if(matrixChosen)
+            mainCannon.AnimateCannon();
+        //TODO
+        //connect this to the cannonRotate class
+        //connect this to the WindowUI
+        //stretch connect this to the VisualVector
+
+
+    }
+
+    public void SelectCannonBalls(cannonballController ball)
+    {
+        currBall = ball;
+        currMatrix = currBall.matrix;
+        matrixChosen = true;
+        P02W.SetMatrixSelected(currMatrix);
+        CalculateAnswer();
+        if(vectChosen)
+            mainCannon.AnimateCannon();
+        //TODO
+        //connect this to the cannonRotate class
+        //connect this to the WindowUI
+        //stretch connect this to the VisualVector
+    }
+
+    public void CalculateAnswer()
+    {
+        if(vectChosen && matrixChosen)
+        {
+            currAnswer = new int[3];
+            currAnswer[0] = currVector[0] * currMatrix[0][0] + currVector[2] * currMatrix[1][0];
+            currAnswer[2] = currVector[0] * currMatrix[0][1] + currVector[2] * currMatrix[1][1];
+        }
+    }
+
+
 
     void Update()
     {
@@ -382,7 +490,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
         if (topCameraActive)
         {
             MainCamera.gameObject.SetActive(true);
-            MainCamera.GetComponent<CameraController>().isLock = true;
+            GameRoot.instance.LockCamera(false);
+  //          MainCamera.GetComponent<CameraController>().isLock = false;
 
             topCamera.gameObject.SetActive(false);
 
@@ -506,230 +615,154 @@ public class GameControllerPuzzle02 : GameControllerRoot
     {
         int randX, randY, randZ;
 
-        switch (Difficulty)
+        //generate ships and locations
+        for (int i = 0; i < numberOfShips; i++)
         {
-            case 1 :
-                for(int i = 0; i < numberOfShips-1; i++)
-                {
-                    //Generate initial location
-                    randX = Random.Range(-75, 76);
-                    randY = 0;
-                    randZ =  Random.Range(Mathf.RoundToInt(Mathf.Abs(randX)*0.2f) +10, 100);
+            GameObject temp = Instantiate(shipMaster);
 
-                    shipPuzzles[i].shipParent.transform.position = new Vector3(randX, 0, randZ);
+            //Generate initial location
+            if (Difficulty != 3)
+            {
+                //for the lower diff, I want all the placments to be in multiples of 5
+                randX = 5 * Random.Range(-15, 16);
+                randY = 0;
+                randZ = 5 * Random.Range(3, 21);
 
-                    //Check that this location is not too close to previous ships
-                    for(int j = 0; j < numberOfShips - 1; j++)
-                    {
-                        if (shipPuzzles[j].transform.position == Vector3.zero)
-                            break;
+            }
+            else
+            {                
+                randX = Random.Range(-75, 76);
+                randY = 0;
+                randZ = Random.Range(Mathf.RoundToInt(Mathf.Abs(randX) * 0.2f) + 15, 100);
+            }
 
-                        if((shipPuzzles[i].transform.position - shipPuzzles[j].transform.position).magnitude < minDistApart)
-                        {
-                            i--;
-                            break;
-                        }
-                    }
+            temp.GetComponent<PuzzleController02>().SetPosition(new Vector3(randX, randY, randZ));
+
+            shipPuzzles.Add(temp.GetComponent<PuzzleController02>());
+
+            float distApart;
+            //Check that this location is not too close to previous ships
+            for (int j = 0; j < shipPuzzles.Count; j++)
+            {
+                distApart = (shipPuzzles[i].transform.position - shipPuzzles[j].transform.position).magnitude;
+                if (shipPuzzles[i].gameObject != shipPuzzles[j].gameObject && distApart < minDistApart)
+                {                    
+                    shipPuzzles.RemoveAt(i);
+                    Destroy(temp);
+                    i--;
+                    break;
                 }
-
-                break;
-
-            case 2:
-                for (int i = 0; i < numberOfShips - 1; i++)
-                {
-                    //Generate initial location
-                    randX = Random.Range(-75, 76);
-                    randY = 0;
-                    randZ = Random.Range(Mathf.RoundToInt(Mathf.Abs(randX) * 0.2f) + 10, 100);
-
-                    shipPuzzles[i].shipParent.transform.position = new Vector3(randX, 0, randZ);
-
-                    //Check that this location is not too close to previous ships
-                    for (int j = 0; j < numberOfShips - 1; j++)
-                    {
-                        if (shipPuzzles[j].transform.position == Vector3.zero)
-                            break;
-
-                        if ((shipPuzzles[i].transform.position - shipPuzzles[j].transform.position).magnitude < minDistApart)
-                        {
-                            i--;
-                            break;
-                        }
-                    }
-                }
-
-
-                break;
-                
-            case 3:
-                //generate ships
-                for (int i = 0; i < numberOfShips - 1; i++)
-                {
-                    //Generate initial location
-                    randX = Random.Range(-75, 76);
-                    randY = 0;
-                    randZ = Random.Range(Mathf.RoundToInt(Mathf.Abs(randX) * 0.2f) + 10, 100);
-                    shipPuzzles[i].shipParent.transform.position = new Vector3(randX, randY, randZ);
-
-                    //Check that this location is not too close to previous ships
-                    for (int j = 0; j < numberOfShips - 1; j++)
-                    {
-                        if (shipPuzzles[j].transform.position == Vector3.zero)
-                            break;
-
-                        if ((shipPuzzles[i].transform.position - shipPuzzles[j].transform.position).magnitude < minDistApart)
-                        {
-                            i--;
-                            break;
-                        }
-                    }
-                }
-
-                //generate airships
-                for(int i = 0; i < numberOfAirships - 1; i++)
-                {
-                    //Generate initial location
-                    randX = Random.Range(-75, 76);
-                    randY = Random.Range(20, 65);
-                    randZ = Random.Range(Mathf.RoundToInt(Mathf.Abs(randX) * 0.2f) + 10, 100);
-                    airshipPuzzles[i].shipParent.transform.position = new Vector3(randX, randY, randZ);
-
-                    //Check that this location is not too close to previous ships
-                    for (int j = 0; j < numberOfAirships - 1; j++)
-                    {
-                        if (airshipPuzzles[j].transform.position == Vector3.zero)
-                            break;
-
-                        if ((airshipPuzzles[i].transform.position - airshipPuzzles[j].transform.position).magnitude < minDistApart)
-                        {
-                            i--;
-                            break;
-                        }
-                    }
-                }
-                break;
+            }
         }
+
+        foreach(PuzzleController02 ship in shipPuzzles)
+        {
+            ship.ToggleFrontText(false);
+            ship.ToggleTopText(false);
+            ship.CreateVectorsList();
+            ship.CreateMatrixList();
+            ship.answerShuffle();
+            ship.SetShipDirection();
+        }
+
+        //generate airships
+        //for (int i = 0; i < numberOfAirships - 1; i++)
+        //{
+        //    //Generate initial location
+        //    randX = Random.Range(-75, 76);
+        //    randY = Random.Range(20, 65);
+        //    randZ = Random.Range(Mathf.RoundToInt(Mathf.Abs(randX) * 0.2f) + 10, 100);
+        //    airshipPuzzles[i].shipParent.transform.position = new Vector3(randX, randY, randZ);
+
+        //    //Check that this location is not too close to previous ships
+        //    for (int j = 0; j < numberOfAirships - 1; j++)
+        //    {
+        //        if (airshipPuzzles[j].transform.position == Vector3.zero)
+        //            break;
+
+        //        if ((airshipPuzzles[i].transform.position - airshipPuzzles[j].transform.position).magnitude < minDistApart)
+        //        {
+        //            i--;
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
-
-
-    public void GenerateAnswerMatrixPair(Vector3 shipLoc)
-    {
-        Vector3[] lvl1Vects = { new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0), new Vector3(1, -1, 0) };
-        Vector3[] lvl2Vects = { new Vector3(1, 2, 0), new Vector3(2, -1, 0), new Vector3(-2, 3, 0), new Vector3(1, -3, 0) };
-
-        switch (Difficulty)
-        {
-            case 1:
-                //pick a vector
-                int iter = Random.Range(0, lvl1Vects.Length);
-                Vector3 cannonVect = lvl1Vects[iter];
-
-                Vector3[] matrix = { Vector3.zero, Vector3.zero };
-                int v1x;
-                int v2x;
-                int v1y;
-                int v2y;
-
-                switch (iter)
-                {
-                    case 0: // 1,0
-                        matrix[0] = shipLoc;
-                        break;
-
-                    case 1:  // 0,1
-                        matrix[1] = shipLoc;
-                        break;
-
-                    case 2:  // 1,1
-                        v1x = Mathf.RoundToInt(shipLoc.x / Random.Range(1, 7));
-                        v2x = (int)shipLoc.x - v1x;
-                        v1y = Mathf.RoundToInt(shipLoc.y / Random.Range(1, 7));
-                        v2y = (int)shipLoc.y - v1y;
-
-                        if(Random.Range(0.0f,1.0f) > 0.5f)
-                        {
-                            int temp = v1x;
-                            v1x = v2x;
-                            v2x = temp;
-                        }
-                        if (Random.Range(0.0f, 1.0f) > 0.5f)
-                        {
-                            int temp = v1y;
-                            v1y = v2y;
-                            v2y = temp;
-                        }
-
-                        matrix[0] = new Vector3(v1x, v1y, 0);
-                        matrix[1] = new Vector3(v2x, v2y, 0);
-                        break;
-
-                    case 3:  // 1,-1
-                        v2x = Mathf.RoundToInt(shipLoc.x / Random.Range(2, 5));
-                        v1x = (int)shipLoc.x + v2x;
-                        v2y = Mathf.RoundToInt(shipLoc.y / Random.Range(2, 5));
-                        v1y = (int)shipLoc.y + v2y;
-
-                        matrix[0] = new Vector3(v1x, v1y, 0);
-                        matrix[1] = new Vector3(v2x, v2y, 0);
-                        break;
-                }
-
-                break;
-
-            case 2:
-                break;
-
-            case 3:
-                break;
-        }
-    }
-
-
-    // public void switchStage()
-    // {
-    //     stage01.SetActive(false);
-    //     this.InitGameController(P02W);
-    // }
 
     public void RecordData()
     {
         switch (stageNumber)
         {
             case 1:
-                if (GameRoot.player.users.p2_1clear_time == 0.0f)
-                    GameRoot.player.users.p2_1clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p2_1clear_time)
-                    GameRoot.player.users.p2_1clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p2_1_time == 0.0f)
+                {
 
-                GameRoot.player.users.p2_1attempts++;
-                GameRoot.player.p2_1.attemptNum = GameRoot.player.users.p2_1attempts;
-                GameRoot.player.p2_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p2_1attempts.ToString();
+                    GameRoot.player.records.p2_1_time = tot_puzzleTime;
+                    //GameRoot.player.records.p2_1_numMove = totMoves;
+                    //GameRoot.player.records.p2_1_questions = questionsList;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p2_1_time)
+                {
+
+                    GameRoot.player.records.p2_1_time = tot_puzzleTime;
+                }
+
+                GameRoot.player.p2_1.attemptDate = System.DateTime.Now.ToString();
+                GameRoot.player.records.p2_1_attempts++;
+
+                //Attempt Username Construction
+                GameRoot.player.p2_1.username = GameRoot.player.users.username;
+                GameRoot.player.p2_1.attemptNum = GameRoot.player.records.p2_1_attempts;
+                GameRoot.player.p2_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_1.attemptNum.ToString();
 
                 break;
 
             case 2:
-                if (GameRoot.player.users.p2_2clear_time == 0.0f)
-                    GameRoot.player.users.p2_2clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p2_2clear_time)
-                    GameRoot.player.users.p2_2clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p2_2_time == 0.0f)
+                {
 
-                GameRoot.player.users.p2_2attempts++;
-                GameRoot.player.p2_2.attemptNum = GameRoot.player.users.p2_2attempts;
-                GameRoot.player.p2_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p2_2attempts.ToString();
+                    GameRoot.player.records.p2_2_time = tot_puzzleTime;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p2_2_time)
+                {
+
+                    GameRoot.player.records.p2_2_time = tot_puzzleTime;
+                }
+
+                GameRoot.player.p2_2.attemptDate = System.DateTime.Now.ToString();
+                GameRoot.player.records.p2_2_attempts++;
+
+                //Attempt Username Construction
+                GameRoot.player.p2_2.username = GameRoot.player.users.username;
+                GameRoot.player.p2_2.attemptNum = GameRoot.player.records.p2_2_attempts;
+                GameRoot.player.p2_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_2.attemptNum.ToString();
                 break;
 
             case 3:
-                if (GameRoot.player.users.p2_3clear_time == 0.0f)
-                    GameRoot.player.users.p2_3clear_time = tot_puzzleTime;
-                else if (tot_puzzleTime < GameRoot.player.users.p2_3clear_time)
-                    GameRoot.player.users.p2_3clear_time = tot_puzzleTime;
+                if (GameRoot.player.records.p2_3_time == 0.0f)
+                {
 
-                GameRoot.player.users.p2_3attempts++;
-                GameRoot.player.p2_3.attemptNum = GameRoot.player.users.p2_3attempts;
-                GameRoot.player.p2_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.users.p2_3attempts.ToString();
+                    GameRoot.player.records.p2_3_time = tot_puzzleTime;
+                }
+                else if (tot_puzzleTime < GameRoot.player.records.p2_3_time)
+                {
+
+                    GameRoot.player.records.p2_3_time = tot_puzzleTime;
+                }
+
+                GameRoot.player.p2_3.attemptDate = System.DateTime.Now.ToString();
+                GameRoot.player.records.p2_3_attempts++;
+
+                //Attempt Username Construction
+                GameRoot.player.p2_3.username = GameRoot.player.users.username;
+                GameRoot.player.p2_3.attemptNum = GameRoot.player.records.p2_3_attempts;
+                GameRoot.player.p2_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_3.attemptNum.ToString();
                 break;
         }
 
+        GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.p2_totAttempts = GameRoot.player.records.p2_1_attempts + GameRoot.player.records.p2_2_attempts + GameRoot.player.records.p2_3_attempts;
+        GameRoot.player.records.p2_totTime += tot_puzzleTime;
     }
 }

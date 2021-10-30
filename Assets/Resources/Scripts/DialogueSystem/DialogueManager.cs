@@ -25,6 +25,8 @@ public class DialogueManager : MonoBehaviour
     private int sentenceIndex;
     private AudioService audioService;
     private bool isFirstSentence;
+    private string currSentence;
+    private bool endOfSentence = false;
 
 
     public Button continueButton;
@@ -33,6 +35,7 @@ public class DialogueManager : MonoBehaviour
     {
         instance = this;
         audioService = GameRoot.instance.audioService;
+        endOfSentence = false;
     }
 
     private void Update() 
@@ -41,7 +44,14 @@ public class DialogueManager : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Space) && isInDialogue)
             {
-                continueButton.onClick.Invoke();
+                if(endOfSentence)
+                    continueButton.onClick.Invoke();
+                else if(currSentence.Length > dialogueText.text.Length)
+                {
+                    StopAllCoroutines();
+                    dialogueText.text = currSentence;
+                    endOfSentence = true;
+                }
             }
         }
         catch{}
@@ -54,8 +64,17 @@ public class DialogueManager : MonoBehaviour
         dialogueWindow.gameObject.SetActive(true);
 
         isInDialogue = true;
-        GameRoot.instance.IsLock(true);
+        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot.instance.LockPlayerAndCam(true);
+        GameRoot.instance.ShowCursor(true);
         uiWindows.gameObject.SetActive(false);
+
+        //try
+        //{
+        //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
+        //}
+        //catch { }
+
 
         //************* Reset the Conversation ****************
         this.conversation = conversation;
@@ -83,6 +102,7 @@ public class DialogueManager : MonoBehaviour
         //******************** Display Sound FX *******************
         if(isFirstSentence)
         {
+
             isFirstSentence = false;
         }
         else
@@ -101,7 +121,7 @@ public class DialogueManager : MonoBehaviour
         //********************** Set Current Sentence Infomation ****************************
         nameText.text = conversation.dialogues[dialogueIndex].character.name;
         characterImage.sprite = conversation.dialogues[dialogueIndex].character.protrait;
-        string sentence = conversation.dialogues[dialogueIndex].sentences[sentenceIndex];
+        currSentence = conversation.dialogues[dialogueIndex].sentences[sentenceIndex];
         //**************************************************************************************
         
         if(sentenceIndex + 1 >= sentencesSize[dialogueIndex])
@@ -116,17 +136,21 @@ public class DialogueManager : MonoBehaviour
         }
 
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+        StartCoroutine(TypeSentence(currSentence));
     }
 
     IEnumerator TypeSentence (string sentence)
     {
+        endOfSentence = false;
+
         dialogueText.text = "";
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
             yield return null;
         }
+
+        endOfSentence = true;
     }
 
     public void EndDialogue()
@@ -206,9 +230,11 @@ public class DialogueManager : MonoBehaviour
     {
         yield return new WaitForSeconds(sec);
 
-        if(!isPuzzleLock)
+        //if not in a puzzle
+        if (!isPuzzleLock || !GameRoot.isPuzzleLock)
         {
-            GameRoot.instance.IsLock(false);
+            GameRoot.instance.LockPlayerAndCam(false);
+            GameRoot.instance.ShowCursor(false);
             Debug.Log("Unlock From Dialogue");
 
             Debug.Log("Start Try");
@@ -216,19 +242,21 @@ public class DialogueManager : MonoBehaviour
             try
             {
                 GameObject.Find("Main Camera").GetComponent<CameraController>().postPuzzleLock = true;
-                GameObject.Find("Main Camera").GetComponent<CameraController>().isLock = true;
+                //              GameObject.Find("Main Camera").GetComponent<CameraController>().isLock = false;
                 Debug.Log("In Try");
             }
             catch { Debug.Log("In Catch"); }
             Debug.Log("After Try Catch");
         }
+        else
+            GameRoot.instance.ShowCursor(true);
 
         isInDialogue = false;
 
-        try
-        {
-            GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
-        }
-        catch { }
+        //try
+        //{
+        //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
+        //}
+        //catch { }
     }
 }

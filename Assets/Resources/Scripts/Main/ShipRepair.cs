@@ -76,7 +76,7 @@ public class ShipRepair : MonoBehaviour
     public GameControllerMain GCM;
 
     private bool animate = false;
-    private bool fxComplete = false;
+    public bool fxComplete = true;
 
     // Start is called before the first frame update
     void Start()
@@ -148,6 +148,7 @@ public class ShipRepair : MonoBehaviour
         ShipUpdate();
         this.player = player;
         this.mainCamera = camera;
+        fxComplete = false;
         prevCameraPos = mainCamera.transform.position;
 
         player.GetComponent<ThirdPersonUserControl>().isLock = true;
@@ -200,10 +201,10 @@ public class ShipRepair : MonoBehaviour
                 switch(GameRoot.instance.prevLevel)
                 {
                     case 1:
-                        targetPos = sail1.transform.position;
+                        targetPos = sail3.transform.position;
                         break;
                     case 2:
-                        targetPos = sail3.transform.position;
+                        targetPos = sail1.transform.position;
                         break;
                     case 3:
                         targetPos = sail2.transform.position;
@@ -236,6 +237,7 @@ public class ShipRepair : MonoBehaviour
         shipCamera.GetComponent<Camera>().enabled = false;
         mainCamera.GetComponent<Camera>().enabled = true;
 
+        fxComplete = true;
         animate = false;
         playFX = true;
         fxIter = 0;
@@ -329,11 +331,11 @@ public class ShipRepair : MonoBehaviour
                 switch (level)
                 {
                     case 1:
-                        FXGlowRings(mast1.GetComponent<Renderer>(), iter, true);
+                        FXGlowRings(mast3.GetComponent<Renderer>(), iter, true);
                         break;
 
                     case 2:
-                        FXGlowRings(mast3.GetComponent<Renderer>(), iter, true);
+                        FXGlowRings(mast1.GetComponent<Renderer>(), iter, true);
                         break;
 
                     case 3:
@@ -420,13 +422,13 @@ public class ShipRepair : MonoBehaviour
 
 
         //Stage4 Completed
-        mast1.SetActive(GameRoot.instance.puzzlesDone[4][1]);
+        mast1.SetActive(GameRoot.instance.puzzlesDone[4][2]);
         mast2.SetActive(GameRoot.instance.puzzlesDone[4][3]); //mast2 is the main, so making it for level 3
-        mast3.SetActive(GameRoot.instance.puzzlesDone[4][2]);
+        mast3.SetActive(GameRoot.instance.puzzlesDone[4][1]);
 
-        sail1.SetActive(GameRoot.instance.puzzlesDone[4][1]);
+        sail1.SetActive(GameRoot.instance.puzzlesDone[4][2]);
         sail2.SetActive(GameRoot.instance.puzzlesDone[4][3]); //sail2 is the main, so making it for level 3
-        sail3.SetActive(GameRoot.instance.puzzlesDone[4][2]);
+        sail3.SetActive(GameRoot.instance.puzzlesDone[4][1]);
 
         if(GameRoot.instance.puzzlesDone[4][1] &&
             GameRoot.instance.puzzlesDone[4][2] &&

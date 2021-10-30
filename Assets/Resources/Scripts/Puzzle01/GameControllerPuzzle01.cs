@@ -39,6 +39,10 @@ public class GameControllerPuzzle01 : GameControllerRoot
     private Vector3 previousPosition;
     public int timer = 0;
 
+    public int moves = 0;
+    public string answers = "";
+
+
     public override void InitGameController(Puzzle01Window P01W)
     {
         Debug.Log("Init GameController for Puzzle01");
@@ -54,6 +58,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
         DBP01.InitDatabase();
 
         player = GameObject.FindGameObjectWithTag("Player");
+        GameRoot.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         if (DialogueManager.showP01_00)
@@ -168,7 +173,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     P01W.answerText.color = Color.red;
                     P01W.answerText.text = "s * ( x, y, z )";
 
-                    GameRoot.instance.IsLock(true);
+                    GameRoot.instance.LockPlayerAndCam(true);
+                    GameRoot.instance.ShowCursor(true);
 
                     //Resume cannot unlock the lock
                     GameRoot.isPuzzleLock = true;
@@ -195,7 +201,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     P01W.answerText.color = Color.red;
                     P01W.answerText.text = "s * ( x, y, z )";
 
-                    GameRoot.instance.IsLock(false);
+                    GameRoot.instance.LockPlayerAndCam(false);
+                    GameRoot.instance.ShowCursor(false);
 
                     //Resume can unlock the lock
                     GameRoot.isPuzzleLock = false;
@@ -203,10 +210,12 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     //Dialogue manager can unlock the lock;
                     DialogueManager.isPuzzleLock = false;
 
+                    // VVVV BUT THIS DOESN"T LOCK THE MOUSE, IT LOCKS THE CAMERA!!!  VVVV
                     // lock mouse after leaving question and not finishing it
                     try
                     {
-                        GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
+                        GameRoot.instance.LockCamera(false);
+  //                      GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
                         Debug.Log("mouse locked");
                     }
                     catch { }
@@ -245,7 +254,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
             case 1:
                 Camera.main.depth = -1;
                 topCamPlayer.GetComponent<TopCameraPlayer>().isTopCamera = true;
-                GameRoot.instance.IsLock(true);
+                GameRoot.instance.LockCamera(true);
+                GameRoot.instance.ShowCursor(false);
                 break;
 
             case -1:
@@ -253,8 +263,10 @@ public class GameControllerPuzzle01 : GameControllerRoot
                 topCamPlayer.GetComponent<TopCameraPlayer>().isTopCamera = false;
                 if (!isTriggerQuestion)
                 {
-                    GameRoot.instance.IsLock(false);
-                    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
+//                    GameRoot.instance.LockPlayerAndCam(false);
+                    GameRoot.instance.LockCamera(false);
+                    GameRoot.instance.ShowCursor(true);
+ //                   GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
                 }
                 break;
         }
@@ -277,6 +289,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
     {
         bool check = DBP01.Calculation(questionNum, scalar, x, y, z);
 
+        moves++;
         AnswerAttempt(scalar, x, y, z);
 
 //        P01W.feedbackPanel.gameObject.SetActive(true);
@@ -288,6 +301,10 @@ public class GameControllerPuzzle01 : GameControllerRoot
             isAnswerCorrect = true;
             P01W.answerText.color = Color.green;
 
+            answers += scalar + " * [ " + x + ", " + y + ", " + z + " ]\n";
+
+            GameRoot.instance.ShowCursor(false);
+            GameRoot.instance.LockPlayerAndCam(false);
             P01W.SetFeedback(formula, "Correct!", Color.green);
 
             //Prepare next question to show the question tips in feedback panel
@@ -387,15 +404,32 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
     public void RecordData()
     {
-        if (GameRoot.player.users.p1_1clear_time == 0.0f)
-            GameRoot.player.users.p1_1clear_time = puzzleTime;
-        else if (puzzleTime < GameRoot.player.users.p1_1clear_time)
-            GameRoot.player.users.p1_1clear_time = puzzleTime;
+        if (GameRoot.player.records.p1_time == 0.0f)
+        {
 
+            GameRoot.player.records.p1_time = puzzleTime;
+            GameRoot.player.records.p1_numMove = moves;
+            GameRoot.player.records.p1_answers = answers;
+        }
+        else if (puzzleTime < GameRoot.player.records.p1_time)
+        {
+
+            GameRoot.player.records.p1_time = puzzleTime;
+            GameRoot.player.records.p1_numMove = moves;
+            GameRoot.player.records.p1_answers = answers;
+        }
+
+        GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.p1_totAttempts++;
+
+        GameRoot.player.p1_1.attemptDate = System.DateTime.Now.ToString();
+
+        //Attempt Username Construction
         GameRoot.player.p1_1.username = GameRoot.player.users.username;
-        GameRoot.player.users.p1_1attempts++;
-        GameRoot.player.p1_1.attemptNum = GameRoot.player.users.p1_1attempts;
+        GameRoot.player.p1_1.attemptNum = GameRoot.player.records.p1_totAttempts;
         GameRoot.player.p1_1.usernameAttempt = GameRoot.player.p1_1.username + GameRoot.player.p1_1.attemptNum.ToString();
+
+        GameRoot.player.records.p1_totTime += puzzleTime;
     }
 
 }

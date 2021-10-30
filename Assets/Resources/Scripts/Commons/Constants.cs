@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 public class Constants
 {
     //Game Settings
@@ -26,6 +27,89 @@ public class Constants
     public const string puzzle04_3SceneName = "06Puzzle04-3"; // for scene 4
     public const string creditSceneName = "06Credit";
     public const string tutorialSceneName = "07Tutorial";
+
+
+
+
+    //Stage2 Constants
+    public static List<int[]> level1vectors = new List<int[]>()
+                                          { new int[3]{ 1, 0, 0 },
+                                            new int[3]{ 0, 0, 1 },
+                                            new int[3]{ -1, 0, 0 },
+                                            new int[3]{ 0, 0, -1 },
+                                            new int[3]{ 1, 0, 1 },
+                                            new int[3]{ 1, 0, -1 },
+                                            new int[3]{ -1, 0, 1 },
+                                            new int[3]{ -1, 0, -1 },
+                                            };
+
+    public static List<int[]> level2vectors = new List<int[]>()
+                                          { new int[3]{ 2, 0, 0 },
+                                            new int[3]{ 0, 0, 2 },
+                                            new int[3]{ -2, 0, 0 },
+                                            new int[3]{ 0, 0, -2 },
+                                            new int[3]{ 1, 0, 2 },
+                                            new int[3]{ 2, 0, 1 },
+                                            new int[3]{ -1, 0, 2 },
+                                            new int[3]{ 1, 0, -2 },
+                                            new int[3]{ -2, 0, 1 },
+                                            new int[3]{ 2, 0, -1 },
+                                            new int[3]{ 2, 0, 2 },
+                                            new int[3]{ 2, 0, -2 },
+                                            new int[3]{ -2, 0, 2 },
+                                            new int[3]{ -2, 0, -2 },
+                                            new int[3]{ 3, 0, 0 },
+                                            new int[3]{ 0, 0, 3 },
+                                            new int[3]{ -3, 0, 0 },
+                                            new int[3]{ 3, 0, 3 },
+                                            new int[3]{ 3, 0, -3 },
+                                            new int[3]{ -3, 0, 3 },
+                                            new int[3]{ -3, 0, -3 },                                                                                        new int[3]{ 1, 0, 2 },
+                                            new int[3]{ 3, 0, 1 },
+                                            new int[3]{ -1, 0, 3 },
+                                            new int[3]{ 1, 0, -3 },
+                                            new int[3]{ -3, 0, 1 },
+                                            new int[3]{ 3, 0, -1 },
+                                            new int[3]{ 2, 0, 3 },
+                                            new int[3]{ 3, 0, 2 },
+                                            new int[3]{ -2, 0, 3 },
+                                            new int[3]{ 2, 0, -3 },
+                                            };
+
+    public static List<int[]> level3vectors = new List<int[]>()
+                                          { new int[3]{ 2, 0, 0 },
+                                            new int[3]{ 0, 0, 2 },
+                                            new int[3]{ -2, 0, 0 },
+                                            new int[3]{ 0, 0, -2 },
+                                            new int[3]{ 1, 0, 2 },
+                                            new int[3]{ 2, 0, 1 },
+                                            new int[3]{ -1, 0, 2 },
+                                            new int[3]{ 1, 0, -2 },
+                                            new int[3]{ -2, 0, 1 },
+                                            new int[3]{ 2, 0, -1 },
+                                            new int[3]{ 2, 0, 2 },
+                                            new int[3]{ 2, 0, -2 },
+                                            new int[3]{ -2, 0, 2 },
+                                            new int[3]{ -2, 0, -2 },
+                                            new int[3]{ 3, 0, 0 },
+                                            new int[3]{ 0, 0, 3 },
+                                            new int[3]{ -3, 0, 0 },
+                                            new int[3]{ 3, 0, 3 },
+                                            new int[3]{ 3, 0, -3 },
+                                            new int[3]{ -3, 0, 3 },
+                                            new int[3]{ -3, 0, -3 },                                                                                        new int[3]{ 1, 0, 2 },
+                                            new int[3]{ 3, 0, 1 },
+                                            new int[3]{ -1, 0, 3 },
+                                            new int[3]{ 1, 0, -3 },
+                                            new int[3]{ -3, 0, 1 },
+                                            new int[3]{ 3, 0, -1 },
+                                            new int[3]{ 2, 0, 3 },
+                                            new int[3]{ 3, 0, 2 },
+                                            new int[3]{ -2, 0, 3 },
+                                            new int[3]{ 2, 0, -3 },
+                                            };
+
+
 
     //Music Names
     public const string audioBgMenu = "00MenuBg";

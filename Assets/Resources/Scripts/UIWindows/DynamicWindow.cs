@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DynamicWindow : WindowRoot
 {
     public Animation aniTips;
-    public Text txtTips;
-    public Text txtTipsShow;
+    public TextMeshProUGUI txtTip;
+    public TextMeshProUGUI txtTips;
+    public TextMeshProUGUI txtTipsShow;
 
     private bool isTipsShow = false;
     private Queue<String> QueueTips = new Queue<String>();
@@ -16,8 +18,9 @@ public class DynamicWindow : WindowRoot
     protected override void InitWindow()
     {
         base.InitWindow();
-        SetActive(txtTips, false);
-        SetActive(txtTipsShow, false);
+        SetActive(txtTips.gameObject, false);
+        SetActive(txtTip.gameObject, false);
+        SetActive(txtTipsShow.gameObject, false);
     }
 
     private void Update()
@@ -44,7 +47,7 @@ public class DynamicWindow : WindowRoot
     private void SetTips(string tips)
     {
         //Active the tip gameobject and set the text
-        SetActive(txtTips, true);
+        SetActive(txtTips.gameObject, true);
         SetText(txtTips, tips);
 
         //Get the animation for later use and play the animation
@@ -54,7 +57,8 @@ public class DynamicWindow : WindowRoot
         //Track the animation time, when it finishs, close the tip gameobject
         StartCoroutine(AniPlayDone(clip.length, () =>
         {
-            SetActive(txtTips, false);
+            SetActive(txtTips.gameObject, false);
+            SetActive(txtTip.gameObject, false);
             isTipsShow = false;
         }));
     }
@@ -71,13 +75,33 @@ public class DynamicWindow : WindowRoot
 
     public void ShowTips(string tips, bool state, bool isReactive)
     {
-        if(isReactive)
+        txtTips.color = new Vector4(246, 197, 97, 255) / 255;
+        txtTip.color = new Vector4(246, 197, 97, 255) / 255;
+
+
+        if (isReactive)
         {
-            SetActive(txtTipsShow, false);
-            SetActive(txtTipsShow, true);
+            SetActive(txtTipsShow.gameObject, false);
+            SetActive(txtTipsShow.gameObject, true);
         }
 
-        SetActive(txtTipsShow, state);
+        SetActive(txtTipsShow.gameObject, state);
         SetText(txtTipsShow, tips);
     }
+
+    public void ShowTips(string tips, Color color, bool state, bool isReactive)
+    {
+        txtTips.color = color;
+        txtTip.color = color;
+
+        if (isReactive)
+        {
+            SetActive(txtTipsShow.gameObject, false);
+            SetActive(txtTipsShow.gameObject, true);
+        }
+
+        SetActive(txtTipsShow.gameObject, state);
+        SetText(txtTipsShow, tips);
+    }
+
 }

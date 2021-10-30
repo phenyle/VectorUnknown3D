@@ -180,46 +180,54 @@ public class LevelSelectButtons : MonoBehaviour
         switch (sceneName)
         {
             case SceneNameMod.Puzzle02SceneName:
-                if (GameRoot.player.users.p2_1clear_time != 0)
+                if (GameRoot.player.records.p2_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.users.p2_1clear_time);
+                    lvl1time.text = ConvertTime(GameRoot.player.records.p2_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.users.p2_2clear_time != 0)
+                if (GameRoot.player.records.p2_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.users.p2_2clear_time);
+                    lvl2time.text = ConvertTime(GameRoot.player.records.p2_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
+
+                if (GameRoot.player.records.p2_3_time != 0)
+                {
+                    lvl3comp.SetActive(true);
+                    lvl3time.text = ConvertTime(GameRoot.player.records.p2_3_time);
+                }
+                else
+                    lvl3comp.SetActive(false);
 
 
                 break;
 
             case SceneNameMod.Puzzle03SceneName:
-                if (GameRoot.player.users.p3_1clear_time != 0)
+                if (GameRoot.player.records.p3_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.users.p3_1clear_time);
+                    lvl1time.text = ConvertTime(GameRoot.player.records.p3_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.users.p3_2clear_time != 0)
+                if (GameRoot.player.records.p3_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.users.p3_2clear_time);
+                    lvl2time.text = ConvertTime(GameRoot.player.records.p3_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
 
-                if (GameRoot.player.users.p3_3clear_time != 0)
+                if (GameRoot.player.records.p3_3_time != 0)
                 {
                     lvl3comp.SetActive(true);
-                    lvl3time.text = ConvertTime(GameRoot.player.users.p3_3clear_time);
+                    lvl3time.text = ConvertTime(GameRoot.player.records.p3_3_time);
                 }
                 else
                     lvl3comp.SetActive(false);
@@ -227,26 +235,26 @@ public class LevelSelectButtons : MonoBehaviour
                 break;
 
             case SceneNameMod.Puzzle04SceneName:
-                if (GameRoot.player.users.p4_1clear_time != 0)
+                if (GameRoot.player.records.p4_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.users.p4_1clear_time);
+                    lvl1time.text = ConvertTime(GameRoot.player.records.p4_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.users.p4_2clear_time != 0)
+                if (GameRoot.player.records.p4_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.users.p4_2clear_time);
+                    lvl2time.text = ConvertTime(GameRoot.player.records.p4_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
 
-                if (GameRoot.player.users.p4_3clear_time != 0)
+                if (GameRoot.player.records.p4_3_time != 0)
                 {
                     lvl3comp.SetActive(true);
-                    lvl3time.text = ConvertTime(GameRoot.player.users.p4_3clear_time);
+                    lvl3time.text = ConvertTime(GameRoot.player.records.p4_3_time);
                 }
                 else
                     lvl3comp.SetActive(false);

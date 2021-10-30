@@ -47,7 +47,10 @@ public class Puzzle03Window : WindowRoot
         if (isInit)
         {
             InitWindow();
+            TogglePanels(false);
         }
+        else
+            TogglePanels(false);
     }
 
     protected override void InitWindow()

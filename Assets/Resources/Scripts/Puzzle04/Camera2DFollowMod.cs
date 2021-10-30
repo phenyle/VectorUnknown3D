@@ -21,6 +21,7 @@ public class Camera2DFollowMod : MonoBehaviour
     private Vector3 m_LookAheadPos;
 
     private bool inPortal;
+    public bool isLock;
 
     // Use this for initialization
     private void Start()
@@ -36,13 +37,15 @@ public class Camera2DFollowMod : MonoBehaviour
         transform.parent = null;
 
         inPortal = false;
+        isLock = false;
     }
 
 
     // Update is called once per frame
     private void Update()
     {
-
+        if (!isLock)
+        {
             // only update lookahead pos if accelerating or changed direction
             float xMoveDelta = (target.position - m_LastTargetPosition).x;
 
@@ -62,7 +65,8 @@ public class Camera2DFollowMod : MonoBehaviour
 
             transform.position = newPos;
 
-            m_LastTargetPosition = target.position;            
+            m_LastTargetPosition = target.position;
+        }
 
     }
 

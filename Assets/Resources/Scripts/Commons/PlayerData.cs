@@ -21,6 +21,7 @@ public class PlayerData : MonoBehaviour
     public enum sheets
     {
         users,
+        records,
         p1_1,
         p2_1,
         p2_2,
@@ -32,6 +33,7 @@ public class PlayerData : MonoBehaviour
         p4_2,
         p4_3
     }
+
 
     public List<string> schools = new List<string>();
 
@@ -63,33 +65,107 @@ public class PlayerData : MonoBehaviour
         public float mouseSense;
         public float soundVol;
         public float soundFX;
-        public float p1_1clear_time;
-        public int p1_1attempts;
-        public float p2_1clear_time;
-        public int p2_1attempts;
-        public float p2_2clear_time;
-        public int p2_2attempts;
-        public float p2_3clear_time;
-        public int p2_3attempts;
-        public float p3_1clear_time;
-        public int p3_1attempts;
-        public float p3_2clear_time;
-        public int p3_2attempts;
-        public float p3_3clear_time;
-        public int p3_3attempts;
-        public float p4_1clear_time;
-        public int p4_1attempts;
-        public float p4_2clear_time;
-        public int p4_2attempts;
-        public float p4_3clear_time;
-        public int p4_3attempts;
+        //public float p1_1clear_time;
+        //public int p1_1attempts;
+        //public float p2_1clear_time;
+        //public int p2_1attempts;
+        //public float p2_2clear_time;
+        //public int p2_2attempts;
+        //public float p2_3clear_time;
+        //public int p2_3attempts;
+        //public float p3_1clear_time;
+        //public int p3_1attempts;
+        //public float p3_2clear_time;
+        //public int p3_2attempts;
+        //public float p3_3clear_time;
+        //public int p3_3attempts;
+        //public float p4_1clear_time;
+        //public int p4_1attempts;
+        //public float p4_2clear_time;
+        //public int p4_2attempts;
+        //public float p4_3clear_time;
+        //public int p4_3attempts;
 
     }
+
+    [System.Serializable]
+    public struct tbl_Records 
+    {
+        public string username;
+        //stage 1
+        public int p1_totAttempts;
+        public float p1_totTime;
+        public float p1_time;
+        public int p1_numMove;
+        public string p1_answers;
+
+        //stage 2
+        public int p2_totAttempts;
+        public float p2_totTime;
+
+        public int p2_1_attempts;
+        public float p2_1_time;
+        public int p2_1_numMove;
+        public string p2_1_questions;
+
+        public int p2_2_attempts;
+        public float p2_2_time;
+        public int p2_2_numMove;
+        public string p2_2_questions;
+
+        public int p2_3_attempts;
+        public float p2_3_time;
+        public int p2_3_numMove;
+        public string p2_3_questions;
+
+        //stage 3
+        public int p3_totAttempts;
+        public float p3_totTime;
+
+        public int p3_1_attempts;
+        public float p3_1_time;
+        public int p3_1_numMove;
+        public string p3_1_movesList;
+
+        public int p3_2_attempts;
+        public float p3_2_time;
+        public int p3_2_numMove;
+        public string p3_2_movesList;
+
+        public int p3_3_attempts;
+        public float p3_3_time;
+        public int p3_3_numMove;
+        public string p3_3_movesList;
+
+
+        //stage 4
+        public int p4_totAttempts;
+        public float p4_totTime;
+
+        public int p4_1_attempts;
+        public float p4_1_time;
+        public int p4_1_numMove;
+        public string p4_1_questions;
+
+        public int p4_2_attempts;
+        public float p4_2_time;
+        public int p4_2_numMove;
+        public string p4_2_questions;
+
+        public int p4_3_attempts;
+        public float p4_3_time;
+        public int p4_3_numMove;
+        public string p4_3_questions;
+
+    }
+
+
     [System.Serializable]
     public struct tbl_P1_1
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public string obs_answers1;
         public string obs_answers2;
@@ -101,6 +177,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
     }
     [System.Serializable]
@@ -108,6 +185,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
     }
     [System.Serializable]
@@ -115,6 +193,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
     }
     [System.Serializable]
@@ -122,6 +201,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public GameControllerPuzzle03.obsData obs;
         public string obs_movesList;
@@ -131,6 +211,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public GameControllerPuzzle03.obsData obs;
         public string obs_movesList;
@@ -140,6 +221,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public GameControllerPuzzle03.obsData obs;
         public string obs_movesList;
@@ -149,6 +231,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public float obs1_time;
         public float obs2_time;
@@ -183,6 +266,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public float obs1_time;
         public float obs2_time;
@@ -214,6 +298,7 @@ public class PlayerData : MonoBehaviour
     {
         public string username;
         public int attemptNum;
+        public string attemptDate;
         public string usernameAttempt;
         public float obs1_time;
         public float obs2_time;
@@ -236,6 +321,7 @@ public class PlayerData : MonoBehaviour
 
     //Player Data Items
     public tbl_Users users;
+    public tbl_Records records;
     public tbl_P1_1 p1_1;
     public tbl_P2_1 p2_1;
     public tbl_P2_2 p2_2;
@@ -251,6 +337,7 @@ public class PlayerData : MonoBehaviour
     public PlayerData()
     {
         users = new tbl_Users();
+        records = new tbl_Records();
         p1_1 = new tbl_P1_1();
         p2_1 = new tbl_P2_1();
         p2_2 = new tbl_P2_2();
@@ -272,26 +359,26 @@ public class PlayerData : MonoBehaviour
         users.mouseSense = 2.0f;
         users.soundVol = 0.25f;
         users.soundFX = 1.0f;
-        users.p1_1clear_time = 0.0f;
-        users.p2_1clear_time = 0.0f;
-        users.p2_2clear_time = 0.0f;
-        users.p2_3clear_time = 0.0f;
-        users.p3_1clear_time = 0.0f;
-        users.p3_2clear_time = 0.0f;
-        users.p3_3clear_time = 0.0f;
-        users.p4_1clear_time = 0.0f;
-        users.p4_2clear_time = 0.0f;
-        users.p4_3clear_time = 0.0f;
-        users.p1_1attempts = 0;
-        users.p2_1attempts = 0;
-        users.p2_2attempts = 0;
-        users.p2_3attempts = 0;
-        users.p3_1attempts = 0;
-        users.p3_2attempts = 0;
-        users.p3_3attempts = 0;
-        users.p4_1attempts = 0;
-        users.p4_2attempts = 0;
-        users.p4_3attempts = 0;
+        //users.p1_1clear_time = 0.0f;
+        //users.p2_1clear_time = 0.0f;
+        //users.p2_2clear_time = 0.0f;
+        //users.p2_3clear_time = 0.0f;
+        //users.p3_1clear_time = 0.0f;
+        //users.p3_2clear_time = 0.0f;
+        //users.p3_3clear_time = 0.0f;
+        //users.p4_1clear_time = 0.0f;
+        //users.p4_2clear_time = 0.0f;
+        //users.p4_3clear_time = 0.0f;
+        //users.p1_1attempts = 0;
+        //users.p2_1attempts = 0;
+        //users.p2_2attempts = 0;
+        //users.p2_3attempts = 0;
+        //users.p3_1attempts = 0;
+        //users.p3_2attempts = 0;
+        //users.p3_3attempts = 0;
+        //users.p4_1attempts = 0;
+        //users.p4_2attempts = 0;
+        //users.p4_3attempts = 0;
 
 
         //player.p1_1 INIT
@@ -334,6 +421,7 @@ public class PlayerData : MonoBehaviour
     public void SetUserName(string new_name)
     {
         users.username = new_name;
+        records.username = new_name;
         p1_1.username = new_name;
         p2_1.username = new_name;
         p2_2.username = new_name;

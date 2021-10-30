@@ -106,6 +106,8 @@ public class GrappleCode : MonoBehaviour
         hookDirection = direction;
         startPos = playerStartPos;
         arcHeight = arc;
+
+
    //     ropeStart.transform.position = charHand.transform.localPosition;
     }
 
@@ -118,15 +120,21 @@ public class GrappleCode : MonoBehaviour
 
         PC04.getGameController().GetAudioService().PlayFXAudio("Puzzle04/grappleShot");
 
-        player.GetComponent<ThirdPersonUserControl>().isLock = true;
+        GameRoot.instance.LockPlayer(true);
 
         grappleAnimation = true;
         this.enabled = true;
 
+        if (PC04.getGameController().Difficulty == 3)
+        {
+            speedIncri = 1.3f;
+        }
+        else
+            speedIncri = 1.0f;
 
         player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
         player.GetComponent<ObjectGlide>().glideObject = ropeEnd;
-        player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.5f);
+        player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.5f * speedIncri);
         player.GetComponent<ObjectGlide>().SetArrivedAtDistaince(1.0f);
         GameRoot.moveEvents.AddListener(PlayerGlideMove);
         player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(ropeEnd, PC04.goalPoint, PC04.goalPoint, ropeEnd.transform.position, 0.0f);
@@ -154,7 +162,7 @@ public class GrappleCode : MonoBehaviour
 
             player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
             player.GetComponent<ObjectGlide>().glideObject = player;
-            player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.4f);
+            player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.4f * speedIncri);
             player.GetComponent<ObjectGlide>().SetArrivedAtDistaince(2.0f);
             GameRoot.moveEvents.AddListener(EndOfPlayerGlide);
             player.GetComponent<ObjectGlide>().GlideOnlyMovingTarget(player, PC04.goalPoint, player.transform.position, 0.0f);
@@ -176,6 +184,7 @@ public class GrappleCode : MonoBehaviour
         GameRoot.moveEvents.RemoveAllListeners();
         GameRoot.moveEvents.AddListener(ReleaseGrapple);
         player.GetComponent<Collider>().enabled = true;
+        GameRoot.instance.LockPlayer(false);
 
         player.GetComponent<ObjectGlide>().GlideOnlyMovingTarget(player, PC04.landPoint, player.transform.position, arcHeight);
 
@@ -196,9 +205,8 @@ public class GrappleCode : MonoBehaviour
         Physics.gravity = new Vector3(0, -9.81f, 0);
         player.GetComponent<Rigidbody>().useGravity = true;
 
-    //    player.GetComponent<Collider>().enabled = true;
-        player.GetComponent<ThirdPersonUserControl>().enabled = true;
-        player.GetComponent<ThirdPersonUserControl>().isLock = false;
+        //    player.GetComponent<Collider>().enabled = true;
+        GameRoot.instance.LockPlayer(false);
 
         ropeStart.transform.localPosition = Vector3.zero;
         ropeEnd.transform.localPosition = Vector3.zero;

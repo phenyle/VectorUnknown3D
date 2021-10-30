@@ -97,6 +97,7 @@
     <Compile Include="Assets\Resources\Scripts\Main\GameControllerMain.cs" />
     <Compile Include="Assets\Resources\Scripts\Main\ObjectGlide.cs" />
     <Compile Include="Assets\Resources\Scripts\Main\RepairShip.cs" />
+    <Compile Include="Assets\Resources\Scripts\Main\ScoreBoardUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Main\ShipRepair.cs" />
     <Compile Include="Assets\Resources\Scripts\Main\TreaureChestScript.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle01\DatabasePuzzle01.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Assets\Resources\Scripts\Puzzle02\HighlightSelected.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\NextLevel.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\PuzzleController02.cs" />
+    <Compile Include="Assets\Resources\Scripts\Puzzle02\RubberizeAnim.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\cannonController.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\cannonballController.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\firedCannonballController.cs" />
