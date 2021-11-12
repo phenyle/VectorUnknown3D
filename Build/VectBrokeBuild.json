@@ -1,0 +1,16 @@
+{
+"companyName": "Math Heads",
+"productName": "Vector Unknown",
+"productVersion": "1.37a",
+"dataUrl": "VectBrokeBuild.data.unityweb",
+"wasmCodeUrl": "VectBrokeBuild.wasm.code.unityweb",
+"wasmFrameworkUrl": "VectBrokeBuild.wasm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0","WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20",
+"cacheControl": {"default": "must-revalidate"},
+"developmentBuild": false,
+"multithreading": false,
+"unityVersion": "2019.4.18f1"
+}
