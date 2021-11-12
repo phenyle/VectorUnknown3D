@@ -541,15 +541,7 @@ public class PuzzleController02 : MonoBehaviour
 
     private void SetText()
     {
-        if (GCP02.Difficulty < 3)
-        {
-            vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
-            vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
-        }
-        else
-        {
-            vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString() + "\n" + shipParent.transform.position.y.ToString();
-            vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString() + "\n" + shipParent.transform.position.y.ToString();
-        }
+        vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
+        vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
     }
 }
