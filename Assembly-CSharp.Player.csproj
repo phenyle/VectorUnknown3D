@@ -685,14 +685,13 @@
     <Compile Include="Assets\Resources\Scripts\Puzzle02\DatabasePuzzle02_02.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\GameControllerPuzzle02.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\HighlightSelected.cs" />
-    <Compile Include="Assets\Resources\Scripts\Puzzle02\NextLevel.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\PuzzleController02.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\RubberizeAnim.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\cannonController.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\cannonballController.cs" />
+    <Compile Include="Assets\Resources\Scripts\Puzzle02\firedBall.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\firedCannonballController.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle02\mainCannonController.cs" />
-    <Compile Include="Assets\Resources\Scripts\Puzzle02\shipContoller.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle03\ChoiceClickButton.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle03\DatabasePuzzle03.cs" />
     <Compile Include="Assets\Resources\Scripts\Puzzle03\ExitZone.cs" />

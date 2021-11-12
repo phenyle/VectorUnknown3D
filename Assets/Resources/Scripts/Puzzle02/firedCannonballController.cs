@@ -33,9 +33,6 @@ public class firedCannonballController : MonoBehaviour
             timer = timer + 1;
             Debug.Log(timer);
 
-            if(timer == 100)
-                GCP02.fireCannon = false;
-
             if (timer > 450)
             {
                 //GCP02.playMiss();
@@ -46,6 +43,15 @@ public class firedCannonballController : MonoBehaviour
                 Destroy(this.gameObject);
             }
 
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "targetShips")
+        {
+            //this.gameObject.GetComponent<ObjectGlide>().CancelGlide();
+            //GameRoot.moveEvents.Invoke();
         }
     }
 }

@@ -211,32 +211,6 @@ public class GameRoot : MonoBehaviour
 
         ShowCursor(true);
 
-
-        //Is this still necessary?---------------------------
-        // check to change cameras in puzzle 2
-        if (SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
-        {
-            Debug.Log("Puzzle 2 Level 1");
-            GCP02_01 = GameObject.Find("GameController_Puzzle02").GetComponent<GameControllerPuzzle02>();
-            if(GCP02_01.cameraFollow)
-            {
-                Debug.Log("Puzzle 2 Level 1 : camera follow");
-                GCP02_01.MainCamera.SetActive(true);
-                GCP02_01.CannonCamera.SetActive(false);
-            }
-            else
-                Debug.Log("Puzzle 2 Level 1: no camera follow");
-        }
-        if(SceneManager.GetActiveScene().name == Constants.puzzle02_2SceneName)
-        {
-            Debug.Log("Puzzle 2 Level 2");
-            GCP02_02 = GameObject.Find("GameController_Puzzle02_02").GetComponent<GameControllerPuzzle02>();
-            if(GCP02_02.cameraFollow)
-            {
-                GCP02_02.CannonCamera.SetActive(false);
-                GCP02_02.MainCamera.SetActive(true);
-            }
-        }
         LockPlayerAndCam(true);
         Time.timeScale = 0;
         pauseWindow.SetWindowState(true);
@@ -283,26 +257,6 @@ public class GameRoot : MonoBehaviour
         pauseWindow.ResetPauseMenu();
         audioService.ResumeAllAudios();
 
-        //Do we still need this?--------------------------
-        // check to change cameras in puzzle 2
-        if(SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
-        {
-            GCP02_01 = GameObject.Find("GameController_Puzzle02").GetComponent<GameControllerPuzzle02>();
-            if(GCP02_01.cameraFollow)
-            {
-                GCP02_01.MainCamera.SetActive(false);
-                GCP02_01.CannonCamera.SetActive(true);
-            }
-        }
-        if(SceneManager.GetActiveScene().name == Constants.puzzle02_2SceneName)
-        {
-            GCP02_02 = GameObject.Find("GameController_Puzzle02_02").GetComponent<GameControllerPuzzle02>();
-            if(GCP02_02.cameraFollow)
-            {
-                GCP02_02.MainCamera.SetActive(false);
-                GCP02_02.CannonCamera.SetActive(true);
-            }
-        }
     }
 
     public void LockPlayer(bool state)

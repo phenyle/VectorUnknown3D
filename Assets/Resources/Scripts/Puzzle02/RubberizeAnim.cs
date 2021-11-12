@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RubberizeAnim : MonoBehaviour
 {
     [Range(0, 2.0f)]

@@ -10454,7 +10454,7 @@ PrefabInstance:
     - target: {fileID: 8602648954684378796, guid: 6299f6e6a09bd9d4d85bab6b72562098,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 351.5
+      value: 262.3
       objectReference: {fileID: 0}
     - target: {fileID: 8602648954684378796, guid: 6299f6e6a09bd9d4d85bab6b72562098,
         type: 3}
@@ -10464,7 +10464,7 @@ PrefabInstance:
     - target: {fileID: 8602648954684378796, guid: 6299f6e6a09bd9d4d85bab6b72562098,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 52.8
+      value: 66.7
       objectReference: {fileID: 0}
     - target: {fileID: 8602648954684378796, guid: 6299f6e6a09bd9d4d85bab6b72562098,
         type: 3}
@@ -27814,7 +27814,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2918626236684459413}
   m_LocalRotation: {x: -0, y: -0.8655411, z: -0, w: -0.500838}
-  m_LocalPosition: {x: 363.7, y: 9.66, z: 46.9}
+  m_LocalPosition: {x: 302.7, y: 9.66, z: 66.4}
   m_LocalScale: {x: 3.4080002, y: 3.408, z: 3.4080002}
   m_Children:
   - {fileID: 2918626236898604075}
@@ -37111,7 +37111,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level2Stage02: {fileID: 0}
   isEnterExit: 0
-  level2ChangeStage: 0
   sceneName: 
 --- !u!114 &2918626237289915403
 MonoBehaviour:
@@ -37141,7 +37140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2918626237289915407}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 351.5, y: 11.1, z: 52.8}
+  m_LocalPosition: {x: 262.3, y: 11.1, z: 66.7}
   m_LocalScale: {x: 2.2034304, y: 2.2034304, z: 2.2034304}
   m_Children:
   - {fileID: 2918626237582459937}
@@ -40891,6 +40890,8 @@ MonoBehaviour:
       m_Calls: []
   timer: 0
   numCorrect: 0
+  questionsList: 
+  totMoves: 0
 --- !u!33 &4360878042714190817
 MeshFilter:
   m_ObjectHideFlags: 0

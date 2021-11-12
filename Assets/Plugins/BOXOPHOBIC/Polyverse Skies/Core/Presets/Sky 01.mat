@@ -4,15 +4,16 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Sky 01
   m_Shader: {fileID: 4800000, guid: 6fc9318f5193c094c98c0d450cd61e3b, type: 3}
-  m_ShaderKeywords: _BUILTINFOG_ON _CLOUDS_ON _ENABLECLOUDSROTATION_ON _ENABLECLOUDS_ON
-    _ENABLEPATTERNOVERLAY_ON _ENABLEPATTERN_ON _ENABLESKYPATTERNOVERLAY_ON _ENABLESTARSSUNMASK_ON
-    _ENABLESTARSTWINKLING_ON _ENABLESTARS_ON _ENABLESUNMASK_ON _ENABLESUNMOONMASK_ON
-    _ENABLESUNMOON_ON _ENABLESUN_ON _ENABLETWINKLING_ON _PATTERNOVERLAY_ON _STARS_ON
-    _SUNORMOON_ON _USECUBEMAP_ON _USEENVIRONMENTGRADIENT_ON _USESKYPATTERNOVERLAY_ON
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _BUILTINFOG_ON _CLOUDS_ON _ENABLECLOUDSROTATION_ON
+    _ENABLECLOUDS_ON _ENABLEPATTERNOVERLAY_ON _ENABLEPATTERN_ON _ENABLESKYPATTERNOVERLAY_ON
+    _ENABLESTARSSUNMASK_ON _ENABLESTARSTWINKLING_ON _ENABLESTARS_ON _ENABLESUNMASK_ON
+    _ENABLESUNMOONMASK_ON _ENABLESUNMOON_ON _ENABLESUN_ON _ENABLETWINKLING_ON _PATTERNOVERLAY_ON
+    _STARS_ON _SUNORMOON_ON _USECUBEMAP_ON _USEENVIRONMENTGRADIENT_ON _USESKYPATTERNOVERLAY_ON
     _USETEXTURE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -172,6 +173,7 @@ Material:
     - _BumpScale: 1
     - _CloudHeight: -0.185
     - _Clouds: 1
+    - _CloudsCat1: 1
     - _CloudsHeight: 0.15
     - _CloudsLitbySun: 0
     - _CloudsRotation: 0
@@ -215,6 +217,7 @@ Material:
     - _Float4: -1
     - _Float5: -0.2
     - _Float6: 0.01
+    - _FogCat1: 1
     - _FogFill: 0
     - _FogHeight: 0
     - _FogIntensity: 0.518
@@ -225,15 +228,18 @@ Material:
     - _Keyword0: 0
     - _Metallic: 0
     - _Mode: 0
+    - _MoonCat: 1
     - _MoonIntensity: 1
     - _MoonSize: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PatternCat: 1
     - _PatternContrast: 0.3
     - _PatternOverlay: 1
     - _RoatationSpeed: 0.4
     - _Rotation: 0
     - _RotationSpeed: 0.5
+    - _SkyCat1: 1
     - _SkyPatternContrast: 0.99
     - _SkyPatternOverlay: 1
     - _SmoothnessTextureChannel: 0
@@ -242,6 +248,7 @@ Material:
     - _StarFlikerSpeed: 0.05
     - _Stars: 1
     - _StarsAmount: 3
+    - _StarsCat1: 1
     - _StarsFlikerContrast: 1
     - _StarsHeightMask: 0.1
     - _StarsHeigntMask: 1
@@ -251,11 +258,13 @@ Material:
     - _StarsMaskPower: 1
     - _StarsSize: 0.3
     - _StarsSunMask: 0.01
+    - _SunCat1: 1
     - _SunIntensity: 2
     - _SunRadiusB: 0
     - _SunRadoisA: 0
     - _SunSize: 0.6
     - _SunorMoon: 1
+    - _TITLE1: 1
     - _ToggleSwitch0: 0
     - _TwinklingContrast: 1
     - _TwinklingSpeed: 0.05

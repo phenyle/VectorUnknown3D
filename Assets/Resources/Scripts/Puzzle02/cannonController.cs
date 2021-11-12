@@ -10,6 +10,7 @@ public class cannonController : MonoBehaviour
     public GameControllerPuzzle02 GCP02;
     public TextMeshProUGUI text;
     public TextMeshProUGUI bracket;
+    public GameObject cannonObject;
 
     public int[] vector;
 
@@ -49,7 +50,7 @@ public class cannonController : MonoBehaviour
 
     public void Update()
     {
-        if(inTrigger)
+        if(this.inTrigger)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {

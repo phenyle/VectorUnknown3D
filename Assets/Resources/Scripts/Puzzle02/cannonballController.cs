@@ -53,7 +53,7 @@ public class cannonballController : MonoBehaviour
 
     public void Update()
     {
-        if(inTrigger)
+        if(this.inTrigger)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {

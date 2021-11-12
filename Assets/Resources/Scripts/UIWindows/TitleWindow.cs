@@ -160,6 +160,8 @@ public class TitleWindow : WindowRoot
     //database when logging in, joining sessions or creating accounts
     public void LateUpdate()
     {
+        GameRoot.instance.ShowCursor(true);
+
         #region Checking connection to database
         //Checking for database/internet connection
         if (checkingConnection)

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -14,7 +15,14 @@ public class PuzzleController02 : MonoBehaviour
     public GameObject shipObject;
     public TextMeshPro vectText;
     public TextMeshPro vectTextTop;
+    public LineRenderer shipLine;
+    public Material lineMatDef;
+    public Material lineMatActive;
     public int[] shipPos;
+
+    [Header("--------FX Parts--------")]
+    public GameObject explosion;
+    public GameObject fires;
 
 
     [HideInInspector]
@@ -105,6 +113,12 @@ public class PuzzleController02 : MonoBehaviour
                                             new int[3]{ 2, 0, -3 },
                                             };
 
+    public string debugAnsVector = "";
+    public string debugAnsMatrix = "";
+    public string debugVectrList = "";
+    public string debugMatrxList = "";
+
+
     public void Awake()
     {
         vectTextTop.gameObject.SetActive(false);
@@ -138,6 +152,7 @@ public class PuzzleController02 : MonoBehaviour
         shipPos[0] = (int)pos.x;
         shipPos[2] = (int)pos.z;
         SetText();
+        SetLine();
     }
 
     public void SetShipDirection()
@@ -173,6 +188,13 @@ public class PuzzleController02 : MonoBehaviour
                 break;
         }
         ansVector = vectorList[Random.Range(0, vectorList.Count)];
+        debugAnsVector = "{ " + ansVector[0].ToString() + ", " + ansVector[2].ToString() + " }";
+
+        foreach (int[] vects in vectorList)
+        {
+            debugVectrList += "{ " + vects[0].ToString() + ", " + vects[2].ToString() + " }\n";
+
+        }
     }
 
     public void CreateMatrixList()
@@ -180,6 +202,9 @@ public class PuzzleController02 : MonoBehaviour
         matrixList = new List<int[][]>();
         ansMatrix = GenerateAnsMatrix(ansVector);
         AdjustShipPos();
+
+        debugAnsMatrix = "{ { " + ansMatrix[0][0].ToString() + ", " + ansMatrix[0][1].ToString() + " }, { " + ansMatrix[1][0].ToString() + ", " + ansMatrix[1][1].ToString() + " } }";
+
         matrixList.Add(ansMatrix);
 
         int picker;
@@ -187,28 +212,46 @@ public class PuzzleController02 : MonoBehaviour
         fakeTypes choice;
         List<fakeTypes> picked = new List<fakeTypes>();
         //need to create 3 more fakey matrixes
-        for (int i = 0; i < 3; i++)
+
+        do
         {
             picker = Random.Range(0, System.Enum.GetNames(typeof(fakeTypes)).Length);
             choice = (fakeTypes)System.Enum.ToObject(typeof(fakeTypes), picker);
             if (!picked.Contains(choice))
             {
-                picked.Add(choice);
-                antiLock = 0;
-                matrixList.Add(GenerateFakeMatricies(choice));
+                if (choice == fakeTypes.swap && ansVector[0] == ansVector[2])
+                {
+                    picked.Add(choice);
+                    antiLock++;
+                }
+                else
+                {
+                    picked.Add(choice);
+                    antiLock = 0;
+                    int[][] temp = GenerateFakeMatricies(choice);
+                    if (!matrixList.Contains(temp)) 
+                        matrixList.Add(temp);
+                    else
+                    {
+                        picked.Remove(choice);
+                        antiLock++;
+                    }
+                }
+
             }
             else
             {
                 antiLock++;
-                if (antiLock > 5)
+                if (antiLock > 20)
                 {
                     picked.Remove(fakeTypes.mod);
                     picked.Remove(fakeTypes.wrongVect);
                 }
 
-                i--;
             }
-        }
+        } while (matrixList.Count < 4);
+
+
     }
 
 
@@ -284,16 +327,21 @@ public class PuzzleController02 : MonoBehaviour
                     fakeMatrix[0] = ansMatrix[1];
                     fakeMatrix[1] = ansMatrix[0];
                 }
-
                 break;
 
             case fakeTypes.mod: //make a tweaked copy of the ansMatrix
                     //we need some value to add/remove from the matrix values
                     //some that is believable but not obvious
-                fakeMatrix = ansMatrix;
                 int quad;
+                
+                for(int i = 0; i < ansMatrix.Length; i++)
+                {
+                    for (int j = 0; j < ansMatrix[i].Length; j++)
+                        fakeMatrix[i][j] = ansMatrix[i][j];
+                }
 
-                for(int j = 0; j < 4; j++)
+
+                for(int j = 0; j < 8; j++)
                 {
                     quad = Random.Range(0, 4);
                     coinflip = Random.Range(0, 1);
@@ -415,6 +463,9 @@ public class PuzzleController02 : MonoBehaviour
     /// <summary>
     /// Dwindles down a reference list of possible vector choices to just 4 options
     /// and returns those four as a list
+    /// 
+    /// Done as a Remove until 4 left because I'm too lazy to write something about
+    /// randomly adding 4 and then checking as I add them that I don't already have it added
     /// </summary>
     /// <param name="reference"></param>
     /// <returns></returns>
@@ -431,7 +482,7 @@ public class PuzzleController02 : MonoBehaviour
             rando = Random.Range(0, temp.Count);
             temp.RemoveAt(rando);
 
-        } while (temp.Count >= 5);
+        } while (temp.Count > 4);
 
         return temp;
     }
@@ -470,8 +521,23 @@ public class PuzzleController02 : MonoBehaviour
             matrixList[i] = matrixList[r];
             matrixList[r] = temp;
         }
+
+        foreach (int[][] matrix in matrixList)
+        {
+            debugMatrxList += "{ { " + matrix[0][0].ToString() + ", " + matrix[0][1].ToString() + " }, { " + matrix[1][0].ToString() + ", " + matrix[1][1].ToString() + " } }\n";
+
+        }
+
     }
 
+    private void SetLine()
+    {
+        shipLine.positionCount = 2;
+        shipLine.SetPosition(0, Vector3.zero + Vector3.up * 10);
+        shipLine.SetPosition(1, new Vector3(shipParent.transform.position.x, 0, shipParent.transform.position.z) + Vector3.up * 10);
+        shipLine.material = lineMatDef;
+        shipLine.gameObject.SetActive(false);
+    }
 
     private void SetText()
     {

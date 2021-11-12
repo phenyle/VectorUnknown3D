@@ -5,14 +5,18 @@ using UnityEngine.SceneManagement;
 public class Puzzle02Window : WindowRoot
 {
     public bool isInit = false;
-    public Image[] shipImages;
     public Text Matrix1, Matrix2, Vector, target;
 
-    private GameControllerPuzzle02 GCP02_01;
-    private GameControllerPuzzle02 GCP02_02;
+    private GameControllerPuzzle02 GCP02;
 
     private GameObject stage01;
-    private GameObject stage02;
+
+    [Header("------ Progress Panel ---------")]
+    public Transform panelProgress;
+    public Text txt_Header;
+    public Text txt_Complete;
+    public Slider slider_Complete;
+    public Text txt_Time;
 
     private void Start()
     {
@@ -27,32 +31,18 @@ public class Puzzle02Window : WindowRoot
         Debug.Log("Init Puzzle02 window");
         base.InitWindow();
 
-        if(SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName)
-        {
-            GCP02_01 = GameObject.Find("GameController_Puzzle02").GetComponent<GameControllerPuzzle02>();
-            GCP02_01.InitGameController(this);
-        }
-        else if(SceneManager.GetActiveScene().name == Constants.puzzle02_2SceneName)
-        {
-            GCP02_02 = GameObject.Find("GameController_Puzzle02_02").GetComponent<GameControllerPuzzle02>();
-            GCP02_02.InitGameController(this);
-        }
+        GCP02 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle02>();
+        GCP02.InitGameController(this);
+
+        txt_Header.text = "Stage 2 - Level " + GCP02.Difficulty.ToString();
+
         Debug.Log("Call GameController of Puzzle02 to connect");
     }
 
-    public void switchStage()
-    {
-        stage01 = GameObject.Find("Stage1");
-        stage01.SetActive(false);
-        // stage02 = GameObject.Find("Stage2");
-        // stage02.SetActive(true); 
-        GCP02_02 = GameObject.Find("GameController_Puzzle02_02").GetComponent<GameControllerPuzzle02>();
-        GCP02_02.InitGameController(this);
-    }
 
-    public void SetTargetShip(int[] shipPos)
+    public void SetTargetShip(Vector3 shipPos)
     {
-        target.text = shipPos[0].ToString() + "\n" + shipPos[2].ToString();
+        target.text = shipPos.x.ToString() + "\n" + shipPos.z.ToString();       
     }
 
     public void SetMatrixSelected(int[][] matrix)
@@ -66,8 +56,20 @@ public class Puzzle02Window : WindowRoot
         Vector.text = vect[0].ToString() + "\n" + vect[2].ToString();
     }
 
+    public void SetCompleteNumber(int sunk, int total)
+    {
+        txt_Complete.text = sunk.ToString() + "/" + total.ToString();
+        slider_Complete.maxValue = total;
+        slider_Complete.value = sunk;
+    }
+
+    public void SetTime(string time)
+    {
+        txt_Time.text = time;
+    }
+
     public void ClickChangeCamera()
     {
-
+        GCP02.SwitchCamera();
     }
 }

@@ -559,50 +559,12 @@ public class Puzzle04Controller : MonoBehaviour
         answer2.y = Mathf.RoundToInt(answer2.y / scal2);
         answer2.z = Mathf.RoundToInt(answer2.z / scal2);
 
-        //One last check that this Pair vector isn't just the same vector as the first vector
-        //The edge case for this is if Vector1(answer1) is parallel to the answer, in that case
-        //Vector2 will also be parallel, and possibly the same values.  If that happens
-        //we throw out Vector1 and recalc Vector2.
-        bool minFinalSize = true;
-        switch (GCP04.Difficulty)
-        {
-            case 1:
-                switch (LimitAxis)
-                {
-                    //Zero vectors are allowed here for "extra" vectors
-                    case Direction.X:
-                        if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
-                            minFinalSize = false;
-                        break;
 
-                    case Direction.Y:
-                        if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
-                            minFinalSize = false;
-                        break;
-                }
 
-                break;
-
-            case 2:
-                if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
-                    minFinalSize = false;
-                if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
-                    minFinalSize = false;
-                break;
-
-            case 3:
-                if (Mathf.Abs(scal1 * answer1.x + scal2 * answer2.x) < Mathf.Abs(InitFinalVector.x / 3))
-                    minFinalSize = false;
-                if (Mathf.Abs(scal1 * answer1.y + scal2 * answer2.y) < Mathf.Abs(InitFinalVector.y / 3))
-                    minFinalSize = false;
-                if (Mathf.Abs(scal1 * answer1.z + scal2 * answer2.z) < Mathf.Abs(InitFinalVector.z / 3))
-                    minFinalSize = false;
-                break;
-        }
 
         // If this Pair vector is the same vector as the first Vector OR the scaled sums results
         // in some final vector with a ZERO, then start over
-        if (!testUnique(answer2) || !minFinalSize)
+        if (!testUnique(answer2) || !ValidateProposedAnswer(scal1 * answer1 + scal2 * answer2))
         {
             cardVectors.Remove(answer1);
             do { answer1 = VectorGenerator(); } while (answer1 == Vector3.zero || (answer1 * scal1) == InitFinalVector);
@@ -616,6 +578,80 @@ public class Puzzle04Controller : MonoBehaviour
         //set the expected card and scal values for the database object
 
         return answer2;
+    }
+
+    /// <summary>
+    /// One last check that this Pair vector isn't just the same vector as the first vector
+    /// The edge case for this is if Vector1(answer1) is parallel to the answer, in that case
+    /// Vector2 will also be parallel, and possibly the same values.  If that happens
+    /// we throw out Vector1 and recalc Vector2.
+    /// </summary>
+    /// <param name="testFinal"></param>
+    /// <returns></returns>
+    private bool ValidateProposedAnswer(Vector3 testFinal)
+    {
+        switch (GCP04.Difficulty)
+        {
+            case 1:
+                switch (LimitAxis)
+                {
+                    //Zero vectors are allowed here for "extra" vectors
+                    case Direction.X:
+                        //compare the magnitude sizes
+                        if (Mathf.Abs(testFinal.x) < Mathf.Abs(InitFinalVector.x / 3))
+                            return false;
+
+                        //compare the positivity/negativity
+                        if ((InitFinalVector.x > 0 && (testFinal.x) <= 0) || (InitFinalVector.x < 0 && (testFinal.x) >= 0))
+                            return false;
+
+                        break;
+
+                    case Direction.Y:
+                        //compare the magnitude sizes
+                        if (Mathf.Abs(testFinal.y) < Mathf.Abs(InitFinalVector.y / 3))
+                            return false;
+
+                        //compare the positivity/negativity
+                        if ((InitFinalVector.y > 0 && (testFinal.y) <= 0) || (InitFinalVector.y < 0 && (testFinal.y) >= 0))
+                            return false;
+                        break;
+                }
+
+                break;
+
+            case 2:
+                //compare the magnitude sizes
+                if (Mathf.Abs(testFinal.x) < Mathf.Abs(InitFinalVector.x / 3))
+                    return false;
+                if (Mathf.Abs(testFinal.y) < Mathf.Abs(InitFinalVector.y / 3))
+                    return false;
+
+                //compare the positivity/negativity
+                if ((InitFinalVector.x > 0 && (testFinal.x) <= 0) || (InitFinalVector.x < 0 && (testFinal.x) >= 0))
+                    return false;
+                if ((InitFinalVector.y > 0 && (testFinal.y) <= 0) || (InitFinalVector.y < 0 && (testFinal.y) >= 0))
+                    return false;
+                break;
+
+            case 3:
+                //compare the magnitude sizes
+                if (Mathf.Abs(testFinal.x) < Mathf.Abs(InitFinalVector.x / 3))
+                    return false;
+                if (Mathf.Abs(testFinal.y) < Mathf.Abs(InitFinalVector.y / 3))
+                    return false;
+                if (Mathf.Abs(testFinal.z) < Mathf.Abs(InitFinalVector.z / 3))
+                    return false;
+                //compare the positivity/negativity
+                if ((InitFinalVector.x > 0 && (testFinal.x) <= 0) || (InitFinalVector.x < 0 && (testFinal.x) >= 0))
+                    return false;
+                if ((InitFinalVector.y > 0 && (testFinal.y) <= 0) || (InitFinalVector.y < 0 && (testFinal.y) >= 0))
+                    return false;
+                if ((InitFinalVector.z > 0 && (testFinal.z) <= 0) || (InitFinalVector.z < 0 && (testFinal.z) >= 0))
+                    return false;
+                break;
+        }
+        return true;
     }
 
     private Vector3 SetFinalAnswer(int scal1, Vector3 vect1, int scal2, Vector3 vect2)

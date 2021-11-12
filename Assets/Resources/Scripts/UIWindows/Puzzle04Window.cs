@@ -785,5 +785,30 @@ public class Puzzle04Window : WindowRoot
         }
     }
 
+    public void Ans1DecreaseButton()
+    {
+        if (scalar1.value > -10)
+            scalar1.value--;
+    }
+
+    public void Ans1IncreaseButton()
+    {
+        if (scalar1.value < 10)
+            scalar1.value++;
+    }
+
+
+    public void Ans2DecreaseButton()
+    {
+        if (scalar2.value > -10)
+            scalar2.value--;
+    }
+
+    public void Ans2IncreaseButton()
+    {
+        if (scalar2.value < 10)
+            scalar2.value++;
+    }
+
 
 }

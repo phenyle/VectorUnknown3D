@@ -132,6 +132,8 @@ public class GrappleCode : MonoBehaviour
         else
             speedIncri = 1.0f;
 
+        player.GetComponent<Rigidbody>().isKinematic = true;
+
         player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
         player.GetComponent<ObjectGlide>().glideObject = ropeEnd;
         player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.5f * speedIncri);
@@ -183,6 +185,8 @@ public class GrappleCode : MonoBehaviour
         playerglide = false;
         GameRoot.moveEvents.RemoveAllListeners();
         GameRoot.moveEvents.AddListener(ReleaseGrapple);
+        player.GetComponent<Rigidbody>().isKinematic = false;
+
         player.GetComponent<Collider>().enabled = true;
         GameRoot.instance.LockPlayer(false);
 

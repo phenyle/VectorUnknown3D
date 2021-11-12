@@ -32,6 +32,7 @@ public class Constants
 
 
     //Stage2 Constants
+    public const int stg2_unitMulti = 100;
     public static List<int[]> level1vectors = new List<int[]>()
                                           { new int[3]{ 1, 0, 0 },
                                             new int[3]{ 0, 0, 1 },

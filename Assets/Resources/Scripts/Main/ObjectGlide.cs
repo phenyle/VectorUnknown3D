@@ -173,7 +173,43 @@ public class ObjectGlide : MonoBehaviour
 
         this.enabled = true;
     }
-#endregion
+
+
+    public void GlideAndLookMovingTarget(GameObject gobject, Vector3 newDestination, GameObject target, Vector3 newStartPos)
+    {
+        glideObject = gobject;
+        SetDestinationPos(newDestination);
+        SetTargetPos(target);
+        SetStartPos(newStartPos);
+        focusAtObject = true;
+        arcHeight = 0.0f;
+        startDistanceXY = (new Vector2(startPos.x, startPos.z) - new Vector2(destinationPos.transform.position.x, destinationPos.transform.position.z)).magnitude;
+        halfwayPoint = (new Vector3(destinationPos.transform.position.x, 0, destinationPos.transform.position.z) - new Vector3(startPos.x, 0, startPos.z)) / 2;
+        destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
+        reachedDestination = false;
+        glide = true;
+
+        this.enabled = true;
+    }
+
+    public void GlideAndLookMovingTarget(GameObject gobject, Vector3 newDestionation, GameObject target, Vector3 newStartPos, float arc)
+    {
+        glideObject = gobject;
+        SetDestinationPos(newDestionation);
+        SetTargetPos(target);
+        SetStartPos(newStartPos);
+        focusAtObject = true;
+        startDistanceXY = (new Vector2(startPos.x, startPos.z) - new Vector2(destinationPos.transform.position.x, destinationPos.transform.position.z)).magnitude;
+        arcHeight = arc;
+        arcTargetPos = new Vector3(0, arcHeight, 0);
+        halfwayPoint = (new Vector3(destinationPos.transform.position.x, 0, destinationPos.transform.position.z) - new Vector3(startPos.x, 0, startPos.z)) / 2;
+        destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
+        reachedDestination = false;
+        glide = true;
+
+        this.enabled = true;
+    }
+    #endregion
 
 
     #region Glide Only Functions
@@ -375,4 +411,8 @@ public class ObjectGlide : MonoBehaviour
         return arcTargetPos;
     }
 
+    public void CancelGlide()
+    {
+        glide = false;
+    }
 }
