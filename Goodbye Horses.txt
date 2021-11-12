@@ -1,5 +1,0 @@
-Something majorly broke the last build version.  Have a working version in a separate folder pull with all the applicalbe updates from the last commit/push.
-
-This textfile and folder clear out are to remove whatever may have caused the crash.
-
-Known crash was something causing every Stage3 and the Credits Scenes to crash Unity, and to crash when attempting to make a new build.
