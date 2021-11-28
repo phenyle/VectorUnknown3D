@@ -4341,7 +4341,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '***'
+  m_Text: ' at least 8 characters'
 --- !u!1 &1795550161864767516
 GameObject:
   m_ObjectHideFlags: 0
@@ -7485,7 +7485,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: First
 --- !u!1 &3381305282171610537
 GameObject:
   m_ObjectHideFlags: 0
@@ -7733,7 +7733,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '***'
+  m_Text: ' at least 8 characters'
 --- !u!1 &3447068135910254772
 GameObject:
   m_ObjectHideFlags: 0
@@ -17290,7 +17290,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Last
+  m_Text: Other
 --- !u!1 &7622269672759661825
 GameObject:
   m_ObjectHideFlags: 0

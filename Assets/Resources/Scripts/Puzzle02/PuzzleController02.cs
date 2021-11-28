@@ -118,6 +118,27 @@ public class PuzzleController02 : MonoBehaviour
     public string debugVectrList = "";
     public string debugMatrxList = "";
 
+    [HideInInspector]
+    [System.Serializable]
+    public struct obsData
+    {
+        public int obsID;
+        public float obsTime;
+        public int[] answer;
+        public bool userUniqueSolution;
+
+        public int[] e_vect;
+        public int[][] e_matrix;
+
+        public int[] i_vect;
+        public int[][] i_matrix;
+    }
+
+    [HideInInspector]
+    public obsData puzzleData;
+    [HideInInspector]
+    public string attemptsList;
+
 
     public void Awake()
     {

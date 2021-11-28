@@ -57,15 +57,16 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public Vector3 currAnswer;
     [HideInInspector]
     [System.Serializable]
-    public struct obsData
+    public struct stageData
     {
-        public int obsID;
-        public float obsTime;
+        public int difficulty;
+        public int attemptNum;
+        public float tot_Time;
         public int numOfShips;
         public int numOfShots;
     }
     [HideInInspector]
-    public obsData puzzleData;
+    public stageData attemptData;
 
     [Header("--------Axis Parts---------")]
     public GameObject AxisMain;
@@ -150,9 +151,10 @@ public class GameControllerPuzzle02 : GameControllerRoot
         startPosition = player.transform.position;
 
         //DATABASE INIT STUFF
-        puzzleData.obsID = Difficulty;
-        puzzleData.obsTime = 0.0f;
-        puzzleData.numOfShots = 0;
+        attemptData.difficulty = Difficulty;
+        attemptData.tot_Time = 0.0f;
+        attemptData.numOfShips = numberOfShips;
+        attemptData.numOfShots = 0;
 
         //Show Dialogue once
         if (showP02_00)
@@ -175,10 +177,14 @@ public class GameControllerPuzzle02 : GameControllerRoot
     {
         if (!DialogueManager.isInDialogue && !GameRoot.isPause)
         {
-            puzzleData.obsTime += Time.deltaTime;
+            attemptData.tot_Time += Time.deltaTime;
+            if(currTarget != null)
+            {
 
-            int minutes = (int)puzzleData.obsTime / 60;
-            int seconds = (int)puzzleData.obsTime - 60 * minutes;
+            }
+
+            int minutes = (int)attemptData.tot_Time / 60;
+            int seconds = (int)attemptData.tot_Time - 60 * minutes;
             if (seconds < 10)
                 P02W.SetTime(minutes.ToString() + " : 0" + seconds.ToString());
             else
