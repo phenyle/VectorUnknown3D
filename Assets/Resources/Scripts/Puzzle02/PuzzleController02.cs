@@ -134,10 +134,14 @@ public class PuzzleController02 : MonoBehaviour
         public int[][] i_matrix;
     }
 
+
     [HideInInspector]
     public obsData puzzleData;
     [HideInInspector]
     public string attemptsList;
+    [HideInInspector]
+    public int attemptNum;
+
 
 
     public void Awake()
@@ -153,6 +157,9 @@ public class PuzzleController02 : MonoBehaviour
     void Start()
     {
         shipPos = new int[3];
+        puzzleData.obsTime = 0.0f;
+        attemptNum = 0;
+        attemptsList = "";
     }
 
 
@@ -329,6 +336,22 @@ public class PuzzleController02 : MonoBehaviour
         //calculate new pos if it changed
         int x = (ansVector[0] * ansMatrix[0][0]) + (ansVector[2] * ansMatrix[1][0]);
         int z = (ansVector[0] * ansMatrix[0][1]) + (ansVector[2] * ansMatrix[1][1]);
+
+        this.puzzleData.e_matrix = ansMatrix;
+        this.puzzleData.e_vect = ansVector;
+        this.puzzleData.answer = new int[2] { x, z };
+        switch(GCP02.Difficulty)
+        {
+            case 1:
+                GameRoot.player.records.p2_1_questions += "{ " + x.ToString() + ", " + z.ToString() + " }\n";
+                break;
+            case 2:
+                GameRoot.player.records.p2_2_questions += "{ " + x.ToString() + ", " + z.ToString() + " }\n";
+                break;
+            case 3:
+                GameRoot.player.records.p2_3_questions += "{ " + x.ToString() + ", " + z.ToString() + " }\n";
+                break;
+        }
 
         //alter ship position if changed to match output of matrix multiplication
         SetPosition(new Vector3(x, 0, z));
@@ -564,5 +587,20 @@ public class PuzzleController02 : MonoBehaviour
     {
         vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
         vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
+    }
+
+    public string CreateAttemptCSV(int[][] a_matrix, int[] a_vect)
+    {
+        string temp = "";
+        attemptNum++;
+
+        temp += attemptNum.ToString() + ", "; //attempt number
+        temp += puzzleData.obsTime.ToString("0.00") + ", "; //time attempted at
+
+        temp += "{ { " + a_matrix[0][0].ToString() + ", " + a_matrix[0][1].ToString() + " }, { " + a_matrix[1][0].ToString() + ", " + a_matrix[1][1].ToString() + " } }, ";
+        temp += "{ " + a_vect[0].ToString() + ", " + a_vect[1].ToString() + " }\n";
+
+        attemptsList += temp;
+        return temp;
     }
 }

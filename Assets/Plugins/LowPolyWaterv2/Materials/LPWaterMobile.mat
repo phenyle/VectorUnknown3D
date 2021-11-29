@@ -9,12 +9,12 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LPWaterMobile
   m_Shader: {fileID: 4800000, guid: 8165be4dd0b12774d80426d906df9c38, type: 3}
-  m_ShaderKeywords: LPW_SHADOWS WATER_REFLECTIVE WATER_REFRACTIVE _DISTORT_ON _EMISSION
-    _SHADING_FLAT _WAVES_OFF _ZWRITE_ON
+  m_ShaderKeywords: WATER_REFLECTIVE _DISTORT_ON _EMISSION _SHADING_FLAT _WAVES_OFF
+    _ZWRITE_ON
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2500
+  m_CustomRenderQueue: 2501
   stringTagMap:
     QUEUE: AlphaTest+50
   disabledShaderPasses: []
@@ -95,5 +95,5 @@ Material:
     - _FresColor: {r: 0.36689016, g: 0.52222586, b: 0.5735294, a: 1}
     - _ShoreColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.6764706, g: 0.6359274, b: 0.2785467, a: 1}
-    - _Sun: {r: -0.26889855, g: 0.19132307, b: 0.9439754, a: 0}
-    - _SunColor: {r: 0.9811321, g: 0.7910911, b: 0.59238166, a: 1}
+    - _Sun: {r: 0.3213938, g: 0.76604444, b: -0.5566705, a: 0}
+    - _SunColor: {r: 1, g: 0.81568635, b: 0.6509804, a: 1}
