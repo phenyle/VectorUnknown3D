@@ -186,6 +186,38 @@ public class PlayerData : MonoBehaviour
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
+
+        public float obs1_time;
+        public float obs2_time;
+        public float obs3_time;
+        public float obs4_time;
+        public float obs5_time;
+        public float obs6_time;
+        public float obs7_time;
+        public float obs8_time;
+        public float obs9_time;
+        public float obs10_time;
+        public PuzzleController02.obsData obs1;
+        public string obs1_attempts;
+        public PuzzleController02.obsData obs2;
+        public string obs2_attempts;
+        public PuzzleController02.obsData obs3;
+        public string obs3_attempts;
+        public PuzzleController02.obsData obs4;
+        public string obs4_attempts;
+        public PuzzleController02.obsData obs5;
+        public string obs5_attempts;
+        public PuzzleController02.obsData obs6;
+        public string obs6_attempts;
+        public PuzzleController02.obsData obs7;
+        public string obs7_attempts;
+        public PuzzleController02.obsData obs8;
+        public string obs8_attempts;
+        public PuzzleController02.obsData obs9;
+        public string obs9_attempts;
+        public PuzzleController02.obsData obs10;
+        public string obs10_attempts;
+
     }
     [System.Serializable]
     public struct tbl_P2_2
@@ -196,6 +228,37 @@ public class PlayerData : MonoBehaviour
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
+
+        public float obs1_time;
+        public float obs2_time;
+        public float obs3_time;
+        public float obs4_time;
+        public float obs5_time;
+        public float obs6_time;
+        public float obs7_time;
+        public float obs8_time;
+        public float obs9_time;
+        public float obs10_time;
+        public PuzzleController02.obsData obs1;
+        public string obs1_attempts;
+        public PuzzleController02.obsData obs2;
+        public string obs2_attempts;
+        public PuzzleController02.obsData obs3;
+        public string obs3_attempts;
+        public PuzzleController02.obsData obs4;
+        public string obs4_attempts;
+        public PuzzleController02.obsData obs5;
+        public string obs5_attempts;
+        public PuzzleController02.obsData obs6;
+        public string obs6_attempts;
+        public PuzzleController02.obsData obs7;
+        public string obs7_attempts;
+        public PuzzleController02.obsData obs8;
+        public string obs8_attempts;
+        public PuzzleController02.obsData obs9;
+        public string obs9_attempts;
+        public PuzzleController02.obsData obs10;
+        public string obs10_attempts;
     }
     [System.Serializable]
     public struct tbl_P2_3
@@ -206,6 +269,37 @@ public class PlayerData : MonoBehaviour
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
+
+        public float obs1_time;
+        public float obs2_time;
+        public float obs3_time;
+        public float obs4_time;
+        public float obs5_time;
+        public float obs6_time;
+        public float obs7_time;
+        public float obs8_time;
+        public float obs9_time;
+        public float obs10_time;
+        public PuzzleController02.obsData obs1;
+        public string obs1_attempts;
+        public PuzzleController02.obsData obs2;
+        public string obs2_attempts;
+        public PuzzleController02.obsData obs3;
+        public string obs3_attempts;
+        public PuzzleController02.obsData obs4;
+        public string obs4_attempts;
+        public PuzzleController02.obsData obs5;
+        public string obs5_attempts;
+        public PuzzleController02.obsData obs6;
+        public string obs6_attempts;
+        public PuzzleController02.obsData obs7;
+        public string obs7_attempts;
+        public PuzzleController02.obsData obs8;
+        public string obs8_attempts;
+        public PuzzleController02.obsData obs9;
+        public string obs9_attempts;
+        public PuzzleController02.obsData obs10;
+        public string obs10_attempts;
     }
     [System.Serializable]
     public struct tbl_P3_1
