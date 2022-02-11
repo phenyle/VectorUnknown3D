@@ -1,7 +1,7 @@
 {
 "companyName": "Math Heads",
 "productName": "Vector Unknown",
-"productVersion": "1.52a",
+"productVersion": "1.5b",
 "dataUrl": "VectorBuilds.data.unityweb",
 "wasmCodeUrl": "VectorBuilds.wasm.code.unityweb",
 "wasmFrameworkUrl": "VectorBuilds.wasm.framework.unityweb",
