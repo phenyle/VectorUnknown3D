@@ -1,0 +1,15 @@
+Stage04 - Level 3 : Z-axis
+
+Passcode Game Saving?
+
+Google Sheets API
+
+Data Collection into API
+
+Game Saves in Google API
+
+Google Sheets API with Unity How-To:
+https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.google.com_document_d_14cRMeyFXhYYCHYjeNahGFLlsAHlc5HmVWp30ZtdqMkk_edit&d=DwMFaQ&c=l45AxH-kUV29SRQusp9vYR0n1GycN4_2jInuKy6zbqQ&r=0lArga3pvKjaRgkpMAZdb-ZbCYcoCxcQ8W0kf84vO3Y&m=9n2ypkYX2NVV4ZlfjcYh6cHojKjpMUQYc8WVbQZZsII&s=99WXrRbCzmYOaWwH8tExO6iw_Q16IrNCwchCFdo1C78&e=
+
+2D Meta Data Output to Google Sheet
+https://docs.google.com/spreadsheets/d/11CfWg1CKIitu53hMdbug30ZiqRIyqJYcwNDpPVj8Ads/edit?ts=5b6df125#gid=532625810

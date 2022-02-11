@@ -1,0 +1,9 @@
+No direct install required.  Game is played via WebGL hosted at:
+
+https://sailorfuzz.github.io/VectorBuilds/
+
+Simply copy the link to your browser (currently supported with Microsoft Edge, and Google Chrome)
+
+From the title screen click Play:
+From here you may either create your own profile using "Create Account"
+or join on my prepared instance session by clicking "Join Session" and entering: SGSC

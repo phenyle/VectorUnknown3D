@@ -1,0 +1,96 @@
+NEW--------------
+ScoreBoardUI.cs
+In-game element to show the player their current scores, record and achievements
+> Overall tab
+Lists the total attempts (completions) of each stage at any difficulty.
+Illustrates what parts for the ship still need to unlocked (black silhouette)
+Shows what stages and difficulties certain parts unlock for
+Illustrates what parts have already been unlocked
+>Stage tabs
+Stage specific meta data about the players best record (by time) for a stage and difficulty
+Different stages track data different ways so each tab is a little different on what is recorded
+>Ingame asset
+trigger, signage, UI elements, buttons and links to the google sheets implimented
+
+CHANGES-----------
+>>>>>Stage2
+Stage 2 difficulty 1 is live again. The stage can be entered without crashing the game at the moment but the final changes and game assets haven't been implimented fully yet.
+>New Stuff
+Dynamic Ship Locations:
+Every play through will now generate a set number of ships (pending level) at random locations (within limits)
+The new system now creates its own selections of vectors and matrixes to hit the ships
+---Algorithm flow works like this---
+-For each stage, the ships are randomly scattered across the field (and made to not overlap or be too close)
+-For easy levels (level 1 and 2) the ships will only be placed in locations that are multiples of 5 eg [40,25], [-50,75], etc
+-Each ship knows where it is so it knows what the answer is.  
+-There are two preset lists of possible vectors choices, 
+-easy list is things like [1,0], [0,-1], [1,1], etc
+-hard list is things like [2,-1], [2,3], [3,0], [-1,3], etc
+-Each ship (pending difficulty) chooses 4 vectors from the lists for its answers
+-From there, each ship selects ONE of those vectors (ansV) as the actual answer vector (the rest are used, but herrings)
+-From here the matricies are generated.
+-First each ship finds the GCD of its location, ex GCD([40,50]) = 10, or GCD([15,45]) = 15
+-for the lower levels the GCD is usually 5, 10, 15, etc.
+-It uses this GCD and a random number to generate the first vector of the 2x2 matrix. 
+-The random number range is determined as some integer between 0, and shipPosition / GCD
+-we end up with two random numbers for X and Y (call them r1, r2)
+-The first vector of the matrix is the product of the GCD * [r1, r2]
+-this gives us [[a,c]...] of our matrix where a = GCD * r1 and c = GCD * r2
+-from here using the chosen answer vector (ansV) from earlier we can determine [...,[b,d]]
+-it follows that [b,d] = ([ship.x,ship.y] - ansV.x*[a,c]) / ansV.y
+-for cases where ansV.y = 0, the algorithm throws away the [r1,r2] and finds a solution where ansV.x[a,c] = [x, y]
+-for cases where the division results in a frational, the result is rounded and the ship position is adjusted
+-in the case of rounding, this means there are edges where the ship location isn't exactly a multiple of 5
+-after the answer matrix (ansM) is deteremined each ship generates 3 more herring matricies and adds them to their lists
+Game Mechanic Wise:
+The game picks a ship and random, asks it for its list of possible vectors and possible matrices and distributed them to the player interactable assets (the cannons and cannonballs).
+Also, the game checks if there is another ship inbetween the cannon and the picked ship.
+- if there is, the game changes the picked ship to be the one that's in the way first
+- don't want to break the immersion of shooting through on ship to sink the one behind it, lol.
+Addons:
+Picking a vector and matrix will rotate the cannon to face in the direction of the resulting vector
+- this sort of helpful in picking choices as you can see if the cannon is even facing the target
+- the cannon does not rotate if the combination of ansV and ansM results in [0,0]
+The targeted ship will have its goal location broadcasted above it and animated for better visual recognition
+Cannonballs (the Matrix picker/signs) are much more noticable with glowing animated ring
+--- In addition to the ring, the signage now rotates to face the player as they walk by
+Future Plans:
+Implement the cannon firing sequence so the player can actually play the game
+Allow the player to select through targets (skip and choose different ships at their prefrence)
+Better Cannon (answer Vector) signage, more animated and noticeable
+Top down Camera view re-imagined
+
+>>>>Player and Camera Locking
+Unified the system of locking the player, camera and show/hide cursor into ONE system
+-- every stage, portal, dialog, etc had its own methods of hiding/locking the player causing all sorts of confusion
+-- new tools implemented at the GameRoot to explicitly control what is locked and when
+
+>>>>Database (Google Sheets)
+Changes maded to google sheets to clean up some of the mess under "users" and unifiy records data in their own table "records"
+No changes made to how the individual stages record their data, those still record every attempt and associated information
+That's a lie, actually the database now, additionally, records the DATE of each attempt (for keeping track of a player's progress through time, or determing how long has passed between attempts).
+New records tab and data meant to facilitate the new ScoreBoardUI and keep better records of the player's gamestate.
+
+>>>> Dialog
+Players can now press "Space" to automatically fill out the current line of dialog.  
+Pressing Space again (or when the dialog is fully written out) will automatically click the "next" button.
+
+BUG FIXES------------------
+Stage4:
+changed the "tab" to cursor to be consistent with the new lock/unlock rules
+changed how fast the player grapples on Level3 because of the increased size of the map (player felt slow)
+Fixes to Goals resulting in a 0 in some dimension causing all sorts of problems for visual scaling
+-- extreme rare case of stars aligning to cause the final vector to be dimished and rounded to a 0
+-- algorithm now checks at the end to ensure that (for the goal at least) no value is 0
+-- if, on the rare case it is, throw the original solution out and start again.
+Stage4 grappling has some fixes to get over ledges, but it still needs more work, it's not as consistent as it should be
+Stage3 minimap visuals looks right for the selected vector and much clearer
+Stage3 camera should be unlocked correctly when entering the level now and unlocked when dialog is completed
+Probably countless others that I just saw, fixed and didn't think about
+
+LIVE PLAY-------------
+Pushing a WebGL Build version of this source push to the VectorUnknown3D repo.  Live play should be available at:
+https://phenyle.github.io/VectorUnknown3D/
+won't know till the push is done (cross them fingers)
+Will also push a live build the old link at
+https://sailorfuzz.github.io/VectorBuilds/

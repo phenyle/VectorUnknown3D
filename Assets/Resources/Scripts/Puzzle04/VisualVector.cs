@@ -221,6 +221,9 @@ public class VisualVector : MonoBehaviour
                 vector1end.transform.position = start.transform.position + rescaledVector(PC04.getAnsCard1() * PC04.getScalar1());
                 vector1ball.SetActive(true);
                 vector1.SetActive(true);
+                vector1.GetComponent<LineRenderer>().SetPosition(0, start.transform.position);
+                vector1.GetComponent<LineRenderer>().SetPosition(1, vector1end.transform.position);
+
                 VectorBetweenPoints(vector1, start.transform.position, vector1end.transform.position, 0.25f);
 
             }
@@ -236,6 +239,8 @@ public class VisualVector : MonoBehaviour
                 vector2end.transform.position = vector1end.transform.position + rescaledVector(PC04.getAnsCard2() * PC04.getScalar2());
                 vector2ball.SetActive(true);
                 vector2.SetActive(true);
+                vector2.GetComponent<LineRenderer>().SetPosition(0, vector1end.transform.position);
+                vector2.GetComponent<LineRenderer>().SetPosition(1, vector2end.transform.position);
                 VectorBetweenPoints(vector2, vector1end.transform.position, vector2end.transform.position, 0.25f);
 
             }
@@ -250,6 +255,9 @@ public class VisualVector : MonoBehaviour
             if (PC04.getAnsCard1() != Vector3.zero && PC04.getAnsCard2() != Vector3.zero)
             {
                 finalVector.SetActive(true);
+                finalVector.GetComponent<LineRenderer>().SetPosition(0, start.transform.position);
+                finalVector.GetComponent<LineRenderer>().SetPosition(1, vector2end.transform.position);
+
                 VectorBetweenPoints(finalVector, start.transform.position, vector2end.transform.position, 0.25f);
             }
             else

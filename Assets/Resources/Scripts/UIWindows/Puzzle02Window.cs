@@ -10,6 +10,10 @@ public class Puzzle02Window : WindowRoot
     private GameControllerPuzzle02 GCP02;
 
     private GameObject stage01;
+    private bool showOverlay = false;
+    [HideInInspector]
+    public bool showTargetLines = false;
+
 
     [Header("------ Progress Panel ---------")]
     public Transform panelProgress;
@@ -53,7 +57,7 @@ public class Puzzle02Window : WindowRoot
 
     public void SetVectorSelected(int[] vect)
     {
-        Vector.text = vect[0].ToString() + "\n" + vect[2].ToString();
+        Vector.text = vect[0].ToString() + "\n" + vect[1].ToString();
     }
 
     public void SetCompleteNumber(int sunk, int total)
@@ -71,5 +75,18 @@ public class Puzzle02Window : WindowRoot
     public void ClickChangeCamera()
     {
         GCP02.SwitchCamera();
+    }
+
+    public void ClickShowLattice()
+    {
+        showOverlay = !showOverlay;
+        GCP02.ToggleOverlay(showOverlay);
+    }
+
+    public void ClickShowTargetLines()
+    {
+        showTargetLines = !showTargetLines;
+        GCP02.ToggleTargetLines(showTargetLines);
+
     }
 }

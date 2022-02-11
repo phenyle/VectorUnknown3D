@@ -1,0 +1,40 @@
+DONE:
+New Account Changes:
+-- New accounts now have a drop down list for selecting a school
+-- Current listed schools are only ASU and CSU and Other
+-- Selecting "Other" from the drop down enables a text field to manually enter school name
+-- Added new error pop-ups to check if school selected/entered
+-- Changed the font sizes on the drop down lists to make them easier to read
+
+DataBase Changes:
+-- Added new functionality to the GFSU to update specific tables
+-- Exiting the puzzle now only updates that specific puzzle table on GoogleSheets
+------This is to cut down on traffic and limit errors when saving player data
+------When first logging in ONLY the "users" table is loaded
+-- Created new metrics under the "User" table to track number of attempts for any puzzle & difficulty
+-- Puzzle tables now save multiple attempts by the same user
+------The new attempt is denoted by their attempt number and a modified version of their username+attemptNumber
+------Players may retry any puzzle (sans puzzle1) multiple times and each attempt is saved independently (assuming they finish the puzzle)
+-- Fixed some bugs with Puzzle04 puzzleIDs getting mixed up when saving to the database
+-- Added functionality for saving player School information
+-- Changed the GFSU listing for database tables (from a string[] to an enum)
+------Should limit possible future errors with mispelling, scaling, etc.
+
+Pause Menu:
+-- Eliminated the option "Hub" from the pause menu when the player is in the Tutorial
+------This was causing a bug where the player could play the full game without ever logging in
+
+
+
+STILL NEED TO DO:
+Puzzle2 overhaul
+Bulletin/Progress Report Board
+Create a grammar and format for how data is saved to the database for easier parsing
+
+
+
+KNOWN BUGS:
+Solving Puzzle03 without ever rotating the camera causes the camera to hang instead of returning to player
+LevelSelectUI is ghosting scores from different levels on stage2
+Puzzle4 causes problems on the extremely rare chance 2 answer cards have the same vector values (the game treats both cards as the same card)
+

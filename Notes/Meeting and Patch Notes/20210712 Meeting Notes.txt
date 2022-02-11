@@ -1,0 +1,28 @@
+New Features:
+Graph overlay now visible through level
+Graph/VisVectors that intersect with map are discolored (silohouettes)
+Finally Fixed the Z axis to Vertical
+Refactor/Overhaul of Puzzle04 Vector Generation
+Refactor of Puzzle04controller (more to be done)
+Bug addressed with player getting suspended mid-air after grapple
+Optimization and decentrilization of Puzzle04 tools
+
+
+
+
+
+
+
+Notes:
+Table of Possible Vector pairs for goals [OLD]
+Picks from table [OLD]
+
+
+
+
+
+
+
+
+
+Bugs:

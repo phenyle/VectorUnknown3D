@@ -1,0 +1,38 @@
+================ New =================
+Importation of the All-in-1-Sprite-Shader package
+
+============== Changes ===============
+- Updated Dialogs with Left v Right (where found)
+- Changed In-Game texts of "puzzles" to "Stages" (unify naming structure)
+- Removed Old UI elements on Hub world
+- Fixed Font Material colors
+- Visual Vector changes from Cylinders to LineRenderers
+- Fail Shot bug fixes
+- Changes to GrappleKit to show Demo of shot tracjector and missed shots
+- Tweaks to Stage4 vector generation
+- PlayerData tweaks for database management
+
+>>>>In Depth<<<<<
+Visual Vector:
+Changed visual system (for moving player vectors only, atm) from stretched cylinders to LineRenderers
+Originally we didn't use LineRenderers because we didn't have good sprite material shaders to produce
+the translucent and FX lines.  With the new Sprite-Shader package we do now.
+This change is helpful in reducing processing power needed and LineRenderers will produce a more consistent
+and manageable result.
+Red/Blue/Green Visual vectors replaced with LineRenderers
+Hook Grapple rope replaced with a LineRenderer.
+
+GrappleKit:
+Now shows an animating visual "hook" moving along the "Final" vector line.
+Also fires a "missed" shot, which will move towards the player answer, then fly off a bit more and bounce around
+Missed shots changes the Rope LineRenderer to a TrailRenderer which will fly off with the hook
+Changed animation of FX of "muzzleFlash" for firing the hook.
+FX and SoundFX both play for both hit and missed shots
+
+FailShots:
+Player may now enter in the wrong information and see where the shot goes
+Fixed numerous issues causing the player be locked after entering a wrong (failed) answer
+When entering a wrong answer, the GrappleKit will fire but "exit" portal will not activate
+Wrong Answers turn off VisualVector for a second while the "wrong" animation plays out.
+
+With both fixes for how the failshots activate and how the grapple kit activates, this should aleviate many of the numerous bugs that occured after entering in the wrong answer.  Player should not become locked at the portal, or unable to move, or visualvectors being gone permanent, or having to restart the game.

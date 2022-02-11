@@ -3,7 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 public class PuzzleController02 : MonoBehaviour
 {
@@ -24,6 +25,16 @@ public class PuzzleController02 : MonoBehaviour
     public GameObject explosion;
     public GameObject fires;
 
+    [Header("--------Settings--------")]
+
+    private float minDistApart = 10;
+    public int xMin = -75;
+    public int xMax = 75;
+    public int zMin = 20;
+    public int zMax = 100;
+    public int rValue = 10;
+    private int attempt = 1;
+    public int id;
 
     [HideInInspector]
     public List<int[][]> matrixList; //a generate list of 4 possible answer matricies
@@ -147,6 +158,19 @@ public class PuzzleController02 : MonoBehaviour
         shipParent = this.gameObject;
         shipObject = shipParent.transform.Find("shipBody").gameObject;
         GCP02 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle02>();
+
+
+        //ReScaleLevel(GCP02.Difficulty);
+    }
+
+    private void ReScaleLevel(int diffLvl)
+    {
+        minDistApart = Mathf.CeilToInt(10 * (diffLvl / 3.0f));
+        xMin = Mathf.CeilToInt(xMin * (diffLvl / 3.0f));
+        xMax = Mathf.FloorToInt(xMax * (diffLvl / 3.0f));
+        zMin = Mathf.CeilToInt(zMin * (diffLvl / 3.0f));
+        zMax = Mathf.FloorToInt(zMax * (diffLvl / 3.0f));
+        rValue = Mathf.RoundToInt(rValue * (GCP02.Difficulty / 3.0f));
     }
 
     // Start is called before the first frame update
@@ -166,6 +190,12 @@ public class PuzzleController02 : MonoBehaviour
         vectText.gameObject.SetActive(val);
     }
 
+    public void SetID(int idnum)
+    {
+        id = idnum;
+    }
+
+
     public void SetPosition(Vector3 pos)
     {
         shipParent.transform.position = pos;
@@ -176,9 +206,10 @@ public class PuzzleController02 : MonoBehaviour
         SetLine();
     }
 
+
     public void SetShipDirection()
     {
-        shipObject.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
+        shipObject.transform.Rotate(Vector3.up, Random.Range(0.0f, Mathf.PI * 2));
     }
 
 
@@ -327,8 +358,8 @@ public class PuzzleController02 : MonoBehaviour
     private void AdjustShipPos()
     {
         //calculate new pos if it changed
-        int x = (ansVector[0] * ansMatrix[0][0]) + (ansVector[2] * ansMatrix[1][0]);
-        int z = (ansVector[0] * ansMatrix[0][1]) + (ansVector[2] * ansMatrix[1][1]);
+        int x = (ansVector[0] * ansMatrix[0][0]) + (ansVector[1] * ansMatrix[1][0]);
+        int z = (ansVector[0] * ansMatrix[0][1]) + (ansVector[1] * ansMatrix[1][1]);
 
         //alter ship position if changed to match output of matrix multiplication
         SetPosition(new Vector3(x, 0, z));
@@ -565,4 +596,314 @@ public class PuzzleController02 : MonoBehaviour
         vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
         vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
     }
+
+    public void AltCreateMatrixList()
+    {
+        Debug.LogWarning("Making New Matrix For ShipID# " + id.ToString() + "\tAttempt# " + attempt.ToString());
+
+        matrixList = new List<int[][]>();
+        for(int i = 0; i < 4; i++)
+        {
+            matrixList.Add(AltGenerateAnswerMatrix());
+        }
+        ansMatrix = matrixList[Random.Range(0, 4)];
+    }
+
+
+    private int[][] AltGenerateAnswerMatrix()
+    {
+        float[] pos = new float[2];
+        int[][] matrix = new int[2][] { new int[2], new int[2] };
+        int[] vect = ansVector;
+
+        float thetaMax = Mathf.Deg2Rad * 120.0f;
+        float thetaMin = Mathf.Deg2Rad * 60.0f;
+        float theta;
+
+        Vector2 x1 = new Vector2(1, 0);
+        theta = Random.Range(0.0f, 6.28f);
+
+        float s = Mathf.Cos(theta) * x1.x - Mathf.Sin(theta) * x1.y;
+        float t = Mathf.Sin(theta) * x1.x + Mathf.Cos(theta) * x1.y;
+        int randScal = Random.Range(Mathf.RoundToInt((float)rValue * 0.66f), rValue);
+        Vector2 k = new Vector2(s, t) * randScal;
+        k.x = Mathf.RoundToInt(k.x);
+        k.y = Mathf.RoundToInt(k.y);
+
+        x1 = k;
+
+        //Rotating the second Vector
+        theta = Random.Range(thetaMin, thetaMax);
+        if (Random.Range(0.0f, 1.0f) < 0.5f)
+            theta = (theta * -1);
+
+        s = Mathf.Cos(theta) * x1.normalized.x - Mathf.Sin(theta) * x1.normalized.y;
+        t = Mathf.Sin(theta) * x1.normalized.x + Mathf.Cos(theta) * x1.normalized.y;
+
+        k = new Vector2(s, t);
+
+        //scoring phase
+        float bestScore = 99;
+        float bestScal = 0;
+        float magV1 = x1.magnitude;
+        //We're only going to look at x2 that at least half the mag x1 but not larger than 1.5 the mag of x1 
+        for (int i = Mathf.RoundToInt(magV1 * 0.5f); i < Mathf.RoundToInt(magV1 * 1.5f); i++)
+        {
+            Vector2 tempRound = new Vector2(Mathf.Round(k.x * i), Mathf.Round(k.y * i));
+            float score = Mathf.Abs((tempRound - (k * i)).magnitude);
+            if(score < bestScore)
+            {
+                bestScore = score;
+                bestScal = i;
+            }
+        }
+
+        Vector2 x2 = new Vector2(Mathf.Round(k.x * bestScal), Mathf.Round(k.y * bestScal));
+
+        matrix[0][0] = (int)x1.x;
+        matrix[0][1] = (int)x1.y;
+        matrix[1][0] = (int)x2.x;
+        matrix[1][1] = (int)x2.y;
+
+        return matrix;
+    }
+
+    public void AltCreateVectorsList()
+    {
+        vectorList = new List<int[]>();
+        //call function to get one correct vector
+        ansVector = AltGenerateAnswerVector2();
+        vectorList.Add(ansVector);
+
+        for(int i = 0; i < 3; i++)
+        {
+            vectorList.Add(new int[] { (int)Random.Range(-10, 10) + ansVector[0], (int)Random.Range(-10, 10) + ansVector[1] });
+        }
+
+
+        AdjustShipPos();
+
+        //make modified copies of the correct vector as redherrings
+    }
+
+
+    public int[] AltGenerateAnswerVector()
+    {
+        //Range Variables
+        int[] alphaRanges = new int[2];
+        int[] betaRanges = new int[2];
+        int alpha, beta;
+
+        //coinflip to start from alpha or beta
+        if (Random.Range(0.0f, 1.0f) < 0.5f)
+        {
+            alphaRanges = FindRanges(0);
+            alpha = Random.Range(alphaRanges[0], alphaRanges[1]);
+            betaRanges = RedefineRanges(1, alpha);
+            beta = Random.Range(alphaRanges[0], alphaRanges[1]);
+        }
+        else
+        {
+            betaRanges = FindRanges(1);
+            beta = Random.Range(betaRanges[0], betaRanges[1]);
+            alphaRanges = RedefineRanges(0, beta);
+            alpha = Random.Range(alphaRanges[0], alphaRanges[1]);
+        }
+
+        return new int[2] { alpha, beta };
+    }
+
+    public int[] AltGenerateAnswerVector2()
+    {
+
+
+        //Range Variables
+        int[] alphaRanges = new int[2];
+        int[] betaRanges = new int[2];
+        int alpha, beta;
+
+        Matrix<double> matrix = DenseMatrix.OfArray(new double[,]
+        {
+            {ansMatrix[0][0], ansMatrix[1][0] },
+            {ansMatrix[0][1], ansMatrix[1][1] }
+        });
+
+//        Debug.Log("int Array Matrix:\n" + ansMatrix[0][0].ToString() + ", " + ansMatrix[1][0].ToString() + "\n" + ansMatrix[0][1].ToString() + ", " + ansMatrix[1][1].ToString());
+
+        Debug.Log("ShipID# " + id.ToString() + "\tNumerics Matrix:\n" + matrix.ToString());
+
+        Matrix<double> invertedMatrix = matrix.Inverse();
+
+ //       Debug.Log("Inverted Matrix:\n" + invertedMatrix.ToString());
+
+        // Calc Mins
+        Matrix<double> minValues = DenseMatrix.OfArray(new double[,]
+        {
+            { xMin },
+            { zMin }
+        });
+        Matrix<double> minRange = (invertedMatrix * minValues).PointwiseCeiling();
+
+        //Calc Maxs
+        Matrix<double> maxValues = DenseMatrix.OfArray(new double[,]
+        {
+            { xMax },
+            { zMax }
+        });
+        Matrix<double> maxRange = (invertedMatrix * maxValues).PointwiseFloor();
+
+        Matrix<double> scalMatrix = DenseMatrix.OfArray(new double[,]
+            {
+                { 0 },
+                { 0 }
+            });
+
+        Vector3 resultPos;
+
+        alpha = Random.Range((int)minRange[0, 0], (int)maxRange[0, 0]);
+
+        beta = Random.Range((int)minRange[1, 0], (int)maxRange[1, 0]);
+
+        scalMatrix[0, 0] = alpha;
+        scalMatrix[1, 0] = beta;
+
+        Matrix<double> resultMatrix = (matrix * scalMatrix);
+        resultPos = new Vector3((float)resultMatrix[0, 0], 0, (float)resultMatrix[1, 0]);
+
+        Debug.Log("ShipID# " + id.ToString() + "\tShip Pos Result\n" + resultPos.ToString());
+
+        if(!ShipInBounds( resultPos ) || !ShipsSpacedOut( resultPos ))
+        {
+            matrixList.Clear();
+            matrixList.TrimExcess();
+            ansMatrix = new int[2][];
+            vectorList.Clear();
+            vectorList.TrimExcess();
+            ansVector = new int[2];
+            attempt++;
+            Debug.LogWarning("ShipID# " + id.ToString() + "\tCleared Lists\nMatrixCount: " + matrixList.Count().ToString() + "\tVectorCount: " + vectorList.Count().ToString());
+            AltCreateMatrixList();
+            AltCreateVectorsList();
+        }
+
+        return new int[2] { alpha, beta };
+    }
+
+    private bool ShipInBounds(Vector3 pos)
+    {
+        if (pos.x < xMin || pos.x > xMax)
+        {
+            Debug.LogWarning("ShipID# " + id.ToString() + "\tX out of bounds at: " + pos.x.ToString());
+            return false;
+        }
+        else if (pos.z < zMin || pos.z > zMax)
+        {
+            Debug.LogWarning("ShipID# " + id.ToString() + "\tZ out of bounds at: " + pos.z.ToString());
+            return false;
+        }
+        else
+            return true;
+    }
+
+    private bool ShipsSpacedOut(Vector3 pos)
+    {
+        float distApart;
+        //Check that this location is not too close to previous ships
+        for (int i = 0; i < GCP02.GetShipList().Count; i++)
+        {
+            if(this.gameObject != GCP02.GetShipList()[i].gameObject)
+            {
+                distApart = (pos - GCP02.GetShipList()[i].transform.position).magnitude;
+                if (distApart < minDistApart)
+                {
+                    Debug.LogWarning("ShipID# " + id.ToString() + "\tShips too close, MinDist: " + minDistApart.ToString() + "\nThis Pos: " + pos.ToString() + "\tOtherShip: " + GCP02.GetShipList()[i].transform.position.ToString());
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private int[] FindRanges(int dimen)
+    {
+        int xMin = -75;
+        int xMax = 75;
+        int zMin = 20;
+        int zMax = 100;
+
+        int[][] intRanges = new int[2][] { new int[2], new int[2] }; //[0][] Xranges, [1][] Zranges;  [][0] Max, [][1] Min
+        int[] retRanges = new int[2];
+        if (ansMatrix[dimen][0] != 0)
+        {
+            intRanges[0][0] = Mathf.FloorToInt((float)xMax / (float)ansMatrix[dimen][0]);
+            intRanges[0][1] = Mathf.CeilToInt((float)xMin / (float)ansMatrix[dimen][0]);
+        }
+        else
+        {
+            intRanges[0][0] = 0;
+            intRanges[0][1] = 0;
+        }
+        if (ansMatrix[dimen][1] != 0)
+        {
+            intRanges[1][0] = Mathf.FloorToInt((float)zMax / (float)ansMatrix[dimen][1]);
+            intRanges[1][1] = Mathf.CeilToInt((float)zMin / (float)ansMatrix[dimen][1]);
+        }
+        else
+        {
+            intRanges[1][0] = 0;
+            intRanges[1][1] = 0;
+        }
+
+        retRanges[0] = intRanges[0][0] < intRanges[1][0] ? intRanges[0][0] : intRanges[1][0];
+        retRanges[1] = intRanges[0][1] < intRanges[1][1] ? intRanges[0][1] : intRanges[1][1];
+
+        return retRanges;
+    }
+
+
+    private int[] RedefineRanges(int dimen, int scalOther)
+    {
+        int xMin = -75;
+        int xMax = 75;
+        int zMin = 20;
+        int zMax = 100;
+        int dimenOther;
+
+        if (dimen == 0)
+            dimenOther = 1;
+        else
+            dimenOther = 0;
+
+
+        int[][] modRanges = new int[2][] { new int[2], new int[2] }; //[0][] Xranges, [1][] Zranges;  [][0] Max, [][1] Min
+        int[] retRanges = new int[2];
+        if (ansMatrix[dimen][0] != 0)
+        {
+            modRanges[0][0] = Mathf.FloorToInt(((float)xMax - ((float)scalOther * (float)ansMatrix[dimenOther][0])) / (float)ansMatrix[dimen][0]);
+            modRanges[0][1] = Mathf.CeilToInt(((float)xMin - ((float)scalOther * (float)ansMatrix[dimenOther][0])) / (float)ansMatrix[dimen][0]);
+        }
+        else
+        {
+            modRanges[0][0] = 0;
+            modRanges[0][1] = 0;
+        }
+        if (ansMatrix[dimen][1] != 0)
+        {
+            modRanges[1][0] = Mathf.FloorToInt(((float)zMax - ((float)scalOther * (float)ansMatrix[dimenOther][1])) / (float)ansMatrix[dimen][1]);
+            modRanges[1][1] = Mathf.CeilToInt(((float)zMin - ((float)scalOther * (float)ansMatrix[dimenOther][1])) / (float)ansMatrix[dimen][1]);
+        }
+        else
+        {
+            modRanges[1][0] = 0;
+            modRanges[1][1] = 0;
+        }
+
+        retRanges[0] = modRanges[0][0] < modRanges[1][0] ? modRanges[0][0] : modRanges[1][0];
+        retRanges[1] = modRanges[0][1] < modRanges[1][1] ? modRanges[0][1] : modRanges[1][1];
+
+        return retRanges;
+    }
+
 }

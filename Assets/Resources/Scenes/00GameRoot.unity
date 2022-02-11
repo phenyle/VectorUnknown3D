@@ -786,7 +786,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1039605556
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1646,6 +1646,7 @@ MonoBehaviour:
     hash: 
     salt: 
     first_last: 
+    sessionID: 
     ID_num: -1
     education: 
     school: 
@@ -1660,6 +1661,7 @@ MonoBehaviour:
     soundFX: 0
   records:
     username: 
+    sessionID: 
     p1_totAttempts: 0
     p1_totTime: 0
     p1_time: 0
@@ -1709,6 +1711,7 @@ MonoBehaviour:
     p4_3_questions: 
   p1_1:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -1718,21 +1721,25 @@ MonoBehaviour:
     obs_answers4: 
   p2_1:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
   p2_2:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
   p2_3:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
   p3_1:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -1744,6 +1751,7 @@ MonoBehaviour:
     obs_movesList: 
   p3_2:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -1755,6 +1763,7 @@ MonoBehaviour:
     obs_movesList: 
   p3_3:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -1766,6 +1775,7 @@ MonoBehaviour:
     obs_movesList: 
   p4_1:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -1906,6 +1916,7 @@ MonoBehaviour:
     obs9_attempts: 
   p4_2:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -2031,6 +2042,7 @@ MonoBehaviour:
     obs8_attempts: 
   p4_3:
     username: 
+    sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
@@ -2376,7 +2388,7 @@ PrefabInstance:
     - target: {fileID: 273465165697739586, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 294871590796011475, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -3897,7 +3909,7 @@ PrefabInstance:
     - target: {fileID: 4144322305904700641, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4149269528659680059, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -4098,7 +4110,7 @@ PrefabInstance:
     - target: {fileID: 4654111459846934678, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4658401067044624124, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -4484,7 +4496,7 @@ PrefabInstance:
     - target: {fileID: 5325149698427185699, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5328426674396230035, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -4873,6 +4885,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 16.3
       objectReference: {fileID: 0}
+    - target: {fileID: 6472314238812986616, guid: eee79c634ca777149b1a3a7cba30dd5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6486155445656221051, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_FontData.m_Font
@@ -4989,6 +5006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: 6731686547476107268, guid: eee79c634ca777149b1a3a7cba30dd5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6768814224624543398, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -5625,7 +5647,7 @@ PrefabInstance:
     - target: {fileID: 8031520652080770129, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_Text
-      value: Version 1.37b
+      value: Version 1.5b
       objectReference: {fileID: 0}
     - target: {fileID: 8081813158940462857, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -6132,7 +6154,7 @@ PrefabInstance:
     - target: {fileID: 9145488240919422364, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: imgTips.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9145488240919422364, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -6143,7 +6165,7 @@ PrefabInstance:
     - target: {fileID: 9145488240919422364, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: imgTipsChecks.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9145488240919422364, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}

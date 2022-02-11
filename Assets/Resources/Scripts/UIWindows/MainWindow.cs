@@ -23,10 +23,10 @@ public class MainWindow : WindowRoot
         Debug.Log("Init Main Window");
         base.InitWindow();
 
-        for (int i = 0; i < imgTipsChecks.Length; i++)
-        {
-            imgTipsChecks[i].sprite = imgTips[i];
-        }
+        //for (int i = 0; i < imgTipsChecks.Length; i++)
+        //{
+        //    imgTipsChecks[i].sprite = imgTips[i];
+        //}
 
         GCM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerMain>();
         GCM.InitGameController(this);
@@ -34,11 +34,11 @@ public class MainWindow : WindowRoot
 
     public void SetInstructionText(string content)
     {
-        txtInstruction.text = content;
+ //       txtInstruction.text = content;
     }
 
     public void SetCheckImage(int index, Sprite sprite)
     {
-        imgTipsChecks[index].sprite = sprite;
+//        imgTipsChecks[index].sprite = sprite;
     }
 }

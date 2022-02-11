@@ -6,6 +6,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 {
     [Range(1, 3)]
     public int Difficulty;
+    public GameObject diffScalar;
 
     //variables 
     public int[] currentTransformMatrix = new int[] { 0, 0, 0, 0 };
@@ -24,19 +25,17 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public GameObject visVectCamera;
     public bool topCameraActive = false;
 
-
     [Header("--------Ship Parts---------")]
     public GameObject shipMaster;
-//    public GameObject airShipMaster;
-    [Range(0,10,order = 1)]
+    //    public GameObject airShipMaster;
+    [Range(0, 10, order = 1)]
     public int numberOfShips;
- //   [Range(0, 10, order = 1)]
- //   public int numberOfAirships;
+    //   [Range(0, 10, order = 1)]
+    //   public int numberOfAirships;
     private List<PuzzleController02> shipPuzzles;
- //   private List<PuzzleController02> airshipPuzzles;
-    public float minDistApart = 5;
+    //   private List<PuzzleController02> airshipPuzzles;
+    public float minDistApart = 10;
     private PuzzleController02 currTarget;
-
 
     [Header("--------Cannon Parts---------")]
     public List<cannonController> cannons;
@@ -70,6 +69,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     [Header("--------Axis Parts---------")]
     public GameObject AxisMain;
+    public VisVect2 VV02;
 
     public GameObject firingCannon;
 
@@ -163,7 +163,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
             showP02_00 = false;
         }
 
-        GenerateShipLocations();
+        //this.diffScalar.transform.localScale *= (float)Difficulty / 3.0f;
+
+        //GenerateShipLocations();
+        AltGenerateShipLocations();
+        CreatePuzzles();
         endPortal.SetActive(false);
 
 
@@ -173,12 +177,17 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     }
 
+    private void CreatePuzzles()
+    {
+
+    }
+
     void Update()
     {
         if (!DialogueManager.isInDialogue && !GameRoot.isPause)
         {
             attemptData.tot_Time += Time.deltaTime;
-            if(currTarget != null)
+            if (currTarget != null)
             {
 
             }
@@ -233,6 +242,20 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     }
 
+    public void ToggleOverlay(bool val)
+    {
+        //placeholder for Puzzle2UI class to access the visual vector class
+        VV02.ToggleLattice(val);
+    }
+
+    public void ToggleTargetLines(bool val)
+    {
+        foreach (PuzzleController02 ship in shipPuzzles)
+        {
+            ship.shipLine.gameObject.SetActive(val);
+        }
+    }
+
 
     public void SinkShip()
     {
@@ -261,10 +284,10 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         RaycastHit hitcheck;
 
-        if(Physics.SphereCast(new Vector3(0, 0.5f, 5.0f), 2.0f, target.transform.position, out hitcheck))
+        if (Physics.SphereCast(new Vector3(0, 0.5f, 5.0f), 2.0f, target.transform.position, out hitcheck))
         {
             PuzzleController02 temp = new PuzzleController02();
-            if(hitcheck.transform.TryGetComponent(out temp))
+            if (hitcheck.transform.TryGetComponent(out temp))
             {
                 target = temp;
             }
@@ -334,12 +357,13 @@ public class GameControllerPuzzle02 : GameControllerRoot
         vectChosen = true;
         P02W.SetVectorSelected(currVector);
         CalculateAnswer();
-        
+
         if (matrixChosen)
         {
             mainCannon.AnimateCannon();
             mainCannon.cannonFuzeFX.SetActive(true);
-        //    mainCannon.ToggleTriggerBox(true);
+            //    mainCannon.ToggleTriggerBox(true);
+            VV02.SetMasterVector(currAnswer);
         }
         //TODO
         //connect this to the cannonRotate class
@@ -356,13 +380,15 @@ public class GameControllerPuzzle02 : GameControllerRoot
         matrixChosen = true;
         mainCannon.SetCannonText(new int[3] { 0, 0, 0 });
         P02W.SetMatrixSelected(currMatrix);
+        VV02.CreateLattice(new Vector3(currMatrix[0][0], 0, currMatrix[0][1]), new Vector3(currMatrix[1][0], 0, currMatrix[1][1]));
         CalculateAnswer();
-        
+
         if (vectChosen)
         {
             mainCannon.AnimateCannon();
             mainCannon.cannonFuzeFX.SetActive(true);
             //    mainCannon.ToggleTriggerBox(true);
+            VV02.SetMasterVector(currAnswer);
 
         }
         //TODO
@@ -373,11 +399,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     public void CalculateAnswer()
     {
-        if(vectChosen && matrixChosen)
+        if (vectChosen && matrixChosen)
         {
             currAnswer = Vector3.zero;
-            currAnswer.x = currVector[0] * currMatrix[0][0] + currVector[2] * currMatrix[1][0];
-            currAnswer.z = currVector[0] * currMatrix[0][1] + currVector[2] * currMatrix[1][1];
+            currAnswer.x = currVector[0] * currMatrix[0][0] + currVector[1] * currMatrix[1][0];
+            currAnswer.z = currVector[0] * currMatrix[0][1] + currVector[1] * currMatrix[1][1];
         }
     }
 
@@ -396,14 +422,14 @@ public class GameControllerPuzzle02 : GameControllerRoot
             GameRoot.instance.LockCamera(true);
             AxisMain.SetActive(true);
 
-            foreach(PuzzleController02 ship in shipPuzzles)
+            foreach (PuzzleController02 ship in shipPuzzles)
             {
                 ship.ToggleTopText(true);
                 ship.ToggleFrontText(false);
-                ship.shipLine.gameObject.SetActive(true);
+                ship.shipLine.gameObject.SetActive(P02W.showTargetLines);
             }
             currTarget.shipLine.material = currTarget.lineMatActive;
- //           currTarget.vectTextTop.GetComponent<RubberizeAnim>().active = true;
+            //           currTarget.vectTextTop.GetComponent<RubberizeAnim>().active = true;
 
             //ADD Feature for Turning on the Line Renderers
 
@@ -425,8 +451,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 ship.shipLine.gameObject.SetActive(false);
             }
             currTarget.vectText.gameObject.SetActive(true);
- 
-            
+
+
             //ADD Feature for Turning off the Line Renderers
 
             topCameraActive = false;
@@ -440,7 +466,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         P02W.SetVectorSelected(currVector);
 
         matrixChosen = false;
-        currMatrix = new int[2][] { new int[2]{ 0, 0 }, new int[2]{ 0, 0 } };
+        currMatrix = new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 0 } };
         P02W.SetMatrixSelected(currMatrix);
 
         lastAnswer = new int[3] { (int)currAnswer.x, 0, (int)currAnswer.z };
@@ -450,6 +476,25 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     }
 
+    private void AltGenerateShipLocations()
+    {
+        for(int i = 0; i < numberOfShips; i++)
+        {
+            GameObject temp = Instantiate(shipMaster);
+            temp.GetComponent<PuzzleController02>().SetID(i + 1);
+            temp.GetComponent<PuzzleController02>().ToggleFrontText(false);
+            temp.GetComponent<PuzzleController02>().ToggleTopText(false);
+            temp.GetComponent<PuzzleController02>().AltCreateMatrixList();
+            temp.GetComponent<PuzzleController02>().AltCreateVectorsList();
+            temp.GetComponent<PuzzleController02>().answerShuffle();
+            temp.GetComponent<PuzzleController02>().SetShipDirection();
+            
+            shipPuzzles.Add(temp.GetComponent<PuzzleController02>());
+        }
+
+        P02W.SetCompleteNumber(numberOfShips - shipPuzzles.Count, numberOfShips);
+
+    }
     private void GenerateShipLocations() 
     {
         int randX, randY, randZ;
@@ -498,8 +543,10 @@ public class GameControllerPuzzle02 : GameControllerRoot
         {
             ship.ToggleFrontText(false);
             ship.ToggleTopText(false);
-            ship.CreateVectorsList();
-            ship.CreateMatrixList();
+//            ship.CreateVectorsList();
+//            ship.CreateMatrixList();
+            ship.AltCreateMatrixList();
+            ship.AltCreateVectorsList();
             ship.answerShuffle();
             ship.SetShipDirection();
         }
@@ -527,6 +574,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
         //        }
         //    }
         //}
+    }
+
+    public List<PuzzleController02> GetShipList()
+    {
+        return shipPuzzles;
     }
 
     public PuzzleController02 GetCurrTarget()
@@ -560,7 +612,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 GameRoot.player.p2_1.username = GameRoot.player.users.username;
                 GameRoot.player.p2_1.attemptNum = GameRoot.player.records.p2_1_attempts;
                 GameRoot.player.p2_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_1.attemptNum.ToString();
-
+                GameRoot.player.p2_1.sessionID = GameRoot.player.users.sessionID;
                 break;
 
             case 2:
@@ -582,6 +634,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 GameRoot.player.p2_2.username = GameRoot.player.users.username;
                 GameRoot.player.p2_2.attemptNum = GameRoot.player.records.p2_2_attempts;
                 GameRoot.player.p2_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_2.attemptNum.ToString();
+                GameRoot.player.p2_2.sessionID = GameRoot.player.users.sessionID;
                 break;
 
             case 3:
@@ -603,10 +656,13 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 GameRoot.player.p2_3.username = GameRoot.player.users.username;
                 GameRoot.player.p2_3.attemptNum = GameRoot.player.records.p2_3_attempts;
                 GameRoot.player.p2_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p2_3.attemptNum.ToString();
+                GameRoot.player.p2_3.sessionID = GameRoot.player.users.sessionID;
                 break;
         }
 
         GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
+
         GameRoot.player.records.p2_totAttempts = GameRoot.player.records.p2_1_attempts + GameRoot.player.records.p2_2_attempts + GameRoot.player.records.p2_3_attempts;
         GameRoot.player.records.p2_totTime += tot_puzzleTime;
     }

@@ -689,6 +689,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_1.username = GameRoot.player.users.username;
                 GameRoot.player.p3_1.attemptNum = GameRoot.player.records.p3_1_attempts;
                 GameRoot.player.p3_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_1.attemptNum.ToString();
+                GameRoot.player.p3_1.sessionID = GameRoot.player.users.sessionID;
                 break;
 
             case 2:
@@ -718,6 +719,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_2.username = GameRoot.player.users.username;
                 GameRoot.player.p3_2.attemptNum = GameRoot.player.records.p3_2_attempts;
                 GameRoot.player.p3_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_2.attemptNum.ToString();
+                GameRoot.player.p3_2.sessionID = GameRoot.player.users.sessionID;
                 break;
 
             case 3:
@@ -746,11 +748,15 @@ public class GameControllerPuzzle03 : GameControllerRoot
                 GameRoot.player.p3_3.username = GameRoot.player.users.username;
                 GameRoot.player.p3_3.attemptNum = GameRoot.player.records.p3_3_attempts;
                 GameRoot.player.p3_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p3_3.attemptNum.ToString();
+                GameRoot.player.p3_3.sessionID = GameRoot.player.users.sessionID;
+
                 break;
 
         }
 
         GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
+
         GameRoot.player.records.p3_totAttempts = GameRoot.player.records.p3_1_attempts + GameRoot.player.records.p3_2_attempts + GameRoot.player.records.p3_3_attempts;
         GameRoot.player.records.p3_totTime += puzzleData.obsTime;
     }

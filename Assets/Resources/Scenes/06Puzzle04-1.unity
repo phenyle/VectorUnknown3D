@@ -1201,7 +1201,7 @@ PrefabInstance:
     - target: {fileID: 6345867033673952941, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6391221368735763618, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -1346,7 +1346,7 @@ PrefabInstance:
     - target: {fileID: 7706181882907016331, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7902234069575203463, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
@@ -4202,7 +4202,8 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 2918626237289915404}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1465391609448854193, guid: 4a8ceae58fb6f584eba5b4999d36b1a4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4a8ceae58fb6f584eba5b4999d36b1a4, type: 3}
 --- !u!1 &1410152362
 GameObject:
@@ -39021,7 +39022,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level2Stage02: {fileID: 0}
   isEnterExit: 0
-  level2ChangeStage: 0
   sceneName: 
 --- !u!114 &2918626237289915403
 MonoBehaviour:

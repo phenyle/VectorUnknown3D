@@ -27,7 +27,7 @@ public class cannonController : MonoBehaviour
     public void SetCannon(int[] vect)
     {
         vector = vect;
-        text.text = vector[0].ToString() + "\n" + vector[2].ToString();
+        text.text = vector[0].ToString() + "\n" + vector[1].ToString();
     }
 
     //used to trigger UI

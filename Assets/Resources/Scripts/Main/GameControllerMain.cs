@@ -101,139 +101,139 @@ public class GameControllerMain : GameControllerRoot
         }
 
 
-        //*****************Start of the game 
-        if (GameRoot.instance.puzzleCompleted[0] == false)
-        {
-            if (DialogueManager.showIntro)
-            {
-                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Intro"));
-                DialogueManager.showIntro = false;
-                MW.SetInstructionText("Explore the Land.");
-            }
-            else
-            {
-                GameRoot.instance.LockCamera(false);
- //               mainCamera.GetComponent<CameraController>().isLock = false;
-            }          
-        }
+//        //*****************Start of the game 
+//        if (GameRoot.instance.puzzleCompleted[0] == false)
+//        {
+//            if (DialogueManager.showIntro)
+//            {
+//                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Intro"));
+//                DialogueManager.showIntro = false;
+// //               MW.SetInstructionText("Explore the Land.");
+//            }
+//            else
+//            {
+//                GameRoot.instance.LockCamera(false);
+// //               mainCamera.GetComponent<CameraController>().isLock = false;
+//            }          
+//        }
 
-        //*****************If player only finish puzzle 01 and not 2
-        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] != true)
-        {
-            if(DialogueManager.showM_00)
-            {
-                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_00"));
-                DialogueManager.showM_00 = false;
-            }
-            else
-            {
-                GameRoot.instance.LockCamera(false);
-                //               mainCamera.GetComponent<CameraController>().isLock = false;
-            }
+//        //*****************If player only finish puzzle 01 and not 2
+//        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] != true)
+//        {
+//            if(DialogueManager.showM_00)
+//            {
+//                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_00"));
+//                DialogueManager.showM_00 = false;
+//            }
+//            else
+//            {
+//                GameRoot.instance.LockCamera(false);
+//                //               mainCamera.GetComponent<CameraController>().isLock = false;
+//            }
 
-            //Set the instructional text and check image
-            MW.SetInstructionText("Find & enter the cave to beat the pirates.");
-            MW.SetCheckImage(0, spriteChecks[0]);
-        }
-        //If player finish puzzle 01 & puzzle 02
-        else if(GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] == false)
-        {
-            SetActive(sunLight, false);
-            SetActive(moonLight, true);
-            ocean.sun = moonLight.GetChild(0).GetComponent<Light>();      
+//            //Set the instructional text and check image
+////            MW.SetInstructionText("Find & enter the cave to beat the pirates.");
+// //           MW.SetCheckImage(0, spriteChecks[0]);
+//        }
+//        //If player finish puzzle 01 & puzzle 02
+//        else if(GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] == false)
+//        {
+//            SetActive(sunLight, false);
+//            SetActive(moonLight, true);
+//            ocean.sun = moonLight.GetChild(0).GetComponent<Light>();      
 
-            RenderSettings.skybox = night;
-            SetActive(portalPuzzle03, true);
+//            RenderSettings.skybox = night;
+//            SetActive(portalPuzzle03, true);
 
-            if(DialogueManager.showM_01)
-            {
-                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_01"));
-                DialogueManager.showM_01 = false;
-            }
-            else
-            {
-                GameRoot.instance.LockCamera(false);
-                //               mainCamera.GetComponent<CameraController>().isLock = false;
-            }
+//            if(DialogueManager.showM_01)
+//            {
+//                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_01"));
+//                DialogueManager.showM_01 = false;
+//            }
+//            else
+//            {
+//                GameRoot.instance.LockCamera(false);
+//                //               mainCamera.GetComponent<CameraController>().isLock = false;
+//            }
 
-            MW.SetInstructionText("Find & enter the pirates' hideout to save villagers.");
-            MW.SetCheckImage(0, spriteChecks[0]);
-            MW.SetCheckImage(1, spriteChecks[1]);
-        }
-        //***************** if PLayer finishes puzzle 1, 2 ,and 3
-        else if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2])
-        {
+////            MW.SetInstructionText("Find & enter the pirates' hideout to save villagers.");
+////            MW.SetCheckImage(0, spriteChecks[0]);
+////            MW.SetCheckImage(1, spriteChecks[1]);
+//        }
+//        //***************** if PLayer finishes puzzle 1, 2 ,and 3
+//        else if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2])
+//        {
 
-            if (DialogueManager.showM_00)
-            {
-                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_OnePuzzleLeft"));
-                DialogueManager.showM_00 = false;
-            }
-            else
-            {
-                GameRoot.instance.LockCamera(false);
-                //               mainCamera.GetComponent<CameraController>().isLock = false;
-            }
+//            if (DialogueManager.showM_00)
+//            {
+//                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_OnePuzzleLeft"));
+//                DialogueManager.showM_00 = false;
+//            }
+//            else
+//            {
+//                GameRoot.instance.LockCamera(false);
+//                //               mainCamera.GetComponent<CameraController>().isLock = false;
+//            }
 
 
-            MW.SetCheckImage(0, spriteChecks[0]);
-            MW.SetCheckImage(1, spriteChecks[1]);
-            MW.SetCheckImage(2, spriteChecks[2]);
+// //           MW.SetCheckImage(0, spriteChecks[0]);
+//  //          MW.SetCheckImage(1, spriteChecks[1]);
+//   //         MW.SetCheckImage(2, spriteChecks[2]);
 
-            GameRoot.instance.LockCamera(false);
-            //               mainCamera.GetComponent<CameraController>().isLock = false;
-        }
+//            GameRoot.instance.LockCamera(false);
+//            //               mainCamera.GetComponent<CameraController>().isLock = false;
+//        }
 
-        //***************** if PLayer finishes puzzle 1, 2, 3 and 4
-        else if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] && GameRoot.instance.puzzleCompleted[3])
-        {
+//        //***************** if PLayer finishes puzzle 1, 2, 3 and 4
+//        else if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] && GameRoot.instance.puzzleCompleted[3])
+//        {
 
-            MW.SetCheckImage(0, spriteChecks[0]);
-            MW.SetCheckImage(1, spriteChecks[1]);
-            MW.SetCheckImage(2, spriteChecks[2]);
-            MW.SetCheckImage(3, spriteChecks[3]);
+// //           MW.SetCheckImage(0, spriteChecks[0]);
+//  //          MW.SetCheckImage(1, spriteChecks[1]);
+//   //         MW.SetCheckImage(2, spriteChecks[2]);
+//    //        MW.SetCheckImage(3, spriteChecks[3]);
 
-            GameRoot.instance.LockCamera(false);
-            //               mainCamera.GetComponent<CameraController>().isLock = false;
-        }
-        //***************** if Player finishes puzzle 2
-        if (GameRoot.instance.puzzleCompleted[1] == true)
-        {
-            MW.SetCheckImage(1, spriteChecks[1]);
+//            GameRoot.instance.LockCamera(false);
+//            //               mainCamera.GetComponent<CameraController>().isLock = false;
+//        }
+//        //***************** if Player finishes puzzle 2
+//        if (GameRoot.instance.puzzleCompleted[1] == true)
+//        {
+// //           MW.SetCheckImage(1, spriteChecks[1]);
 
-            GameRoot.instance.LockCamera(false);
-            //               mainCamera.GetComponent<CameraController>().isLock = false;
-        }
-        //***************** if PLayer finishes puzzle 3
-        if (GameRoot.instance.puzzleCompleted[2] == true)
-        {
+//            GameRoot.instance.LockCamera(false);
+//            //               mainCamera.GetComponent<CameraController>().isLock = false;
+//        }
+//        //***************** if PLayer finishes puzzle 3
+//        if (GameRoot.instance.puzzleCompleted[2] == true)
+//        {
 
-            MW.SetCheckImage(2, spriteChecks[2]);
+// //           MW.SetCheckImage(2, spriteChecks[2]);
 
-            GameRoot.instance.LockCamera(false);
-            //               mainCamera.GetComponent<CameraController>().isLock = false;
-        }
-        //***************** if PLayer finishes puzzle 4
-        if (GameRoot.instance.puzzleCompleted[3] == true)
-        {
-            if (DialogueManager.showM_01)
-            {
-                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_P4_completed"));
-                DialogueManager.showM_01 = false;
-            }
-            else
-            {
-                GameRoot.instance.LockCamera(false);
-                //               mainCamera.GetComponent<CameraController>().isLock = false;
-            }
+//            GameRoot.instance.LockCamera(false);
+//            //               mainCamera.GetComponent<CameraController>().isLock = false;
+//        }
+//        //***************** if PLayer finishes puzzle 4
+//        if (GameRoot.instance.puzzleCompleted[3] == true)
+//        {
+//            if (DialogueManager.showM_01)
+//            {
+//                FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Main_P4_completed"));
+//                DialogueManager.showM_01 = false;
+//            }
+//            else
+//            {
+//                GameRoot.instance.LockCamera(false);
+//                //               mainCamera.GetComponent<CameraController>().isLock = false;
+//            }
 
-            MW.SetCheckImage(3, spriteChecks[3]);
+//            MW.SetCheckImage(3, spriteChecks[3]);
 
-            GameRoot.instance.LockCamera(false);
-            //               mainCamera.GetComponent<CameraController>().isLock = false;
-        }
-        // DialogueManager.isInDialogue = true;
-        // DialogueManager.isPuzzleLock = false;
+//            GameRoot.instance.LockCamera(false);
+//            //               mainCamera.GetComponent<CameraController>().isLock = false;
+//        }
+//        // DialogueManager.isInDialogue = true;
+//        // DialogueManager.isPuzzleLock = false;
 
 
         if (GameRoot.instance.firstCompletion)

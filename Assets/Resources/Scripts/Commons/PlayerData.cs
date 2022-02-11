@@ -53,6 +53,7 @@ public class PlayerData : MonoBehaviour
         public string hash;
         public string salt;
         public string first_last;
+        public string sessionID;
         public int ID_num;
         public string education;
         public string school;
@@ -92,6 +93,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_Records 
     {
         public string username;
+        public string sessionID;
+
         //stage 1
         public int p1_totAttempts;
         public float p1_totTime;
@@ -164,6 +167,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P1_1
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -176,6 +181,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P2_1
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -184,6 +191,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P2_2
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -192,6 +201,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P2_3
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -200,6 +211,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P3_1
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -210,6 +223,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P3_2
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -220,6 +235,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P3_3
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -230,6 +247,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P4_1
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -265,6 +284,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P4_2
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;
@@ -297,6 +318,8 @@ public class PlayerData : MonoBehaviour
     public struct tbl_P4_3
     {
         public string username;
+        public string sessionID;
+
         public int attemptNum;
         public string attemptDate;
         public string usernameAttempt;

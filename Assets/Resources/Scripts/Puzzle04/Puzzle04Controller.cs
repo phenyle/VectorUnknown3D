@@ -60,6 +60,7 @@ public class Puzzle04Controller : MonoBehaviour
     private ObjectGlide cameraGlide;
     public float grappleArcHeight = 0.0f;
     private CameraRotate cameraRotate;
+    public UnityEvent answerEvents;
 
     [Header("---Conversation Select---")]
     [Range(0, 9)]
@@ -78,6 +79,7 @@ public class Puzzle04Controller : MonoBehaviour
     private Vector3 card1;
     private Vector3 card2;
     private Vector3 playerAnswer;
+    private Vector3 prevPlayerAnswer = Vector3.zero;
     private bool ans1Entered; //condition flag that a card is slotted in position1 in the UI
     private bool ans2Entered; //condition flag that a card is slotted in position2 in the UI
     private bool correct;
@@ -247,7 +249,7 @@ public class Puzzle04Controller : MonoBehaviour
 
             if (GCP04.P04W.getAnswer1() != null)
             {
-                card1 = GCP04.P04W.getAnswer1().GetComponent<CardVectors>().getCardVector();
+                card1 = GCP04.P04W.getAnswer1().GetComponent<CardDrag>().getCardVector();
                 ans1Entered = true;
             }
             else
@@ -258,7 +260,7 @@ public class Puzzle04Controller : MonoBehaviour
 
             if (GCP04.P04W.getAnswer2() != null)
             {
-                card2 = GCP04.P04W.getAnswer2().GetComponent<CardVectors>().getCardVector();
+                card2 = GCP04.P04W.getAnswer2().GetComponent<CardDrag>().getCardVector();
                 ans2Entered = true;
             }
             else
@@ -267,7 +269,18 @@ public class Puzzle04Controller : MonoBehaviour
                 ans2Entered = false;
             }
 
+
+            //prevanswer
             playerAnswer = scalar1 * card1 + scalar2 * card2;
+
+            grappleKit.demoTarget.transform.position = VV01.vector2end.transform.position;
+
+            if (playerAnswer != Vector3.zero && playerAnswer != prevPlayerAnswer)
+            {
+                grappleKit.enabled = true;
+                grappleKit.DemoAnim = true;
+                grappleKit.SetDemoTargetPos(VV01.vector2end.transform.position);
+            }
 
             GCP04.P04W.setFinalAnswerDisplay(this);
 
@@ -302,6 +315,7 @@ public class Puzzle04Controller : MonoBehaviour
             prevScal2 = scalar2;
             prevVect1 = card1;
             prevVect2 = card2;
+            prevPlayerAnswer = prevScal1 * prevVect1 + prevScal2 * prevVect2;
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -342,7 +356,7 @@ public class Puzzle04Controller : MonoBehaviour
                         if(InitFinalVector.x > 0)
                             temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
                         else
-                            temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                            temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
                         temp.y += 0.0f;
                         temp.z += 0.0f;
                         break;
@@ -352,7 +366,7 @@ public class Puzzle04Controller : MonoBehaviour
                         if(InitFinalVector.y > 0)
                             temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
                         else
-                            temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                            temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
                         temp.z += 0.0f;
                         break;
                 }
@@ -363,12 +377,12 @@ public class Puzzle04Controller : MonoBehaviour
                 if (InitFinalVector.x > 0)
                     temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
                 else
-                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
 
                 if (InitFinalVector.y > 0)
                     temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
                 else
-                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
                 temp.z += 0.0f;
                 break;
 
@@ -377,17 +391,17 @@ public class Puzzle04Controller : MonoBehaviour
                 if (InitFinalVector.x > 0)
                     temp.x += UnityEngine.Random.Range(0, FinalDynamicRange);
                 else
-                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                    temp.x -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
 
                 if (InitFinalVector.y > 0)
                     temp.y += UnityEngine.Random.Range(0, FinalDynamicRange);
                 else
-                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                    temp.y -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
 
                 if(InitFinalVector.z > 0)
                     temp.z += UnityEngine.Random.Range(0, FinalDynamicRange);
                 else
-                    temp.z -= UnityEngine.Random.Range(0, FinalDynamicRange);
+                    temp.z -= UnityEngine.Random.Range(0, FinalDynamicRange / 2);
 
                 break;
         }
@@ -918,6 +932,7 @@ public class Puzzle04Controller : MonoBehaviour
         {
             if (playerAnswer == finalAnswerVector)
             {
+                //on first time answering correctly
                 if (!correct)
                     GCP04.P04W.SetComplete();
                 correct = true;
@@ -954,8 +969,12 @@ public class Puzzle04Controller : MonoBehaviour
             else
             {
                 correct = false;
-                grappleKit.InitGrapple(correct, VV01.vector2end.transform.position, goalPoint, player.transform.position, grappleArcHeight);
-                grappleKit.grappleToGoal(this);
+                grappleKit.SetFailShot(VV01.vector2end.transform.position);
+                turnOffVisualVectors();
+                //grappleKit.InitGrapple(correct, finalAnswerVector, VV01.vector2end, player.transform.position, grappleArcHeight);
+                //grappleKit.grappleToGoal(this);
+
+
                 return false;
             }
         }
@@ -1016,11 +1035,16 @@ public class Puzzle04Controller : MonoBehaviour
         GCP04.P04W.ShowInputPanel(true);
         GCP04.P04W.ShowFeedbackPanel(true);
         GCP04.P04W.ShowCardPanel(true);
+        GCP04.P04W.ResetCardPositions();
         GCP04.P04W.ShowButtonPanel(true);
         GCP04.P04W.exitPanel.gameObject.SetActive(true);
         GCP04.inPuzzle = true;
 
         GCP04.P04W.resetButtons();
+
+        grappleKit.SetPuzzleController(this);
+        grappleKit.ropeStart.transform.position = this.startPoint.transform.position;
+        grappleKit.ropeEnd.transform.position = this.startPoint.transform.position;
 
 
         assignCards();
@@ -1106,7 +1130,7 @@ public class Puzzle04Controller : MonoBehaviour
 
     // VISUAL VECTOR----------------
     #region Visual Vector
-    private void turnOnVisualVectors()
+    public void turnOnVisualVectors()
     {
         VV01.ToggleBasicVectors(true);
 
@@ -1137,7 +1161,7 @@ public class Puzzle04Controller : MonoBehaviour
 
     }
 
-    private void turnOffVisualVectors()
+    public void turnOffVisualVectors()
     {
         //Basic is player vectors, goal vector, orbs
         VV01.ToggleBasicVectors(false);

@@ -1,0 +1,57 @@
+DONE:
+Updated Pause Menu UI
+- Added new Button to return to Hub
+- Changed "Menu" button to quit to title
+- Both buttons have a popup confirming their selection
+- Added a new slider in settings to adjust the camera rotation speed
+HubWorld Changes:
+- Reduced the wait timer for shipRepair after completeing a level for the first time
+- Removed Old "ship repair" assets
+- Replaced the ground glow portals with standing portals (easier to see)
+- Fixed the portal text overlaying everything
+- Lowered the "bridge" between the islands to stop popping up
+Added new functionality to the LevelSelectUI:
+- LevelSelectUI now shows the best completion time for completed levels
+- Added support for Puzzle03 multilevels
+Database Changes:
+- Database now saves individual player settings (sound volume, mouse speed)
+- Added new database entries for Puzzle 3
+Puzzle03 Changes:
+- Fixed Minimap of spans for better visibility
+- Overhauled UI problems of instance vs prefab vs code changes (this was a nightmare)
+- Changed the portal trigger from pressing a key to just entering the portal
+- Added new Axis lines (and labels) show the relative position of the stage rotations
+- Added the camera glide and rotate functions for when in puzzle
+- Overhauled convoluted rotation calculation
+- Added some randomness to how the level starts
+---- Every time the stage is played the level may be rotated on Y in 90degrees
+- Changed the position of the player so that they start facing the same direction as minimap
+- Also player is not just an amorphous being, User has control of player again
+- Split Puzzle03 into 3 separate levels of difficulty (but some bug is killing levels 2 and 3, fix later).
+
+
+STILL NEED TO DO:
+Dialog overhaul changes
+Fix Puzzle03 bug crash on higher difficulties
+
+
+KNOWN BUGS:
+Puzzle03_2 and Puzzle03_3 crash from and audioSource null error
+Solving Puzzle03 without ever rotating the camera causes the camera to hang instead of returning to player
+LevelSelectUI is ghosting scores from different levels on stage2
+
+
+AGENDA:
+Get to Final Build
+Keep Puzzle1?
+Fix Tutorial to MainGame Bug from Menu
+Puzzle3 Camera/Mouse on load
+Puzzle3 question portal more noticable.
+Readdress Camera Angle on ShipRepair
+Dialog about busted up ship on start.
+-- Parrot tells what parts are missing and what puzzles need to be completed.
+Bulletin Board? Leader Board?
+UI overhaul for Level 2
+Add Safari to supported browsers
+
+Create a Grammar for Puzzle Struct composition for easier parsing <-Big Brain

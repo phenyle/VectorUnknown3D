@@ -15,6 +15,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class GameControllerPuzzle04 : GameControllerRoot
 {
     public GameObject topCamPlayer;
+    public static GameControllerPuzzle04 instance;
 
     [Header("STAGE LEVEL")]
     [Range(1, 3)]
@@ -55,6 +56,11 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
     public string questionsList;
     public int totMoves;
+
+    public void Awake()
+    {
+        instance = this;
+    }
 
     public void Start()
     {
@@ -464,6 +470,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 GameRoot.player.p4_1.username = GameRoot.player.users.username;
                 GameRoot.player.p4_1.attemptNum = GameRoot.player.records.p4_1_attempts;
                 GameRoot.player.p4_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_1.attemptNum.ToString();
+                GameRoot.player.p4_1.sessionID = GameRoot.player.users.sessionID;
 
                 break;
 
@@ -493,6 +500,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 GameRoot.player.p4_2.username = GameRoot.player.users.username;
                 GameRoot.player.p4_2.attemptNum = GameRoot.player.records.p4_2_attempts;
                 GameRoot.player.p4_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_2.attemptNum.ToString();
+                GameRoot.player.p4_2.sessionID = GameRoot.player.users.sessionID;
 
                 break;
 
@@ -523,13 +531,18 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 GameRoot.player.p4_3.username = GameRoot.player.users.username;
                 GameRoot.player.p4_3.attemptNum = GameRoot.player.records.p4_3_attempts;
                 GameRoot.player.p4_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_3.attemptNum.ToString();
+                GameRoot.player.p4_3.sessionID = GameRoot.player.users.sessionID;
 
                 break;
         }
 
         GameRoot.player.records.username = GameRoot.player.users.username;
+        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
+        GameRoot.player.p4_3.sessionID = GameRoot.player.users.sessionID;
+
         GameRoot.player.records.p4_totAttempts = GameRoot.player.records.p4_1_attempts + GameRoot.player.records.p4_2_attempts + GameRoot.player.records.p4_3_attempts;
         GameRoot.player.records.p4_totTime += tot_puzzleTime;
+        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
     }
 
     public void SetPuzzlePause(bool val)

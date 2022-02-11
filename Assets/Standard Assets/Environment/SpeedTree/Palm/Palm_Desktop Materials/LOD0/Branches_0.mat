@@ -4,19 +4,26 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Branches_0
-  m_Shader: {fileID: 14000, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: EFFECT_BUMP EFFECT_HUE_VARIATION GEOM_TYPE_BRANCH_DETAIL
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: EFFECT_BUMP EFFECT_HUE_VARIATION GEOM_TYPE_BRANCH_DETAIL _SHADING_FLAT
+    _WAVES_OFF
   m_LightmapFlags: 5
-  m_EnableInstancingVariants: 1
-  m_CustomRenderQueue: -1
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: f15241bc5a839ea46bf857431081d715, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -25,14 +32,61 @@ Material:
         m_Texture: {fileID: 2800000, guid: 4d6c994b9ad45b847bc67ec5f857fc78, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FresnelTex:
+        m_Texture: {fileID: 2800000, guid: bbe71c065be7eca47b24d1e03bf041b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: dd49a2ed5943a014e8d933ff5381281a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 6a1c221a7d11eaa4e875ae74a888d906, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Cull: 2
+    - PixelSnap: 0
+    - _ColorMask: 15
+    - _Cull: 0
     - _Cutoff: 0.33
-    - _WindQuality: 5
+    - _Direction: 180
+    - _EdgeBlend: 0
+    - _EnableExternalAlpha: 0
+    - _Gloss: 0.6
+    - _Height: 1
+    - _Height_: 1
+    - _Length: 3.3
+    - _Opacity: 0.7
+    - _RHeight: 0.2
+    - _RHeight_: 0.2
+    - _RSpeed: 1
+    - _RSpeed_: 1
+    - _Scale_: 1
+    - _Shading: 0
+    - _ShoreDistance: 1
+    - _ShoreIntensity: 0
+    - _Smoothness: 1
+    - _Specular: 0.6
+    - _Speed: 0.5
+    - _Speed_: 0.5
+    - _Steepness: 0.5
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _Stretch: 10
+    - _TexSize_: 64
+    - _UseUIAlphaClip: 0
+    - _Waves: 0
+    - _WindQuality: 0
+    - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _Color: {r: 1, g: 0.6169631, b: 0.3254717, a: 1}
+    - _Direction_: {r: -1, g: -0.00000008742278, b: -1.65, a: -0.00000014424758}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShoreColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}

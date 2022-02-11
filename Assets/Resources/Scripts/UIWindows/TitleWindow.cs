@@ -460,6 +460,7 @@ public class TitleWindow : WindowRoot
                         tmp_player.SetUserName(js_Name.text + hashID);
 
                     tmp_player.users.last_login = System.DateTime.Now.ToString();
+                    tmp_player.users.sessionID = js_Name.text;
                     GameRoot.player = tmp_player;
                     GameRoot.GSFU.SaveNewPlayer();
 

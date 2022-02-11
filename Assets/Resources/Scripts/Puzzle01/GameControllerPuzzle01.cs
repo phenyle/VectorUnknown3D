@@ -426,6 +426,9 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
         //Attempt Username Construction
         GameRoot.player.p1_1.username = GameRoot.player.users.username;
+        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
+        GameRoot.player.p1_1.sessionID = GameRoot.player.users.sessionID;
+
         GameRoot.player.p1_1.attemptNum = GameRoot.player.records.p1_totAttempts;
         GameRoot.player.p1_1.usernameAttempt = GameRoot.player.p1_1.username + GameRoot.player.p1_1.attemptNum.ToString();
 
