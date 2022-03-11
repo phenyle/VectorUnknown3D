@@ -60,7 +60,10 @@ public class EnterExit : MonoBehaviour
                     break;
 
                 case SceneName.MainSceneName:
-                    playerController.sceneName = Constants.mainSceneName;
+                    if((GameRoot.player.users.isClass || GameRoot.player.users.isExpo) && GameRoot.player.users.forceStage)
+                        playerController.sceneName = SceneManager.GetActiveScene().name;
+                    else
+                        playerController.sceneName = Constants.mainSceneName;
 
                     if (SceneManager.GetActiveScene().name == Constants.menuSceneName)
                         GameRoot.instance.exitPuzzle = 0;                   

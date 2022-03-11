@@ -14,11 +14,11 @@ public class FinishTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !PC04.grappleKit.isGrappling())
+        if (other.tag == "Player" && !GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
             GetComponentInParent<GapTriggersController>().finish = true;
             resetPos = GetComponentInParent<GapTriggersController>().GetComponentInParent<Puzzle04Controller>().finish.transform.position;
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle04>().setResetPos(resetPos);
+            GameControllerPuzzle04.instance.setResetPos(resetPos);
 
             Debug.Log("finish trigger");
         }

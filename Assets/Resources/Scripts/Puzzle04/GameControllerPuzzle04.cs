@@ -26,6 +26,8 @@ public class GameControllerPuzzle04 : GameControllerRoot
     private bool pausePuzzTime;
     public List<Puzzle04Controller> puzzleDatas;
     public Puzzle04Controller currPuzzle;
+    public VisualVector visVector;
+    public GrappleCode grappleKit;
 
 
     [Header("Environment Components")]
@@ -47,8 +49,8 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
     private AudioService audio04;
 
-    private GameObject player;
-    private GameObject mainCamera;
+    public GameObject player;
+    public GameObject mainCamera;
     private Vector3 startPosition;
     private Vector3 previousPosition;
     public int timer = 0;
@@ -60,15 +62,14 @@ public class GameControllerPuzzle04 : GameControllerRoot
     public void Awake()
     {
         instance = this;
+        player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     public void Start()
     {
         P04W = puzzleWindow.GetComponent<Puzzle04Window>();
 
-        player = GameObject.FindGameObjectWithTag("Player");
-
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         GameRoot.instance.FindPlayerAndCamera();
 
         pausePuzzTime = false;

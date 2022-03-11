@@ -617,7 +617,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
         GameRoot.camEvents.AddListener(CamAtPuzzle);
         CameraTools.GetComponent<ObjectGlide>().glideObject = puzzleCamera;
         CameraTools.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.3f);
-        CameraTools.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(puzzleCamera, puzzCamStart, currPuzzle, puzzleCamera.transform.position);
+        CameraTools.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(puzzleCamera, puzzCamStart, currPuzzle, 0, 0.3f, 0.0f);
     }
 
     public void CamGlideToPlayer()
@@ -633,7 +633,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
             CameraTools.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.3f);
 
         CameraTools.GetComponent<ObjectGlide>().glideObject = puzzleCamera;
-        CameraTools.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(puzzleCamera, mainCamera, player, puzzleCamera.transform.position);
+        CameraTools.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(puzzleCamera, mainCamera, player, 0, camSpeed, 0.4f);
         CameraTools.GetComponent<CameraRotate>().enabled = false;
     }
 

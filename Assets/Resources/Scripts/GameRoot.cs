@@ -215,6 +215,12 @@ public class GameRoot : MonoBehaviour
         Time.timeScale = 0;
         pauseWindow.SetWindowState(true);
 
+        //Remove Hub Button if in ForcedStageMode
+        if (player.users.forceStage)
+            pauseWindow.ToggleHubButton(false);
+        else
+            pauseWindow.ToggleHubButton(true);
+
         //Show username in top corner of pause menu (if it's loaded)
         try
         {

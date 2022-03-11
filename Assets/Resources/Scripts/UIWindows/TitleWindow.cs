@@ -18,6 +18,8 @@ using UnityEngine.UI;
 
 public class TitleWindow : WindowRoot
 {
+    private bool DEBUG = false;
+
     //MAIN SCREEN
     [Header ("Main Screen")]
     public Transform panelMain;
@@ -66,6 +68,10 @@ public class TitleWindow : WindowRoot
     public Dropdown admin_dropMonth;
     public Dropdown admin_dropDay;
     public Dropdown admin_dropYear;
+
+    public Dropdown admin_StageSelect;
+    public Dropdown admin_DifficultySelect;
+    public Toggle admin_forceStage;
 
     [Header("Other")]
     public Transform panelError;
@@ -160,6 +166,14 @@ public class TitleWindow : WindowRoot
     //database when logging in, joining sessions or creating accounts
     public void LateUpdate()
     {
+        if(DEBUG)
+        {
+            GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", "asdf.qwer", false);
+            GameRoot.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", "asdf.qwer", false);
+
+            PlayGame();
+        }
+
         #region Checking connection to database
         //Checking for database/internet connection
         if (checkingConnection)
@@ -448,7 +462,19 @@ public class TitleWindow : WindowRoot
                     {
                         GameRoot.isExpo = true;
                         GameRoot.expoName = js_Name.text;
+
                     }
+                    if(GameRoot.player.users.isClass)
+                    {
+                        GameRoot.isClass = true;
+                        GameRoot.expoName = js_Name.text;
+                        tmp_player.users.isClass = true;
+
+                    }
+
+                    tmp_player.users.stageNum = GameRoot.player.users.stageNum;
+                    tmp_player.users.difficultyNum = GameRoot.player.users.difficultyNum;
+                    tmp_player.users.forceStage = GameRoot.player.users.forceStage;
 
                     if (GameRoot.isExpo)
                     {
@@ -513,8 +539,81 @@ public class TitleWindow : WindowRoot
         audioService.PlayUIAudio(Constants.audioUIStartBtn);
         //GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);// original 
 
-        GameRoot.instance.exitPuzzle = 0;
-        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);//added by LaQuez Brown 1-26-21
+        if (GameRoot.player.users.isClass || GameRoot.player.users.isExpo)
+        {
+            switch(GameRoot.player.users.stageNum)
+            {
+                case 0: //no level restrictions, join at main hub
+                    GameRoot.instance.exitPuzzle = 0;
+                    GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
+                    break;
+                case 1: //stage 1
+                    GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
+                    break;
+
+                case 2: //stage 2
+                    switch(GameRoot.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                case 3: //stage 3
+                    switch (GameRoot.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                case 4: //stage 4
+                    switch (GameRoot.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    GameRoot.instance.exitPuzzle = 0;
+                    GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
+                    break;
+            }
+
+        }
+        else
+        {
+            GameRoot.instance.exitPuzzle = 0;
+            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);//added by LaQuez Brown 1-26-21
+        }
 
         // hides mouse when loading game
         Cursor.visible = false;
@@ -881,9 +980,14 @@ public class TitleWindow : WindowRoot
                 else
                     session.users.expires = new DateTime(DateTime.Now.Year + 100, 1, 1).ToString();
 
+                session.users.stageNum = admin_StageSelect.value;
+                session.users.difficultyNum = admin_DifficultySelect.value + 1;
+                session.users.forceStage = admin_forceStage.isOn;
+
                 GameRoot.player = session;
                 GameRoot.isExpo = false;
                 GameRoot.isClass = true;
+
 
  //               DateTime.Compare(DateTime.Now, DateTime.Parse(GameRoot.player.users.last_login));
 
@@ -929,6 +1033,10 @@ public class TitleWindow : WindowRoot
                 else
                     session.users.expires = new DateTime(DateTime.Now.Year + 100, 1, 1).ToString();
 
+                session.users.stageNum = admin_StageSelect.value;
+                session.users.difficultyNum = admin_DifficultySelect.value + 1;
+                session.users.forceStage = admin_forceStage.isOn;
+
                 GameRoot.player = session;
 
 
@@ -963,11 +1071,19 @@ public class TitleWindow : WindowRoot
             admin_sessionName.interactable = false;
             admin_toggleExpire.isOn = false;
             admin_toggleExpire.interactable = false;
+            admin_StageSelect.interactable = false;
+            admin_DifficultySelect.interactable = false;
+            admin_forceStage.interactable = false;
+            admin_StageSelect.value = 0;
+            admin_DifficultySelect.value = 0;
+            admin_forceStage.isOn = false;
         }
         else
         {
             admin_sessionName.interactable = true;
             admin_toggleExpire.interactable = true;
+            admin_StageSelect.interactable = true;
+            StageSelectChange();
         }
     }
 
@@ -1013,6 +1129,39 @@ public class TitleWindow : WindowRoot
 
         admin_dropYear.options = yearsList;
 
+    }
+
+    public void StageSelectChange()
+    {
+        if(admin_StageSelect.value == 0)
+        {
+            admin_DifficultySelect.interactable = false;
+            admin_forceStage.isOn = false;
+            admin_forceStage.interactable = false;
+        }
+        else if(admin_StageSelect.value == 1)
+        {
+            admin_DifficultySelect.interactable = true;
+            admin_forceStage.isOn = false;
+            admin_forceStage.interactable = true;
+
+            admin_DifficultySelect.ClearOptions();
+            List<string> options = new List<string>();
+            options.Add("Level 1");
+            admin_DifficultySelect.AddOptions(options);
+        }
+        else
+        {
+            admin_DifficultySelect.interactable = true;
+            admin_forceStage.interactable = true;
+
+            admin_DifficultySelect.ClearOptions();
+            List<string> options = new List<string>();
+            options.Add("Level 1");
+            options.Add("Level 2");
+            options.Add("Level 3");
+            admin_DifficultySelect.AddOptions(options);
+        }
     }
     #endregion
 

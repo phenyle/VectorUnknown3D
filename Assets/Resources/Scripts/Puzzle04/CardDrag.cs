@@ -6,20 +6,17 @@ using TMPro;
 
 public class CardDrag : EventTrigger
 {
-    private Vector3 cardValues;
     private Vector3 startPos;
     private CardController cardController;
     public int cardIndexID = 0;
 
-
     private bool dragging = false;
 
     private Puzzle04Window P04W;
-    private Vector2 mousePos;
 
     public void Start()
     {
-        P04W = GameObject.Find("Puzzle04Window").GetComponent<Puzzle04Window>();
+        P04W = GameControllerPuzzle04.instance.P04W;
         cardController = this.gameObject.GetComponent<CardController>();
         startPos = this.transform.position;
         dragging = false;
@@ -30,8 +27,7 @@ public class CardDrag : EventTrigger
     {
         if (dragging)
         {
-            mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            this.transform.position = mousePos;
+            this.transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         }
     }
 
@@ -41,11 +37,11 @@ public class CardDrag : EventTrigger
         dragging = true;
         this.transform.SetAsLastSibling();
 
-        if (P04W.getAnswer1() != null && this.cardValues == P04W.getAnswer1().GetComponent<CardDrag>().cardValues)
+        if (P04W.getAnswer1() != null && cardController == P04W.getAnswer1())
             P04W.setAnswer1(null);
 
-        if (P04W.getAnswer2() != null && this.cardValues == P04W.getAnswer2().GetComponent<CardDrag>().cardValues)
-            P04W.setAnswer2(null);
+        if (P04W.getAnswer2() != null && cardController == P04W.getAnswer2())
+            P04W.setAnswer2(null); 
     }
 
     public override void OnPointerUp(PointerEventData eventData)
@@ -57,7 +53,7 @@ public class CardDrag : EventTrigger
         if (inAnsSlot1(this.gameObject))
         {
             this.transform.position = P04W.getAnsField1trans().position;
-
+            
             //Look to see if another card is already there and returning the old card
             for (int i = 0; i < P04W.getCards().Count; i++)
             {
@@ -72,7 +68,7 @@ public class CardDrag : EventTrigger
                 }
 
             }
-            P04W.setAnswer1(this.gameObject);
+            P04W.setAnswer1(cardController);
         }
         else if (inAnsSlot2(this.gameObject))
         {
@@ -92,20 +88,10 @@ public class CardDrag : EventTrigger
                 }
 
             }
-            P04W.setAnswer2(this.gameObject);
+            P04W.setAnswer2(cardController);
         }
         else
             this.transform.position = P04W.GetStartPositions()[cardIndexID].position;
-    }
-
-    public Vector3 getCardVector()
-    {
-        return cardValues;
-    }
-
-    public void setCardVector(Vector3 val)
-    {
-        cardValues = val;
     }
 
     /// <summary>
@@ -174,11 +160,5 @@ public class CardDrag : EventTrigger
     {
         return startPos;
     }
-
-    public void resetCard()
-    {
-        this.transform.position = startPos;
-    }
-
 
 }

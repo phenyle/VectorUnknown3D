@@ -9,7 +9,10 @@ public class PortalTrigger : MonoBehaviour
     public bool inPortal = false;
     public Puzzle04Controller PC04;
 
-    private float triggerDelay;
+    public bool exiting;
+    private float timeOutMax = 1.0f;
+    private float currTime = 0.0f;
+
 
 
     // Start is called before the first frame update
@@ -21,13 +24,16 @@ public class PortalTrigger : MonoBehaviour
 
     public void Update()
     {
-        if (triggerDelay > 0)
+        if (exiting)
         {
-            this.GetComponent<Collider>().enabled = false;
-            triggerDelay--;
+            currTime += Time.deltaTime;
+            if (currTime > timeOutMax)
+            {
+                this.GetComponent<Collider>().enabled = true;
+                if (currTime > timeOutMax + 0.2f)
+                    exiting = false;
+            }
         }
-        else
-            this.GetComponent<Collider>().enabled = true;
     }
 
 
@@ -35,18 +41,30 @@ public class PortalTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            PC04.OnPortalEnter();
+            if (exiting)
+                alarmCollider();
+            else
+                PC04.OnPortalEnter();
         }
+
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
+            alarmCollider();
             PC04.OnPortalExit();
-            triggerDelay = 10f;
         }
     }
-  
+
+    public void alarmCollider()
+    {
+        this.GetComponent<Collider>().enabled = false;
+        currTime = 0.0f;
+        exiting = true;
+    }
+
+
     public void SetPuzzleController(Puzzle04Controller controller)
     {
         PC04 = controller;

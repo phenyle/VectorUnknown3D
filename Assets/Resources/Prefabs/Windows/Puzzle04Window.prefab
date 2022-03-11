@@ -5446,6 +5446,7 @@ MonoBehaviour:
   cameraDragInput: {fileID: 9103858021609938805}
   ansField1: {fileID: 6152567676438669981}
   ansField2: {fileID: 5615690752803714583}
+  SubmitButton: {fileID: 6152567676544387444}
   cardPanel: {fileID: 3246064880059065150}
   cardStarts:
   - {fileID: 7533662848762581274}
@@ -6356,7 +6357,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3403432971277025155}
+        m_MethodName: OnSlider1Change
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6152567675478732230
 GameObject:
   m_ObjectHideFlags: 0
@@ -9617,7 +9629,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3403432971277025155}
+        m_MethodName: OnSlider2Change
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8646914574477734252
 GameObject:
   m_ObjectHideFlags: 0

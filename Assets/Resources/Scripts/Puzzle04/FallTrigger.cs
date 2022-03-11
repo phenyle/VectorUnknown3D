@@ -15,7 +15,7 @@ public class FallTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !PC04.grappleKit.isGrappling())
+        if (other.tag == "Player" && !GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
             Debug.Log("fall trigger");
 
@@ -26,10 +26,10 @@ public class FallTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player" && !PC04.grappleKit.isGrappling())
+        if (other.tag == "Player" && !GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
 
-            GameObject.FindGameObjectWithTag("Player").transform.position = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle04>().getResetPos();
+            GameControllerPuzzle04.instance.player.transform.position = GameControllerPuzzle04.instance.getResetPos();
 
             GetComponentInParent<GapTriggersController>().fall = false;
         }

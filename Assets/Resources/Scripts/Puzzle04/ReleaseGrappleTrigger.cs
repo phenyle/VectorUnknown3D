@@ -8,9 +8,9 @@ public class ReleaseGrappleTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player" && PC04.grappleKit.isGrappling())
+        if(other.tag == "Player" && GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
-            PC04.grappleKit.ReleaseGrapple();
+            GameControllerPuzzle04.instance.grappleKit.ReleaseGrapple();
         }
     }
 

@@ -87,6 +87,11 @@ public class PauseWindow : WindowRoot
         }
     }
 
+    public void ToggleHubButton(bool val)
+    {
+        btn_Hub.SetActive(val);
+    }
+
     public void ClickHubBtn()
     {
         if (!popupActive)

@@ -15,11 +15,11 @@ public class ResetTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !PC04.grappleKit.isGrappling())
+        if (other.tag == "Player" && !GameControllerPuzzle04.instance.grappleKit.isGrappling())
         {
             resetPos = GetComponentInParent<GapTriggersController>().GetComponentInParent<Puzzle04Controller>().reset.transform.position;
             GetComponentInParent<GapTriggersController>().reset = true;
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle04>().setResetPos(resetPos);
+            GameControllerPuzzle04.instance.setResetPos(resetPos);
             Debug.Log("reset trigger");
         }
     }

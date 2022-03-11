@@ -17,8 +17,9 @@ public class Puzzle04Window : WindowRoot
     //    private GameObject finalDisplay;
     public GameObject ansField1; //background field object
     public GameObject ansField2; //background field object
-    private GameObject ansCard1;
-    private GameObject ansCard2;
+    public Button SubmitButton;
+    public CardController card1 { get; private set; }
+    public CardController card2 { get; private set; }
 
     //LEFT PIN WINDOWS------------------
     [Header("Answer Card Displays")]
@@ -48,13 +49,13 @@ public class Puzzle04Window : WindowRoot
     public GameObject XYbutton;
     public GameObject XZbutton;
     public GameObject YZbutton;
-    private bool axisOn;
-    private bool gridOn;
-    private bool projectionsOn;
-    private bool anchorsOn;
-    private bool XYtoggle;
-    private bool XZtoggle;
-    private bool YZtoggle;
+    public bool axisOn { get; private set; }
+    public bool gridOn { get; private set; }
+    public bool projectionsOn { get; private set; }
+    public bool anchorsOn { get; private set; }
+    public bool XYtoggle { get; private set; }
+    public bool XZtoggle { get; private set; }
+    public bool YZtoggle { get; private set; }
 
 
     //UPPER LEFT PIN WINDOW------------
@@ -84,7 +85,7 @@ public class Puzzle04Window : WindowRoot
 
     private void Start()
     {
-        GCP04 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle04>();
+        GCP04 = GameControllerPuzzle04.instance;
         numComplete = 0;
         puzzleSlider.value = 0;
         if (isInit)
@@ -215,121 +216,66 @@ public class Puzzle04Window : WindowRoot
 
     }
 
-    /// <summary>
-    /// Gets the cards display info from "CardVectors" and sets the vector values info
-    /// to the UIcards.
-    /// 
-    /// NOTE: Which vectors display is dependent on the InitWindow() method where
-    /// certain vector types are displayed/not displayed dependent on the 
-    /// GameControllerPuzzle01.Difficutly
-    /// NOTE2: If GameControllerPuzzle01.Diffculty is set to 1 then the resulting
-    /// displayed values will be dependent on if the PARTICULAR Puzzle01Controller
-    /// is set for an X or Y direction constraint.  This is done for flexibliy reasons.
-    /// </summary>
-    /// <param name="PC04"> Only used for 1D vectors in the X or Y direction</param>
-    public void setCardDisplay(Puzzle04Controller PC04)
+
+    public void SetDisplays(List<Vector3> cards)
     {
-        for(int i = 0; i < UIcards.Count; i++)
+        for (int i = 0; i < UIcards.Count; i++)
         {
-            UIcards[i].GetComponent<CardController>().SetVector(UIcards[i].GetComponent<CardDrag>().getCardVector());
+            UIcards[i].GetComponent<CardController>().SetVector(cards[i]);
         }
-
-
-        ////1D Vectors----------------------------------
-        //if (PC04.getDirection().ToString().CompareTo("X") == 0)
-        //{
-        //    for (int i = 0; i < UIcards.Count; i++)
-        //    {
-        //        UIcards[i].transform.Find("1DBracket").transform.Find("1Dval").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().x.ToString();
-        //    }
-        //}
-        //if (PC04.getDirection().ToString().CompareTo("Y") == 0)
-        //{
-        //    for (int i = 0; i < UIcards.Count; i++)
-        //    {
-        //        UIcards[i].transform.Find("1DBracket").transform.Find("1Dval").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().y.ToString();
-        //    }
-        //}
-
-        ////2D Vectors----------------------------------------
-        //for (int i = 0; i < UIcards.Count; i++)
-        //{
-        //    UIcards[i].transform.Find("2DBracket").transform.Find("2DvalX").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().x.ToString();
-        //    UIcards[i].transform.Find("2DBracket").transform.Find("2DvalY").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().y.ToString();
-        //}
-
-        ////3D Vectors------------------------------------------
-        //for (int i = 0; i < UIcards.Count; i++)
-        //{
-        //    UIcards[i].transform.Find("3DBracket").transform.Find("3DvalX").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().x.ToString();
-        //    UIcards[i].transform.Find("3DBracket").transform.Find("3DvalY").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().z.ToString();
-        //    UIcards[i].transform.Find("3DBracket").transform.Find("3DvalZ").GetComponentInChildren<Text>().text = UIcards[i].GetComponent<CardDrag>().getCardVector().y.ToString();
-        //}
+        goalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector());
+        finalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.playerAnswer);
 
     }
-
-
-
-    public void setFeedbackDisplay(Puzzle04Controller PC04)
-    {
-        goalDisplay.GetComponent<CardController>().SetVector(PC04.getAnswerVector());
-
-        ////1D Vectors------------------------------------------
-        //if (PC04.getDirection().ToString().CompareTo("X") == 0)
-        //{
-        //    goalDisplay.transform.Find("1DBracket").transform.Find("1Dval").GetComponentInChildren<Text>().text = PC04.getAnswerVector().x.ToString();
-        //}
-        //if (PC04.getDirection().ToString().CompareTo("Y") == 0)
-        //{
-
-        //    goalDisplay.transform.Find("1DBracket").transform.Find("1Dval").GetComponentInChildren<Text>().text = PC04.getAnswerVector().y.ToString();
-        //}
-
-        ////2D Vectors----------------------------------------
-        //goalDisplay.transform.Find("2DBracket").transform.Find("2DvalX").GetComponentInChildren<Text>().text = PC04.getAnswerVector().x.ToString();
-        //goalDisplay.transform.Find("2DBracket").transform.Find("2DvalY").GetComponentInChildren<Text>().text = PC04.getAnswerVector().y.ToString();
-
-
-        ////3D Vectors------------------------------------------
-        //goalDisplay.transform.Find("3DBracket").transform.Find("3DvalX").GetComponentInChildren<Text>().text = PC04.getAnswerVector().x.ToString();
-        //goalDisplay.transform.Find("3DBracket").transform.Find("3DvalY").GetComponentInChildren<Text>().text = PC04.getAnswerVector().z.ToString();
-        //goalDisplay.transform.Find("3DBracket").transform.Find("3DvalZ").GetComponentInChildren<Text>().text = PC04.getAnswerVector().y.ToString();
-    }
-
 
     public void setFinalAnswerDisplay(Puzzle04Controller PC04)
     {
-        finalDisplay.GetComponent<CardController>().SetVector(PC04.getPlayerAnswer());
-
-    //    //1D Vectors------------------------------------------
-    //    if (PC04.getDirection().ToString().CompareTo("X") == 0)
-    //    {
-    //        finalDisplay.transform.Find("1DBracketFin").transform.Find("1Dval").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().x.ToString();
-    //    }
-    //    if (PC04.getDirection().ToString().CompareTo("Y") == 0)
-    //    {
-
-    //        finalDisplay.transform.Find("1DBracketFin").transform.Find("1Dval").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().y.ToString();
-    //    }
-
-    //    //2D Vectors----------------------------------------
-    //    finalDisplay.transform.Find("2DBracketFin").transform.Find("2DvalX").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().x.ToString();
-    //    finalDisplay.transform.Find("2DBracketFin").transform.Find("2DvalY").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().y.ToString();
-
-    //    //3D Vectors------------------------------------------
-    //    finalDisplay.transform.Find("3DBracketFin").transform.Find("3DvalX").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().x.ToString();
-    //    finalDisplay.transform.Find("3DBracketFin").transform.Find("3DvalY").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().z.ToString();
-    //    finalDisplay.transform.Find("3DBracketFin").transform.Find("3DvalZ").GetComponentInChildren<Text>().text = PC04.getPlayerAnswer().y.ToString();
+        finalDisplay.GetComponent<CardController>().SetVector(PC04.playerAnswer);
     }
 
 
     public void Update()
     {
-        //if (scalar1.value == 0)
-        //    scalar1.value = 1;
-        //if (scalar2.value == 0)
-        //    scalar2.value = 1;
+        if (GameControllerPuzzle04.instance.currPuzzle == null)
+            return;
 
+        //Keyboard Scalar Controls
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (scalar1.value > -10)
+            {
+                scalar1.value--;
+                OnSlider1Change();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (scalar1.value < 10)
+            {
+                scalar1.value++;
+                OnSlider1Change();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (scalar2.value > -10)
+            {
+                scalar2.value--;
+                OnSlider2Change();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (scalar2.value < 10)
+            {
+                scalar2.value++;
+                OnSlider2Change();
+            }
+        }
+    }
+
+    public void OnGUI()
+    {
         scalarText1.text = scalar1.value.ToString();
         scalarText2.text = scalar2.value.ToString();
     }
@@ -339,27 +285,12 @@ public class Puzzle04Window : WindowRoot
         return UIcards;
     }
 
-
-
     public void setCardValues(List<Vector3> cardVals)
     {
         for (int i = 0; i < UIcards.Count; i++)
         {
-            UIcards[i].GetComponent<CardDrag>().setCardVector(cardVals[i]);
             UIcards[i].GetComponent<CardController>().SetVector(cardVals[i]);
         }
-    }
-
-
-    public void resetCardPos()
-    {
-        for (int i = 0; i < UIcards.Count; i++)
-        {
-            UIcards[i].GetComponent<CardDrag>().resetCard();
-        }
-
-        ansCard1 = null;
-        ansCard2 = null;
     }
 
     public void setPuzzleController(Puzzle04Controller PC04)
@@ -367,23 +298,76 @@ public class Puzzle04Window : WindowRoot
         this.PC04 = PC04;
     }
 
-    public void setAnswer1(GameObject card)
+    public void setAnswer1(CardController card)
     {
-        ansCard1 = card;
+        card1 = card;
+        if (GameControllerPuzzle04.instance.currPuzzle != null)
+        {
+            GameControllerPuzzle04.instance.currPuzzle.CalculatePlayerAnswer();
+            finalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.playerAnswer);
+            GameControllerPuzzle04.instance.currPuzzle.answer1events.Invoke();
+            SubmitButtionInteractable();
+        }
+
     }
-    public void setAnswer2(GameObject card)
+    public void setAnswer2(CardController card)
     {
-        ansCard2 = card;
+        card2 = card;
+
+        if (GameControllerPuzzle04.instance.currPuzzle != null)
+        {
+            GameControllerPuzzle04.instance.currPuzzle.CalculatePlayerAnswer();
+            finalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.playerAnswer);
+            GameControllerPuzzle04.instance.currPuzzle.answer2events.Invoke();
+            SubmitButtionInteractable();
+        }
     }
 
-    public GameObject getAnswer1()
+    public void OnSlider1Change()
     {
-        return ansCard1;
+        scalarText1.text = getScalar1Value().ToString();
+
+        if (GameControllerPuzzle04.instance.currPuzzle != null)
+        {
+            GameControllerPuzzle04.instance.currPuzzle.CalculatePlayerAnswer();
+            finalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.playerAnswer);
+
+            SubmitButtionInteractable();
+
+            GameControllerPuzzle04.instance.currPuzzle.answer1events.Invoke();
+        }
+    }
+    public void OnSlider2Change()
+    {
+        scalarText2.text = getScalar2Value().ToString();
+
+        if (GameControllerPuzzle04.instance.currPuzzle != null)
+        {
+            GameControllerPuzzle04.instance.currPuzzle.CalculatePlayerAnswer();
+            finalDisplay.GetComponent<CardController>().SetVector(GameControllerPuzzle04.instance.currPuzzle.playerAnswer);
+
+            SubmitButtionInteractable();
+            GameControllerPuzzle04.instance.currPuzzle.answer2events.Invoke();
+        }
     }
 
-    public GameObject getAnswer2()
+    private void SubmitButtionInteractable()
     {
-        return ansCard2;
+        if (card1 != null && card2 != null &&
+            GameControllerPuzzle04.instance.currPuzzle.playerAnswer != Vector3.zero)
+            GameControllerPuzzle04.instance.P04W.SubmitButton.interactable = true;
+        else
+            GameControllerPuzzle04.instance.P04W.SubmitButton.interactable = false;
+    }
+
+    public CardController getAnswer1()
+    {
+        return card1;
+    }
+
+    public CardController getAnswer2()
+    {
+        return card2;
     }
 
     public int getScalar1Value()
@@ -409,10 +393,8 @@ public class Puzzle04Window : WindowRoot
     {
         if (PC04.checkFinalAnswer())
         {
-            foreach (GameObject card in UIcards)
-            {
-                card.transform.position = card.GetComponent<CardDrag>().getStartPos();
-            }
+
+            ResetCardPositions();
             setAnswer1(null);
             setAnswer2(null);
         }
@@ -453,75 +435,16 @@ public class Puzzle04Window : WindowRoot
     {
         axisOn = !axisOn;
 
-
         if(axisOn)
         {
-            switch (GCP04.Difficulty)
-            {
-                case 1:
-                    if (PC04.getDirection().ToString().CompareTo("X") == 0)
-                        PC04.getVisualVector().activateAxis(true, false, false);
-                    else if (PC04.getDirection().ToString().CompareTo("Y") == 0)
-                        PC04.getVisualVector().activateAxis(false, true, false);
-                    break;
-                case 2:
-                    PC04.getVisualVector().activateAxis(true, true, false);
-                    break;
-                case 3:
-                    PC04.getVisualVector().activateAxis(true, true, true);
-                    break;
-            }
-
- //           gridButton.SetActive(true);
-
-            if (gridOn)
-            {
-                switch (GCP04.Difficulty)
-                {
-                    case 1:
-                        if (PC04.getDirection().ToString().CompareTo("X") == 0)
-                            PC04.getVisualVector().activateBarGrid(true, false, false);
-                        else if (PC04.getDirection().ToString().CompareTo("Y") == 0)
-                            PC04.getVisualVector().activateBarGrid(false, true, false);
-                        break;
-                    case 2:
-                        PC04.getVisualVector().activateBarGrid(true, true, false);
-                        break;
-                    case 3:
-                        PC04.getVisualVector().activateBarGrid(XYtoggle, XZtoggle, YZtoggle);
-                        SetActive(advGridControls, true);
-                        break;
-                }
-
-                if (projectionsOn)
-                {
-                    PC04.getVisualVector().toggleProjections(true);
-
-                    projectionsButton.GetComponent<Image>().color = Color.green;
-
-                    if (anchorsOn)
-                    {
-                        anchorsButton.GetComponent<Image>().color = Color.green;
-                        PC04.getVisualVector().toggleAnchors(true);
-                    }
-                }
-            }
+            GameControllerPuzzle04.instance.visVector.AxisDirector();
 
             axisButton.GetComponent<Image>().color = Color.green;
         }
         else
         {
-            PC04.getVisualVector().deactivateAxis();
+            GameControllerPuzzle04.instance.visVector.deactivateAxis();
             axisButton.GetComponent<Image>().color = Color.white;
-
- //           gridButton.SetActive(false);
-
- //           PC04.getVisualVector().deactivateBarGrid();
-
- //           SetActive(advGridControls, false);
-
- //           PC04.getVisualVector().toggleProjections(false);
- //           PC04.getVisualVector().toggleAnchors(false);
         }
     }
 
@@ -535,15 +458,15 @@ public class Puzzle04Window : WindowRoot
             {
                 case 1:
                     if(PC04.getDirection().ToString().CompareTo("X") == 0)
-                        PC04.getVisualVector().activateBarGrid(true, false, false);
+                        GameControllerPuzzle04.instance.visVector.activateBarGrid(true, false, false);
                     else if(PC04.getDirection().ToString().CompareTo("Y") == 0)
-                        PC04.getVisualVector().activateBarGrid(false, true, false);
+                        GameControllerPuzzle04.instance.visVector.activateBarGrid(false, true, false);
                     break;
                 case 2:
-                    PC04.getVisualVector().activateBarGrid(true, true, false);
+                    GameControllerPuzzle04.instance.visVector.activateBarGrid(true, true, false);
                     break;
                 case 3:
-                    PC04.getVisualVector().activateBarGrid(XYtoggle, XZtoggle, YZtoggle);
+                    GameControllerPuzzle04.instance.visVector.activateBarGrid(XYtoggle, XZtoggle, YZtoggle);
                     SetActive(advGridControls, true);
                     break;
             }
@@ -553,27 +476,22 @@ public class Puzzle04Window : WindowRoot
 
             if(projectionsOn)
             {
-                PC04.getVisualVector().toggleProjections(true);
+                GameControllerPuzzle04.instance.visVector.toggleProjections(true);
 
                 projectionsButton.GetComponent<Image>().color = Color.green;
 
                 if (anchorsOn)
                 {
                     anchorsButton.GetComponent<Image>().color = Color.green;
-                    PC04.getVisualVector().toggleAnchors(true);
+                    GameControllerPuzzle04.instance.visVector.toggleAnchors(true);
                 }
             }
 
         }
         else
         {
-            PC04.getVisualVector().deactivateBarGrid();
+            GameControllerPuzzle04.instance.visVector.deactivateBarGrid();
             gridButton.GetComponent<Image>().color = Color.white;
-
- //           SetActive(advGridControls, false);
-
- //           PC04.getVisualVector().toggleProjections(false);
- //           PC04.getVisualVector().toggleAnchors(false);
         }
     }
 
@@ -607,7 +525,7 @@ public class Puzzle04Window : WindowRoot
 
             if (anchorsOn)
             {
-                PC04.getVisualVector().toggleAnchors(true);
+                GameControllerPuzzle04.instance.visVector.toggleAnchors(true);
                 anchorsButton.GetComponent<Image>().color = Color.green;
             }
             else
@@ -617,11 +535,11 @@ public class Puzzle04Window : WindowRoot
         {
  //           SetActive(advProjectionControls, false);
             anchorsButton.SetActive(false);
-            PC04.getVisualVector().toggleAnchors(false);
+            GameControllerPuzzle04.instance.visVector.toggleAnchors(false);
             projectionsButton.GetComponent<Image>().color = Color.white;
         }
 
-        PC04.getVisualVector().toggleProjections(projectionsOn);
+        GameControllerPuzzle04.instance.visVector.toggleProjections(projectionsOn);
     }
 
     public void toggleAnchorsButton()
@@ -633,7 +551,7 @@ public class Puzzle04Window : WindowRoot
         else
             anchorsButton.GetComponent<Image>().color = Color.white;
 
-        PC04.getVisualVector().toggleAnchors(anchorsOn);
+        GameControllerPuzzle04.instance.visVector.toggleAnchors(anchorsOn);
     }
 
     public void toggleXY()
@@ -645,7 +563,7 @@ public class Puzzle04Window : WindowRoot
         else
             XYbutton.GetComponent<Image>().color = Color.white;
 
-        PC04.getVisualVector().toggleXYplane(XYtoggle, gridOn);
+        GameControllerPuzzle04.instance.visVector.toggleXYplane(XYtoggle, gridOn);
     }
 
     public bool getXYtoggle()
@@ -662,7 +580,7 @@ public class Puzzle04Window : WindowRoot
         else
             XZbutton.GetComponent<Image>().color = Color.white;
 
-        PC04.getVisualVector().toggleXZplane(XZtoggle, gridOn);
+        GameControllerPuzzle04.instance.visVector.toggleXZplane(XZtoggle, gridOn);
     }
 
     public bool getXZtoggle()
@@ -679,7 +597,7 @@ public class Puzzle04Window : WindowRoot
         else
             YZbutton.GetComponent<Image>().color = Color.white;
 
-        PC04.getVisualVector().toggleYZplane(YZtoggle, gridOn);
+        GameControllerPuzzle04.instance.visVector.toggleYZplane(YZtoggle, gridOn);
     }
 
     public bool getYZtoggle()

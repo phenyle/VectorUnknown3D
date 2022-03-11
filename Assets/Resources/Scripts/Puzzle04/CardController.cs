@@ -8,15 +8,11 @@ public class CardController : MonoBehaviour
     public TextMeshProUGUI textVector;
     public GameObject[] brackets;
 
-    private Vector3 cardVector;
-
-    private GameControllerPuzzle04 GCPO4;
-
+    public Vector3 cardVector { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        GCPO4 = GameControllerPuzzle04.instance;
         foreach (GameObject bracket in brackets)
             bracket.SetActive(false);
         brackets[GameControllerPuzzle04.instance.Difficulty - 1].SetActive(true);

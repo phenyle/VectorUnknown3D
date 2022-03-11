@@ -1,0 +1,24 @@
+2D game in one sheet
+Columns denoting stage and level
+
+Login for both 2D/3D
+
+LoginScreen -> 2D/3D choice
+
+Login: User/Pass or SessionCode
+
+
+
+2D data information:
+Card vector options in separate columns (A, B, C, D)
+Answer Vector forumla AND result
+
+storing K, L, X, Y
+
+Ideal and NonIdeal step (units away from target)
+
+add column with each attempt?
+
+on restart -> new line / mark old line that they did not complete
+
+only count when both cards are in

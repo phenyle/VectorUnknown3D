@@ -5915,6 +5915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8602648954684378796}
   - component: {fileID: 8602648954684378799}
+  - component: {fileID: 3521768144252247654}
   m_Layer: 0
   m_Name: GrappleKit
   m_TagString: Untagged
@@ -5965,12 +5966,31 @@ MonoBehaviour:
   charHand: {fileID: 0}
   charShoulder: {fileID: 0}
   prevShoulderRotation: {fileID: 0}
+  glider: {fileID: 3521768144252247654}
   demoTarget: {fileID: 4895569402112900115}
   DemoAnim: 0
   trail: {fileID: 8379037446518855402}
   failTrail: {fileID: 2284130372558591430}
   ropeLine: {fileID: 9216535742952777572}
   dir2Target: {x: 0, y: 0, z: 0}
+--- !u!114 &3521768144252247654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8602648954684378797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c496df408d85c42a577496449dd021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glideObject: {fileID: 0}
+  objectMoveSpeed: 0.1
+  objectRotateSpeed: 0.07
+  arcHeight: 0
+  arrivedAtDistance: 0.2
+  focusAtObject: 0
 --- !u!1 &8918951754887010677
 GameObject:
   m_ObjectHideFlags: 0
@@ -6325,15 +6345,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fbfef7c85393bf49abebf02c7056691, type: 3}
---- !u!4 &5209847303140040240 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4209619327906312, guid: 4fbfef7c85393bf49abebf02c7056691,
-    type: 3}
-  m_PrefabInstance: {fileID: 5207265235900935224}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5207880340546589394 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1679741544873706, guid: 4fbfef7c85393bf49abebf02c7056691,
+    type: 3}
+  m_PrefabInstance: {fileID: 5207265235900935224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5209847303140040240 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4209619327906312, guid: 4fbfef7c85393bf49abebf02c7056691,
     type: 3}
   m_PrefabInstance: {fileID: 5207265235900935224}
   m_PrefabAsset: {fileID: 0}

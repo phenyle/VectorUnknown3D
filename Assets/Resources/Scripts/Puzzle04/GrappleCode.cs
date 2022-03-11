@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.Audio;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GrappleCode : MonoBehaviour
 {
@@ -31,8 +32,8 @@ public class GrappleCode : MonoBehaviour
     public Transform prevShoulderRotation;
 
 
+
     private bool grappleAnimation;
-    private Puzzle04Controller PC04;
     private bool rightAnswer;
     private bool playerglide = false;
     private bool failGrapple = false;
@@ -47,12 +48,19 @@ public class GrappleCode : MonoBehaviour
     public LineRenderer ropeLine;
     public Vector3 dir2Target;
 
+    private Puzzle04Controller PC04;
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GameControllerPuzzle04.instance.player;
+        charShoulder = player.transform.Find("Root").Find("Hips").Find("Spine_01").Find("Spine_02").Find("Spine_03").Find("Clavicle_R").Find("Shoulder_R").gameObject;
+        charHand = charShoulder.transform.Find("Elbow_R").Find("Hand_R").gameObject;
+
+
         ropeEnd.SetActive(false);
         ropeStart.transform.position = charHand.transform.position;
         ropeEnd.transform.position = charHand.transform.position;
@@ -89,6 +97,7 @@ public class GrappleCode : MonoBehaviour
         //player hits submit with the correct answer
         if (grappleAnimation)
         {
+            this.gameObject.SetActive(true);
             ropeEnd.SetActive(true);
             trail.gameObject.SetActive(false);
             ropeLine.enabled = true;
@@ -96,7 +105,6 @@ public class GrappleCode : MonoBehaviour
 
             ropeLine.SetPosition(0, charHand.transform.position);
             ropeLine.SetPosition(1, ropeEnd.transform.position);
- //           VectorBetweenPoints(rope, charHand.transform.position, ropeEnd.transform.position, ropeWidth);
             if (playerglide)
             {
                 ropeEnd.transform.position = goalPoint.transform.position;
@@ -108,7 +116,7 @@ public class GrappleCode : MonoBehaviour
             float currMag = (demoTarget.transform.position - ropeEnd.transform.position).magnitude;
             if (prevTargetPos != demoTarget.transform.position || currMag < 0.05f)
             {
-                ropeEnd.transform.position = PC04.startPoint.transform.position;
+                ropeEnd.transform.position = GameControllerPuzzle04.instance.currPuzzle.startPoint.transform.position;
                 trail.Clear();
             }
             ropeEnd.transform.LookAt(demoTarget.transform.position, Vector3.up);
@@ -152,20 +160,31 @@ public class GrappleCode : MonoBehaviour
                 ropeEnd.transform.position = PC04.startPoint.transform.position;
 
                 failGrapple = false;
-                PC04.turnOnVisualVectors();
+                GameControllerPuzzle04.instance.currPuzzle.turnOnVisualVectors(true);
+                GameControllerPuzzle04.instance.P04W.SubmitButton.interactable = true;
+                DemoAnim = true;
+
             }
         }
     }
 
-    private void VectorBetweenPoints(GameObject visVector, Vector3 begin, Vector3 end, float width)
+    public void GrappleEventListener()
     {
-        Vector3 offset = end - begin;
-        Vector3 localScale = new Vector3(width, (offset.magnitude / 2.0f), width);
-        Vector3 position = begin + (offset / 2.0f);
+        demoTarget.transform.position = GameControllerPuzzle04.instance.visVector.vector2end.transform.position;
 
-        visVector.transform.up = offset;
-        visVector.transform.position = position;
-        visVector.transform.localScale = localScale;
+        if (GameControllerPuzzle04.instance.P04W.card1 != null &&
+            GameControllerPuzzle04.instance.P04W.card1 != null &&
+            GameControllerPuzzle04.instance.currPuzzle.playerAnswer != Vector3.zero)
+        {
+            gameObject.SetActive(true);
+            enabled = true;
+            DemoAnim = true;
+            SetDemoTargetPos(GameControllerPuzzle04.instance.visVector.vector2end.transform.position);
+        }
+        else
+        {
+            DemoAnim = false;
+        }
     }
 
     public void InitGrapple(bool correct, Vector3 direction, GameObject goal, Vector3 playerStartPos, float arc)
@@ -175,21 +194,18 @@ public class GrappleCode : MonoBehaviour
         hookDirection = direction;
         startPos = playerStartPos;
         arcHeight = arc;
-
-
-   //     ropeStart.transform.position = charHand.transform.localPosition;
     }
 
 
     public void grappleToGoal(Puzzle04Controller puzzleController)
     {
-        trail.Clear();
-
         PC04 = puzzleController;
+        this.gameObject.SetActive(true);
+        trail.Clear();
         ropeStart.transform.position = charHand.transform.position;
         ropeEnd.transform.position = charHand.transform.position;
 
-        PC04.getGameController().GetAudioService().PlayFXAudio("Puzzle04/grappleShot");
+        GameControllerPuzzle04.instance.GetAudioService().PlayFXAudio("Puzzle04/grappleShot");
         muzzleFlash.SetActive(true);
         muzzleFlash.transform.position = charHand.transform.position;
         muzzleFlash.transform.LookAt(demoTarget.transform.position, Vector3.up);
@@ -200,11 +216,12 @@ public class GrappleCode : MonoBehaviour
         failGrapple = false;
         failFall = false;
         DemoAnim = false;
+        playerglide = false;
         grappleAnimation = true;
         trail.gameObject.SetActive(false);
         this.enabled = true;
 
-        if (PC04.getGameController().Difficulty == 3)
+        if (GameControllerPuzzle04.instance.Difficulty == 3)
         {
             speedIncri = 1.3f;
         }
@@ -215,10 +232,9 @@ public class GrappleCode : MonoBehaviour
 
         player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
         player.GetComponent<ObjectGlide>().glideObject = ropeEnd;
-        player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.5f * speedIncri);
-        player.GetComponent<ObjectGlide>().SetArrivedAtDistaince(1.0f);
+        player.GetComponent<ObjectGlide>().SetArrivedAtDistance(1.0f);
         GameRoot.moveEvents.AddListener(PlayerGlideMove);
-        player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(ropeEnd, goalPoint, goalPoint, ropeEnd.transform.position, 0.0f);
+        player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(ropeEnd, goalPoint, goalPoint, 0.0f, 0.5f * speedIncri, 0.0f);
 
 
     }
@@ -231,7 +247,6 @@ public class GrappleCode : MonoBehaviour
 
         if (rightAnswer)
         {
-            PC04.OnPortalExit();
             playerglide = true;
             failGrapple = false;
 
@@ -246,9 +261,11 @@ public class GrappleCode : MonoBehaviour
             player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
             player.GetComponent<ObjectGlide>().glideObject = player;
             player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.4f * speedIncri);
-            player.GetComponent<ObjectGlide>().SetArrivedAtDistaince(2.0f);
+            player.GetComponent<ObjectGlide>().SetArrivedAtDistance(2.0f);
             GameRoot.moveEvents.AddListener(EndOfPlayerGlide);
-            player.GetComponent<ObjectGlide>().GlideOnlyMovingTarget(player, PC04.goalPoint, player.transform.position, 0.0f);
+            player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(player, PC04.goalPoint, player, 0.0f, 0.4f * speedIncri, 0.0f);
+            PC04.OnPortalExit();
+
         }
         else
         {
@@ -277,8 +294,8 @@ public class GrappleCode : MonoBehaviour
         player.GetComponent<Collider>().enabled = true;
         GameRoot.instance.LockPlayer(false);
 
-        player.GetComponent<ObjectGlide>().GlideOnlyMovingTarget(player, PC04.landPoint, player.transform.position, arcHeight);
-
+        player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(player, PC04.landPoint, player, arcHeight, 0.4f * speedIncri, 0.0f);
+        this.gameObject.SetActive(false);
     }
 
     public void SetDemoTargetPos(Vector3 pos)
@@ -290,7 +307,7 @@ public class GrappleCode : MonoBehaviour
         grappleAnimation = false;
 
         this.enabled = true;
-        ropeEnd.transform.position = PC04.startPoint.transform.position;
+        ropeEnd.transform.position = GameControllerPuzzle04.instance.currPuzzle.startPoint.transform.position;
         hook.transform.position = ropeEnd.transform.position;
 
         demoTarget.transform.position = pos;
@@ -302,11 +319,11 @@ public class GrappleCode : MonoBehaviour
         trail.Clear();
     }
 
-    public void SetFailShot(Vector3 pos)
+    public void SetFailShot(Vector3 pos, Puzzle04Controller controller)
     {
         demoTarget.transform.position = pos;
-
-        PC04.turnOffVisualVectors();
+        PC04 = controller;
+        GameControllerPuzzle04.instance.currPuzzle.turnOffVisualVectors();
 
         ropeEnd.GetComponent<SphereCollider>().enabled = false;
         failGrapple = true;
@@ -314,7 +331,7 @@ public class GrappleCode : MonoBehaviour
         DemoAnim = false;
         grappleAnimation = false;
 
-        PC04.getGameController().GetAudioService().PlayFXAudio("Puzzle04/grappleShot");
+        GameControllerPuzzle04.instance.GetAudioService().PlayFXAudio("Puzzle04/grappleShot");
         muzzleFlash.SetActive(true);
         muzzleFlash.transform.position = charHand.transform.position;
         muzzleFlash.transform.LookAt(demoTarget.transform.position, Vector3.up);
@@ -322,7 +339,7 @@ public class GrappleCode : MonoBehaviour
 
 
         this.enabled = true;
-        ropeEnd.transform.position = PC04.startPoint.transform.position;
+        ropeEnd.transform.position = GameControllerPuzzle04.instance.currPuzzle.startPoint.transform.position;
         hook.transform.position = ropeEnd.transform.position;
 
         dir2Target = demoTarget.transform.position - ropeEnd.transform.position;
@@ -359,11 +376,6 @@ public class GrappleCode : MonoBehaviour
 
         grappleAnimation = false;
         this.enabled = false;
-    }
-
-    public void SetPuzzleController(Puzzle04Controller controller)
-    {
-        PC04 = controller;
     }
 
     public bool isGrappling()

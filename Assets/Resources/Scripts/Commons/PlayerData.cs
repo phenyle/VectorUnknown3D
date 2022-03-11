@@ -62,31 +62,13 @@ public class PlayerData : MonoBehaviour
         public bool admin;
         public bool isClass;
         public bool isExpo;
+        public int stageNum;
+        public int difficultyNum;
+        public bool forceStage;
         public string expires;
         public float mouseSense;
         public float soundVol;
         public float soundFX;
-        //public float p1_1clear_time;
-        //public int p1_1attempts;
-        //public float p2_1clear_time;
-        //public int p2_1attempts;
-        //public float p2_2clear_time;
-        //public int p2_2attempts;
-        //public float p2_3clear_time;
-        //public int p2_3attempts;
-        //public float p3_1clear_time;
-        //public int p3_1attempts;
-        //public float p3_2clear_time;
-        //public int p3_2attempts;
-        //public float p3_3clear_time;
-        //public int p3_3attempts;
-        //public float p4_1clear_time;
-        //public int p4_1attempts;
-        //public float p4_2clear_time;
-        //public int p4_2attempts;
-        //public float p4_3clear_time;
-        //public int p4_3attempts;
-
     }
 
     [System.Serializable]

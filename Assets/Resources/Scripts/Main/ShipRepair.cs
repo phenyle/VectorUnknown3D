@@ -70,8 +70,8 @@ public class ShipRepair : MonoBehaviour
     private GameObject mainCamera;
     private GameObject shipCamera;
     private Vector3 prevCameraPos;
-    private Vector3 cameraPos;
-    private Vector3 targetPos;
+    private GameObject cameraPos;
+    private GameObject targetPos;
 
     public GameControllerMain GCM;
 
@@ -119,7 +119,9 @@ public class ShipRepair : MonoBehaviour
                 {
                     GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
                     GameRoot.camEvents.AddListener(camAtPlayer);
-                    GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, mainCamera, mainCamera.GetComponent<CameraController>().target.gameObject, shipCamera.transform.position,-5.0f);
+                    float speed = ((shipCamera.transform.position - mainCamera.transform.position).magnitude / 1400.0f) * 6.0f;
+                    GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(speed);
+                    GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, mainCamera, mainCamera.GetComponent<CameraController>().target.gameObject, -5.0f, speed, 0.1f);
                     waitTime = 0;
                     playFX = true;
                     animate = false;
@@ -162,52 +164,52 @@ public class ShipRepair : MonoBehaviour
         switch (GameRoot.instance.prevStage)
         {
             case 1:
-                cameraPos = fromPuzzle1.position;
-                targetPos = this.gameObject.transform.position;
+                cameraPos = fromPuzzle1.gameObject;
+                targetPos = this.gameObject;
                 break;
 
             case 2:
-                cameraPos = fromPuzzle2.position;
+                cameraPos = fromPuzzle2.gameObject;
                 switch(GameRoot.instance.prevLevel)
                 {
                     case 1:
-                        targetPos = stbdCannons.transform.position;
+                        targetPos = stbdCannons;
                         break;
                     case 2:
-                        targetPos = portCannons.transform.position;
+                        targetPos = portCannons;
                         break;
                 }    
 
                 break;
 
             case 3:
-                cameraPos = fromPuzzle3.position;
+                cameraPos = fromPuzzle3.gameObject;
                 switch(GameRoot.instance.prevLevel)
                 {
                     case 1:
-                        targetPos = treasureStern.transform.position;
+                        targetPos = treasureStern;
                         break;
                     case 2:
-                        targetPos = treasureForecastle.transform.position;
+                        targetPos = treasureForecastle;
                         break;
                     case 3:
-                        targetPos = treasureChests.transform.position;
+                        targetPos = treasureChests;
                         break;
                 }
                 break;
 
             case 4:
-                cameraPos = fromPuzzle4.position;
+                cameraPos = fromPuzzle4.gameObject;
                 switch(GameRoot.instance.prevLevel)
                 {
                     case 1:
-                        targetPos = sail3.transform.position;
+                        targetPos = sail3;
                         break;
                     case 2:
-                        targetPos = sail1.transform.position;
+                        targetPos = sail1;
                         break;
                     case 3:
-                        targetPos = sail2.transform.position;
+                        targetPos = sail2;
                         break;
                 }
 
@@ -216,8 +218,9 @@ public class ShipRepair : MonoBehaviour
 
         GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
         GameRoot.camEvents.AddListener(camAtShip);
-        GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(((this.player.transform.position-cameraPos).magnitude / 1400.0f) * 6.0f);
-        GCM.GetComponent<ObjectGlide>().GlideAndLook(shipCamera, cameraPos, targetPos, prevCameraPos, 30.0f);
+        float speed = ((this.player.transform.position - cameraPos.transform.position).magnitude / 1400.0f) * 6.0f;
+        GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(speed);
+        GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, cameraPos, targetPos, 30.0f, speed, 0.1f);
     }
 
     public void camAtShip()
