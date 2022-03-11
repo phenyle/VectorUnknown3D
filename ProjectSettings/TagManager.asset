@@ -25,6 +25,21 @@ TagManager:
   - resTrig
   - PuzzleCamera
   - targetShips
+  - Score
+  - Center
+  - Solution
+  - FollowReflect
+  - Goal
+  - Formula
+  - Manager
+  - PathToRender
+  - Keys
+  - Choices
+  - Follow
+  - PathPreviouslyRendered
+  - Reflect
+  - Dropper
+  - Blinker
   layers:
   - Default
   - TransparentFX
