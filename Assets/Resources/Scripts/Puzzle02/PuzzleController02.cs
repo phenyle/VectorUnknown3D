@@ -145,10 +145,14 @@ public class PuzzleController02 : MonoBehaviour
         public int[][] i_matrix;
     }
 
+
     [HideInInspector]
     public obsData puzzleData;
     [HideInInspector]
-    public string attemptsList;
+    public string attemptsList;
+    [HideInInspector]
+    public int attemptNum;
+
 
 
     public void Awake()
@@ -177,6 +181,9 @@ public class PuzzleController02 : MonoBehaviour
     void Start()
     {
         shipPos = new int[3];
+        puzzleData.obsTime = 0.0f;
+        attemptNum = 0;
+        attemptsList = "";
     }
 
 
@@ -595,6 +602,21 @@ public class PuzzleController02 : MonoBehaviour
     {
         vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
         vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
+    }
+
+    public string CreateAttemptCSV(int[][] a_matrix, int[] a_vect)
+    {
+        string temp = "";
+        attemptNum++;
+
+        temp += attemptNum.ToString() + ", "; //attempt number
+        temp += puzzleData.obsTime.ToString("0.00") + ", "; //time attempted at
+
+        temp += "{ { " + a_matrix[0][0].ToString() + ", " + a_matrix[0][1].ToString() + " }, { " + a_matrix[1][0].ToString() + ", " + a_matrix[1][1].ToString() + " } }, ";
+        temp += "{ " + a_vect[0].ToString() + ", " + a_vect[1].ToString() + " }\n";
+
+        attemptsList += temp;
+        return temp;
     }
 
     public void AltCreateMatrixList()

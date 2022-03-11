@@ -1725,18 +1725,288 @@ MonoBehaviour:
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
+    obs1_time: 0
+    obs2_time: 0
+    obs3_time: 0
+    obs4_time: 0
+    obs5_time: 0
+    obs6_time: 0
+    obs7_time: 0
+    obs8_time: 0
+    obs9_time: 0
+    obs10_time: 0
+    obs1:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs1_attempts: 
+    obs2:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs2_attempts: 
+    obs3:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs3_attempts: 
+    obs4:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs4_attempts: 
+    obs5:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs5_attempts: 
+    obs6:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs6_attempts: 
+    obs7:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs7_attempts: 
+    obs8:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs8_attempts: 
+    obs9:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs9_attempts: 
+    obs10:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs10_attempts: 
   p2_2:
     username: 
     sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
+    obs1_time: 0
+    obs2_time: 0
+    obs3_time: 0
+    obs4_time: 0
+    obs5_time: 0
+    obs6_time: 0
+    obs7_time: 0
+    obs8_time: 0
+    obs9_time: 0
+    obs10_time: 0
+    obs1:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs1_attempts: 
+    obs2:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs2_attempts: 
+    obs3:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs3_attempts: 
+    obs4:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs4_attempts: 
+    obs5:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs5_attempts: 
+    obs6:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs6_attempts: 
+    obs7:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs7_attempts: 
+    obs8:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs8_attempts: 
+    obs9:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs9_attempts: 
+    obs10:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs10_attempts: 
   p2_3:
     username: 
     sessionID: 
     attemptNum: 0
     attemptDate: 
     usernameAttempt: 
+    obs1_time: 0
+    obs2_time: 0
+    obs3_time: 0
+    obs4_time: 0
+    obs5_time: 0
+    obs6_time: 0
+    obs7_time: 0
+    obs8_time: 0
+    obs9_time: 0
+    obs10_time: 0
+    obs1:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs1_attempts: 
+    obs2:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs2_attempts: 
+    obs3:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs3_attempts: 
+    obs4:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs4_attempts: 
+    obs5:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs5_attempts: 
+    obs6:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs6_attempts: 
+    obs7:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs7_attempts: 
+    obs8:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs8_attempts: 
+    obs9:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs9_attempts: 
+    obs10:
+      obsID: 0
+      obsTime: 0
+      answer: 
+      userUniqueSolution: 0
+      e_vect: 
+      i_vect: 
+    obs10_attempts: 
   p3_1:
     username: 
     sessionID: 

@@ -189,7 +189,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
             attemptData.tot_Time += Time.deltaTime;
             if (currTarget != null)
             {
-
+                currTarget.puzzleData.obsTime += Time.deltaTime;
             }
 
             int minutes = (int)attemptData.tot_Time / 60;
@@ -231,6 +231,10 @@ public class GameControllerPuzzle02 : GameControllerRoot
         {
             if (vectChosen && matrixChosen && !mainCannon.animate)
             {
+                currTarget.CreateAttemptCSV(currMatrix, currVector);
+
+
+                
                 mainCannon.FireCannon(currAnswer, currAnswer == currTarget.shipParent.transform.position);
                 audioService.PlayFXAudio(Constants.audioP02CannonFire);
                 ResetSelections();
@@ -260,6 +264,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public void SinkShip()
     {
         currTarget.ToggleFrontText(false);
+
+        SaveLocalPuzzleData(currTarget);
 
         shipPuzzles.Remove(currTarget);
         P02W.SetCompleteNumber(numberOfShips - shipPuzzles.Count, numberOfShips);
@@ -360,10 +366,16 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         if (matrixChosen)
         {
+            currTarget.CreateAttemptCSV(currMatrix, currVector);
             mainCannon.AnimateCannon();
             mainCannon.cannonFuzeFX.SetActive(true);
             //    mainCannon.ToggleTriggerBox(true);
             VV02.SetMasterVector(currAnswer);
+        }
+        else
+        {
+            int[][] empty = new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 0 } };
+            currTarget.CreateAttemptCSV(empty, currVector);
         }
         //TODO
         //connect this to the cannonRotate class
@@ -385,11 +397,17 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         if (vectChosen)
         {
+            currTarget.CreateAttemptCSV(currMatrix, currVector);
             mainCannon.AnimateCannon();
             mainCannon.cannonFuzeFX.SetActive(true);
             //    mainCannon.ToggleTriggerBox(true);
             VV02.SetMasterVector(currAnswer);
 
+        }
+        else
+        {
+            int[] empty = new int[2] { 0, 0 };
+            currTarget.CreateAttemptCSV(currMatrix, empty);
         }
         //TODO
         //connect this to the cannonRotate class
@@ -406,9 +424,6 @@ public class GameControllerPuzzle02 : GameControllerRoot
             currAnswer.z = currVector[0] * currMatrix[0][1] + currVector[1] * currMatrix[1][1];
         }
     }
-
-
-
 
     public void SwitchCamera()
     {
@@ -521,6 +536,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
             }
 
             temp.GetComponent<PuzzleController02>().SetPosition(new Vector3(randX, randY, randZ));
+            temp.GetComponent<PuzzleController02>().puzzleData.obsID = i+1;
 
             shipPuzzles.Add(temp.GetComponent<PuzzleController02>());
 
@@ -584,6 +600,197 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public PuzzleController02 GetCurrTarget()
     {
         return currTarget;
+    }
+
+    public void SaveLocalPuzzleData(PuzzleController02 puzzle)
+    {
+        puzzle.puzzleData.i_matrix = currMatrix;
+        puzzle.puzzleData.i_vect = currVector;
+        if (puzzle.puzzleData.i_vect != puzzle.puzzleData.e_vect || puzzle.puzzleData.i_matrix != puzzle.puzzleData.e_matrix)
+            puzzle.puzzleData.userUniqueSolution = true;
+        else
+            puzzle.puzzleData.userUniqueSolution = false;
+
+        switch (Difficulty)
+        {
+            case 1:
+                GameRoot.player.records.p2_1_numMove += puzzle.attemptNum;
+
+                switch (puzzle.puzzleData.obsID)
+                {
+                    case 1:
+                        GameRoot.player.p2_1.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs1 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs1_attempts = puzzle.attemptsList;
+                        break;
+                    case 2:
+                        GameRoot.player.p2_1.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs2 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs2_attempts = puzzle.attemptsList;
+                        break;
+                    case 3:
+                        GameRoot.player.p2_1.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs3 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs3_attempts = puzzle.attemptsList;
+                        break;
+                    case 4:
+                        GameRoot.player.p2_1.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs4 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs4_attempts = puzzle.attemptsList;
+                        break;
+                    case 5:
+                        GameRoot.player.p2_1.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs5 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs5_attempts = puzzle.attemptsList;
+                        break;
+                    case 6:
+                        GameRoot.player.p2_1.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs6 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs6_attempts = puzzle.attemptsList;
+                        break;
+                    case 7:
+                        GameRoot.player.p2_1.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs7 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs7_attempts = puzzle.attemptsList;
+                        break;
+                    case 8:
+                        GameRoot.player.p2_1.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs8 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs8_attempts = puzzle.attemptsList;
+                        break;
+                    case 9:
+                        GameRoot.player.p2_1.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs9 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs9_attempts = puzzle.attemptsList;
+                        break;
+                    case 10:
+                        GameRoot.player.p2_1.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_1.obs10 = puzzle.puzzleData;
+                        GameRoot.player.p2_1.obs10_attempts = puzzle.attemptsList;
+                        break;
+
+                }
+                break;
+
+
+            case 2:
+                GameRoot.player.records.p2_2_numMove += puzzle.attemptNum;
+
+
+                switch (puzzle.puzzleData.obsID)
+                {
+                    case 1:
+                        GameRoot.player.p2_2.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs1 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs1_attempts = puzzle.attemptsList;
+                        break;
+                    case 2:
+                        GameRoot.player.p2_2.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs2 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs2_attempts = puzzle.attemptsList;
+                        break;
+                    case 3:
+                        GameRoot.player.p2_2.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs3 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs3_attempts = puzzle.attemptsList;
+                        break;
+                    case 4:
+                        GameRoot.player.p2_2.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs4 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs4_attempts = puzzle.attemptsList;
+                        break;
+                    case 5:
+                        GameRoot.player.p2_2.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs5 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs5_attempts = puzzle.attemptsList;
+                        break;
+                    case 6:
+                        GameRoot.player.p2_2.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs6 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs6_attempts = puzzle.attemptsList;
+                        break;
+                    case 7:
+                        GameRoot.player.p2_2.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs7 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs7_attempts = puzzle.attemptsList;
+                        break;
+                    case 8:
+                        GameRoot.player.p2_2.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs8 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs8_attempts = puzzle.attemptsList;
+                        break;
+                    case 9:
+                        GameRoot.player.p2_2.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs9 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs9_attempts = puzzle.attemptsList;
+                        break;
+                    case 10:
+                        GameRoot.player.p2_2.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_2.obs10 = puzzle.puzzleData;
+                        GameRoot.player.p2_2.obs10_attempts = puzzle.attemptsList;
+                        break;
+                }
+                break;
+
+
+            case 3:
+                GameRoot.player.records.p2_3_numMove += puzzle.attemptNum;
+
+                switch (puzzle.puzzleData.obsID)
+                {
+                    case 1:
+                        GameRoot.player.p2_3.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs1 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs1_attempts = puzzle.attemptsList;
+                        break;
+                    case 2:
+                        GameRoot.player.p2_3.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs2 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs2_attempts = puzzle.attemptsList;
+                        break;
+                    case 3:
+                        GameRoot.player.p2_3.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs3 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs3_attempts = puzzle.attemptsList;
+                        break;
+                    case 4:
+                        GameRoot.player.p2_3.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs4 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs4_attempts = puzzle.attemptsList;
+                        break;
+                    case 5:
+                        GameRoot.player.p2_3.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs5 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs5_attempts = puzzle.attemptsList;
+                        break;
+                    case 6:
+                        GameRoot.player.p2_3.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs6 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs6_attempts = puzzle.attemptsList;
+                        break;
+                    case 7:
+                        GameRoot.player.p2_3.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs7 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs7_attempts = puzzle.attemptsList;
+                        break;
+                    case 8:
+                        GameRoot.player.p2_3.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs8 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs8_attempts = puzzle.attemptsList;
+                        break;
+                    case 9:
+                        GameRoot.player.p2_3.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs9 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs9_attempts = puzzle.attemptsList;
+                        break;
+                    case 10:
+                        GameRoot.player.p2_3.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot.player.p2_3.obs10 = puzzle.puzzleData;
+                        GameRoot.player.p2_3.obs10_attempts = puzzle.attemptsList;
+                        break;
+                }
+                break;
+        }
     }
 
 
