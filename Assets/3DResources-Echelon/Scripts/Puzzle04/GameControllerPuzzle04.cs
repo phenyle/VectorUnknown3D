@@ -70,7 +70,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
     {
         P04W = puzzleWindow.GetComponent<Puzzle04Window>();
 
-        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.FindPlayerAndCamera();
 
         pausePuzzTime = false;
         tot_puzzleTime = 0.0f;
@@ -95,14 +95,14 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         //Starter Conversation Managment
         conversation(0);
   //      conversationStart();
 
-        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true)
+        if (GameRoot3D.instance.puzzleCompleted[0] == true && GameRoot3D.instance.puzzleCompleted[1] == true)
         {
             SetActive(sunLight, false);
             SetActive(moonLight, true);
@@ -125,7 +125,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
             timer += (int)Time.deltaTime + 1;
             if (timer == 1200)
             {
-                GameRoot.ShowTips("Press 'R' to reset position.", true, false);
+                GameRoot3D.ShowTips("Press 'R' to reset position.", true, false);
             }
         }
         else
@@ -137,7 +137,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
         if (Input.GetKeyDown(KeyCode.R))
         {
             player.transform.position = startPosition;
-            GameRoot.ShowTips("", true, false);
+            GameRoot3D.ShowTips("", true, false);
         }
 
         //if(Input.GetKeyDown(KeyCode.E))
@@ -172,7 +172,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
         if (!DialogueManager.isInDialogue)
         {
-            if (!GameRoot.isPause && !pausePuzzTime)
+            if (!GameRoot3D.isPause && !pausePuzzTime)
             {
                 tot_puzzleTime += Time.deltaTime;
                 int minutes = (int)tot_puzzleTime / 60;
@@ -262,7 +262,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
             case 1:
                 Camera.main.depth = -1;
                 topCamPlayer.GetComponent<TopCameraPlayer>().isTopCamera = true;
-                GameRoot.instance.LockPlayerAndCam(true);
+                GameRoot3D.instance.LockPlayerAndCam(true);
                 break;
 
             case -1:
@@ -311,49 +311,49 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 switch (puzzle.puzzleID)
                 {
                     case 1:
-                        GameRoot.player.p4_1.obs1_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs1 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs1_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs1 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
-                        GameRoot.player.p4_1.obs2_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs2 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs2_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs2 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
-                        GameRoot.player.p4_1.obs3_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs3 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs3_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs3 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
-                        GameRoot.player.p4_1.obs4_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs4 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs4_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs4 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
-                        GameRoot.player.p4_1.obs5_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs5 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs5_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs5 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
-                        GameRoot.player.p4_1.obs6_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs6 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs6_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs6 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
-                        GameRoot.player.p4_1.obs7_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs7 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs7_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs7 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
-                        GameRoot.player.p4_1.obs8_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs8 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs8_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs8 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs8_attempts = puzzle.attemptsList;
                         break;
                     case 9:
-                        GameRoot.player.p4_1.obs9_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_1.obs9 = puzzle.puzzleData;
-                        GameRoot.player.p4_1.obs9_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_1.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_1.obs9 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_1.obs9_attempts = puzzle.attemptsList;
                         break;
 
                 }
@@ -364,44 +364,44 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 switch (puzzle.puzzleID)
                 {
                     case 1:
-                        GameRoot.player.p4_2.obs1_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs1 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs1_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs1 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
-                        GameRoot.player.p4_2.obs2_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs2 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs2_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs2 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
-                        GameRoot.player.p4_2.obs3_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs3 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs3_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs3 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
-                        GameRoot.player.p4_2.obs4_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs4 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs4_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs4 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
-                        GameRoot.player.p4_2.obs5_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs5 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs5_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs5 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
-                        GameRoot.player.p4_2.obs6_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs6 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs6_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs6 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
-                        GameRoot.player.p4_2.obs7_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs7 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs7_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs7 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
-                        GameRoot.player.p4_2.obs8_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_2.obs8 = puzzle.puzzleData;
-                        GameRoot.player.p4_2.obs8_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_2.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_2.obs8 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_2.obs8_attempts = puzzle.attemptsList;
                         break;
                 }
                 break;
@@ -411,29 +411,29 @@ public class GameControllerPuzzle04 : GameControllerRoot
                 switch (puzzle.puzzleID)
                 {
                     case 1:
-                        GameRoot.player.p4_3.obs1_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_3.obs1 = puzzle.puzzleData;
-                        GameRoot.player.p4_3.obs1_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_3.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_3.obs1 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_3.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
-                        GameRoot.player.p4_3.obs2_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_3.obs2 = puzzle.puzzleData;
-                        GameRoot.player.p4_3.obs2_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_3.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_3.obs2 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_3.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
-                        GameRoot.player.p4_3.obs3_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_3.obs3 = puzzle.puzzleData;
-                        GameRoot.player.p4_3.obs3_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_3.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_3.obs3 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_3.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
-                        GameRoot.player.p4_3.obs4_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_3.obs4 = puzzle.puzzleData;
-                        GameRoot.player.p4_3.obs4_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_3.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_3.obs4 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_3.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
-                        GameRoot.player.p4_3.obs5_time = puzzle.puzzleData.obsTime;
-                        GameRoot.player.p4_3.obs5 = puzzle.puzzleData;
-                        GameRoot.player.p4_3.obs5_attempts = puzzle.attemptsList;
+                        GameRoot3D.player.p4_3.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p4_3.obs5 = puzzle.puzzleData;
+                        GameRoot3D.player.p4_3.obs5_attempts = puzzle.attemptsList;
                         break;
                 }
                 break;
@@ -446,104 +446,104 @@ public class GameControllerPuzzle04 : GameControllerRoot
         switch(Difficulty)
         {
             case 1:
-                if (GameRoot.player.records.p4_1_time == 0.0f)
+                if (GameRoot3D.player.records.p4_1_time == 0.0f)
                 {
 
 //                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_1_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_1_numMove = totMoves;
-                    GameRoot.player.records.p4_1_questions = questionsList;
+                    GameRoot3D.player.records.p4_1_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_1_numMove = totMoves;
+                    GameRoot3D.player.records.p4_1_questions = questionsList;
                 }
-                else if (tot_puzzleTime < GameRoot.player.records.p4_1_time)
+                else if (tot_puzzleTime < GameRoot3D.player.records.p4_1_time)
                 {
 
 //                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_1_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_1_numMove = totMoves;
-                    GameRoot.player.records.p4_1_questions = questionsList;
+                    GameRoot3D.player.records.p4_1_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_1_numMove = totMoves;
+                    GameRoot3D.player.records.p4_1_questions = questionsList;
                 }
 
-                GameRoot.player.p4_1.attemptDate = System.DateTime.Now.ToString();
+                GameRoot3D.player.p4_1.attemptDate = System.DateTime.Now.ToString();
 
-                GameRoot.player.records.p4_1_attempts++;
+                GameRoot3D.player.records.p4_1_attempts++;
 
                 //Attempt Username Construction
-                GameRoot.player.p4_1.username = GameRoot.player.users.username;
-                GameRoot.player.p4_1.attemptNum = GameRoot.player.records.p4_1_attempts;
-                GameRoot.player.p4_1.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_1.attemptNum.ToString();
-                GameRoot.player.p4_1.sessionID = GameRoot.player.users.sessionID;
+                GameRoot3D.player.p4_1.username = GameRoot3D.player.users.username;
+                GameRoot3D.player.p4_1.attemptNum = GameRoot3D.player.records.p4_1_attempts;
+                GameRoot3D.player.p4_1.usernameAttempt = GameRoot3D.player.users.username + "." + GameRoot3D.player.p4_1.attemptNum.ToString();
+                GameRoot3D.player.p4_1.sessionID = GameRoot3D.player.users.sessionID;
 
                 break;
 
             case 2:
-                if (GameRoot.player.records.p4_2_time == 0.0f)
+                if (GameRoot3D.player.records.p4_2_time == 0.0f)
                 {
 
   //                  GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_2_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_2_numMove = totMoves;
-                    GameRoot.player.records.p4_2_questions = questionsList;
+                    GameRoot3D.player.records.p4_2_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_2_numMove = totMoves;
+                    GameRoot3D.player.records.p4_2_questions = questionsList;
                 }
-                else if (tot_puzzleTime < GameRoot.player.records.p4_2_time)
+                else if (tot_puzzleTime < GameRoot3D.player.records.p4_2_time)
                 {
 
  //                   GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_2_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_2_numMove = totMoves;
-                    GameRoot.player.records.p4_2_questions = questionsList;
+                    GameRoot3D.player.records.p4_2_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_2_numMove = totMoves;
+                    GameRoot3D.player.records.p4_2_questions = questionsList;
                 }
 
-                GameRoot.player.p4_2.attemptDate = System.DateTime.Now.ToString();
+                GameRoot3D.player.p4_2.attemptDate = System.DateTime.Now.ToString();
 
-                GameRoot.player.records.p4_2_attempts++;
+                GameRoot3D.player.records.p4_2_attempts++;
 
                 //Attempt Username Construction
-                GameRoot.player.p4_2.username = GameRoot.player.users.username;
-                GameRoot.player.p4_2.attemptNum = GameRoot.player.records.p4_2_attempts;
-                GameRoot.player.p4_2.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_2.attemptNum.ToString();
-                GameRoot.player.p4_2.sessionID = GameRoot.player.users.sessionID;
+                GameRoot3D.player.p4_2.username = GameRoot3D.player.users.username;
+                GameRoot3D.player.p4_2.attemptNum = GameRoot3D.player.records.p4_2_attempts;
+                GameRoot3D.player.p4_2.usernameAttempt = GameRoot3D.player.users.username + "." + GameRoot3D.player.p4_2.attemptNum.ToString();
+                GameRoot3D.player.p4_2.sessionID = GameRoot3D.player.users.sessionID;
 
                 break;
 
             case 3:
-                if (GameRoot.player.records.p4_3_time == 0.0f)
+                if (GameRoot3D.player.records.p4_3_time == 0.0f)
                 {
 
  //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_3_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_3_numMove = totMoves;
-                    GameRoot.player.records.p4_3_questions = questionsList;
+                    GameRoot3D.player.records.p4_3_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_3_numMove = totMoves;
+                    GameRoot3D.player.records.p4_3_questions = questionsList;
                 }
-                else if (tot_puzzleTime < GameRoot.player.records.p4_3_time)
+                else if (tot_puzzleTime < GameRoot3D.player.records.p4_3_time)
                 {
 
  //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_3_time = tot_puzzleTime;
-                    GameRoot.player.records.p4_3_numMove = totMoves;
-                    GameRoot.player.records.p4_3_questions = questionsList;
+                    GameRoot3D.player.records.p4_3_time = tot_puzzleTime;
+                    GameRoot3D.player.records.p4_3_numMove = totMoves;
+                    GameRoot3D.player.records.p4_3_questions = questionsList;
                 }
 
-                GameRoot.player.p4_3.attemptDate = System.DateTime.Now.ToString();
+                GameRoot3D.player.p4_3.attemptDate = System.DateTime.Now.ToString();
 
-                GameRoot.player.records.p4_3_attempts++;
+                GameRoot3D.player.records.p4_3_attempts++;
 
 
                 //Attempt Username Construction
-                GameRoot.player.p4_3.username = GameRoot.player.users.username;
-                GameRoot.player.p4_3.attemptNum = GameRoot.player.records.p4_3_attempts;
-                GameRoot.player.p4_3.usernameAttempt = GameRoot.player.users.username + "." + GameRoot.player.p4_3.attemptNum.ToString();
-                GameRoot.player.p4_3.sessionID = GameRoot.player.users.sessionID;
+                GameRoot3D.player.p4_3.username = GameRoot3D.player.users.username;
+                GameRoot3D.player.p4_3.attemptNum = GameRoot3D.player.records.p4_3_attempts;
+                GameRoot3D.player.p4_3.usernameAttempt = GameRoot3D.player.users.username + "." + GameRoot3D.player.p4_3.attemptNum.ToString();
+                GameRoot3D.player.p4_3.sessionID = GameRoot3D.player.users.sessionID;
 
                 break;
         }
 
-        GameRoot.player.records.username = GameRoot.player.users.username;
-        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
-        GameRoot.player.p4_3.sessionID = GameRoot.player.users.sessionID;
+        GameRoot3D.player.records.username = GameRoot3D.player.users.username;
+        GameRoot3D.player.records.sessionID = GameRoot3D.player.users.sessionID;
+        GameRoot3D.player.p4_3.sessionID = GameRoot3D.player.users.sessionID;
 
-        GameRoot.player.records.p4_totAttempts = GameRoot.player.records.p4_1_attempts + GameRoot.player.records.p4_2_attempts + GameRoot.player.records.p4_3_attempts;
-        GameRoot.player.records.p4_totTime += tot_puzzleTime;
-        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
+        GameRoot3D.player.records.p4_totAttempts = GameRoot3D.player.records.p4_1_attempts + GameRoot3D.player.records.p4_2_attempts + GameRoot3D.player.records.p4_3_attempts;
+        GameRoot3D.player.records.p4_totTime += tot_puzzleTime;
+        GameRoot3D.player.records.sessionID = GameRoot3D.player.users.sessionID;
     }
 
     public void SetPuzzlePause(bool val)

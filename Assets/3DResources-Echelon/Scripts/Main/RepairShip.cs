@@ -26,7 +26,7 @@ public class RepairShip : GameControllerRoot
     void Update()
     {
         //***************** if Player finshes puzzzle 1
-        if (GameRoot.instance.puzzleCompleted[0] == true)
+        if (GameRoot3D.instance.puzzleCompleted[0] == true)
         {
 
 
@@ -36,14 +36,14 @@ public class RepairShip : GameControllerRoot
                 {
                     Parts_1.SetActive(true);
 
-                    GameRoot.ShowTips("", false, false);
+                    GameRoot3D.ShowTips("", false, false);
                 }
 
 
             }
         }
         //Puzzle 2
-        if (GameRoot.instance.puzzleCompleted[1] == true)
+        if (GameRoot3D.instance.puzzleCompleted[1] == true)
         {
 
 
@@ -53,14 +53,14 @@ public class RepairShip : GameControllerRoot
                 {
                     Parts_2.SetActive(true);
 
-                    GameRoot.ShowTips("", false, false);
+                    GameRoot3D.ShowTips("", false, false);
                 }
 
 
             }
         }
         //Puzzle 3
-        if (GameRoot.instance.puzzleCompleted[2] == true)
+        if (GameRoot3D.instance.puzzleCompleted[2] == true)
         {
 
 
@@ -69,14 +69,14 @@ public class RepairShip : GameControllerRoot
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     Parts_3.SetActive(true);
-                    GameRoot.ShowTips("", false, false);
+                    GameRoot3D.ShowTips("", false, false);
                 }
 
 
             }
         }
         //puzzle 4
-        if (GameRoot.instance.puzzleCompleted[3] == true)
+        if (GameRoot3D.instance.puzzleCompleted[3] == true)
         {
 
 
@@ -86,13 +86,13 @@ public class RepairShip : GameControllerRoot
                 {
                     Parts_4.SetActive(true);
 
-                    GameRoot.ShowTips("", false, false);
+                    GameRoot3D.ShowTips("", false, false);
                 }
 
 
             }
         }
-        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] == true && GameRoot.instance.puzzleCompleted[3] == true)
+        if (GameRoot3D.instance.puzzleCompleted[0] == true && GameRoot3D.instance.puzzleCompleted[1] == true && GameRoot3D.instance.puzzleCompleted[2] == true && GameRoot3D.instance.puzzleCompleted[3] == true)
         {
 
 
@@ -108,7 +108,7 @@ public class RepairShip : GameControllerRoot
                     Parts_3.SetActive(false);
                     Parts_4.SetActive(false);
 
-                    GameRoot.ShowTips("", false, false);
+                    GameRoot3D.ShowTips("", false, false);
                 }
 
 
@@ -122,11 +122,11 @@ public class RepairShip : GameControllerRoot
     //used to trigger UI
     private void OnTriggerEnter(Collider other)
     {
-        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true && GameRoot.instance.puzzleCompleted[2] == true && GameRoot.instance.puzzleCompleted[3] == true)
+        if (GameRoot3D.instance.puzzleCompleted[0] == true && GameRoot3D.instance.puzzleCompleted[1] == true && GameRoot3D.instance.puzzleCompleted[2] == true && GameRoot3D.instance.puzzleCompleted[3] == true)
         {
             if (other.gameObject.tag == "Player")
         {
-            GameRoot.ShowTips("Press \"E\" to repair ship", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to repair ship", true, false);
             isTrue = true;
 
         }
@@ -136,7 +136,7 @@ public class RepairShip : GameControllerRoot
         else {
             if (other.gameObject.tag == "Player")
             {
-                GameRoot.ShowTips("Press \"E\" to place ship parts", true, false);
+                GameRoot3D.ShowTips("Press \"E\" to place ship parts", true, false);
                 isTrue = true;
             }
         }
@@ -147,7 +147,7 @@ private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             isTrue = false;
         }
     }

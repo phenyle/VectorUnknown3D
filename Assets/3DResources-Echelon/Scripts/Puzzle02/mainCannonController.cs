@@ -40,7 +40,7 @@ public class mainCannonController : MonoBehaviour
     {
         GCP02 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle02>();
         audioSource = this.GetComponent<AudioSource>();
-        audioSource.clip = GameRoot.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
+        audioSource.clip = GameRoot3D.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
         triggerBox = this.GetComponent<Collider>();
         text.text = "??\n??";
 
@@ -124,7 +124,7 @@ public class mainCannonController : MonoBehaviour
         {
             GCP02.isMainCannonTrigger = true;
             inTrigger = true;
-            GameRoot.ShowTips("Press \"E\" to fire the Cannon Ball", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to fire the Cannon Ball", true, false);
             //text.GetComponent<Text>().color = Color.yellow;
             //text2.GetComponent<Text>().color = Color.yellow;
         }
@@ -137,7 +137,7 @@ public class mainCannonController : MonoBehaviour
         {
             GCP02.isMainCannonTrigger = false;
             inTrigger = false;
-            GameRoot.ShowTips("Press \"E\" to fire the Cannon Ball", false, false);
+            GameRoot3D.ShowTips("Press \"E\" to fire the Cannon Ball", false, false);
             //text.GetComponent<Text>().color = Color.white;
             //text2.GetComponent<Text>().color = Color.white;
         }
@@ -174,10 +174,10 @@ public class mainCannonController : MonoBehaviour
         SetCannonText(new int[3] { (int)target.x, 0, (int)target.z });
 
         if (willHit)
-            GameRoot.moveEvents.AddListener(CannonBallHit);
+            GameRoot3D.moveEvents.AddListener(CannonBallHit);
         else
-            GameRoot.moveEvents.AddListener(CannonBallMiss);
-        tempBall.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
+            GameRoot3D.moveEvents.AddListener(CannonBallMiss);
+        tempBall.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.moveEvents);
         tempBall.GetComponent<ObjectGlide>().GlideOnly(temp, target, tempBall.transform.position);
 
         GCP02.chaseCamera.transform.position = GCP02.mainCamera.transform.position;
@@ -187,8 +187,8 @@ public class mainCannonController : MonoBehaviour
         GCP02.chaseCamera.SetActive(true);
         GCP02.chaseCamera.GetComponent<Camera>().enabled = true;
 
-        GameRoot.camEvents.AddListener(EndCamChase);
-        GCP02.chaseCamera.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
+        GameRoot3D.camEvents.AddListener(EndCamChase);
+        GCP02.chaseCamera.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.2f);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(GCP02.chaseCamera, (target - target.normalized *20) + Vector3.up*15, temp, GCP02.mainCamera.transform.position, -5f);
 
@@ -209,7 +209,7 @@ public class mainCannonController : MonoBehaviour
 
     public void CannonBallHit()
     {
-        GameRoot.moveEvents.RemoveListener(CannonBallHit);
+        GameRoot3D.moveEvents.RemoveListener(CannonBallHit);
         GCP02.GetCurrTarget().explosion.transform.position = tempBall.transform.position;
         GCP02.GetCurrTarget().explosion.SetActive(true);
         GCP02.GetCurrTarget().explosion.GetComponent<ParticleSystem>().Play();
@@ -225,18 +225,18 @@ public class mainCannonController : MonoBehaviour
 
     public void CannonBallMiss()
     {
-        GameRoot.moveEvents.RemoveListener(CannonBallMiss);
+        GameRoot3D.moveEvents.RemoveListener(CannonBallMiss);
 
         Vector3 temp = balltarget.normalized;
         temp *= 6.0f;
         temp = new Vector3(temp.x, -2.0f, temp.z);
-        GameRoot.moveEvents.AddListener(CannonBallSplash);
+        GameRoot3D.moveEvents.AddListener(CannonBallSplash);
         tempBall.GetComponent<ObjectGlide>().GlideOnly(tempBall.transform.parent.gameObject, balltarget + temp, tempBall.transform.position, 0.5f);
     }
 
     public void CannonBallSplash()
     {
-        GameRoot.moveEvents.RemoveListener(CannonBallSplash);
+        GameRoot3D.moveEvents.RemoveListener(CannonBallSplash);
         splashFX.transform.position = tempBall.transform.position;
         splashFX.SetActive(true);
         splashFX.GetComponent<ParticleSystem>().Play();

@@ -58,7 +58,7 @@ public class ScoreBoardUI : MonoBehaviour
         if(other.tag == "Player")
         {
             inTrigger = true;
-            GameRoot.instance.dynamicWindow.ShowTips("Press \"E\" to view records", true, true);
+            GameRoot3D.instance.dynamicWindow.ShowTips("Press \"E\" to view records", true, true);
         }
     }
 
@@ -84,8 +84,8 @@ public class ScoreBoardUI : MonoBehaviour
     {
         mainPanelUI.SetActive(true);
         mn_OverallBtn.Select();
-        GameRoot.instance.LockPlayerAndCam(true);
-        GameRoot.instance.ShowCursor(true);
+        GameRoot3D.instance.LockPlayerAndCam(true);
+        GameRoot3D.instance.ShowCursor(true);
         
         SetOverallScores();
         ov_Panel.SetActive(true);
@@ -110,50 +110,50 @@ public class ScoreBoardUI : MonoBehaviour
         GameObject currRow;
 
 
-        ov_totalTime.text = ConvertTime(GameRoot.player.users.tot_time);
+        ov_totalTime.text = ConvertTime(GameRoot3D.player.users.tot_time);
 
 
         //stage1
         currRow = ov_Table.transform.Find("row1").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p1_totAttempts.ToString();
-        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot.player.records.p1_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_totAttempts.ToString();
+        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot3D.player.records.p1_time > 0 ? Color.white : Color.black;
 
 
 
         //stage2
         currRow = ov_Table.transform.Find("row2").gameObject;
-        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot.player.records.p2_totAttempts.ToString();
-        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot.player.records.p2_1_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot.player.records.p2_2_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot.player.records.p2_3_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot3D.player.records.p2_totAttempts.ToString();
+        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot3D.player.records.p2_1_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot3D.player.records.p2_2_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot3D.player.records.p2_3_time > 0 ? Color.white : Color.black;
 
         //stage3
         currRow = ov_Table.transform.Find("row3").gameObject;
-        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot.player.records.p3_totAttempts.ToString();
-        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot.player.records.p3_1_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot.player.records.p3_2_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot.player.records.p3_3_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot3D.player.records.p3_totAttempts.ToString();
+        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot3D.player.records.p3_1_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot3D.player.records.p3_2_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot3D.player.records.p3_3_time > 0 ? Color.white : Color.black;
 
         //stage4
         currRow = ov_Table.transform.Find("row4").gameObject;
-        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot.player.records.p4_totAttempts.ToString();
-        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot.player.records.p4_1_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot.player.records.p4_2_time > 0 ? Color.white : Color.black;
-        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot.player.records.p4_3_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col1").Find("text").GetComponent<Text>().text = GameRoot3D.player.records.p4_totAttempts.ToString();
+        currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot3D.player.records.p4_1_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col3").GetComponent<Image>().color = GameRoot3D.player.records.p4_2_time > 0 ? Color.white : Color.black;
+        currRow.transform.Find("col4").GetComponent<Image>().color = GameRoot3D.player.records.p4_3_time > 0 ? Color.white : Color.black;
     }
 
     private void SetStage1Scores()
     {
         GameObject currRow;
 
-        s1_totalTime.text = ConvertTime(GameRoot.player.records.p1_totTime);
+        s1_totalTime.text = ConvertTime(GameRoot3D.player.records.p1_totTime);
 
         //level 1
         currRow = s1_Table.transform.Find("row1").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p1_totAttempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p1_time > 0 ? ConvertTime(GameRoot.player.records.p1_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p1_time > 0 ? GameRoot.player.records.p1_numMove.ToString() : "";
-        currRow.transform.Find("col4").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p1_time > 0 ? GameRoot.player.records.p1_answers : "";
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_totAttempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_time > 0 ? ConvertTime(GameRoot3D.player.records.p1_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_time > 0 ? GameRoot3D.player.records.p1_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_time > 0 ? GameRoot3D.player.records.p1_answers : "";
 
     }
 
@@ -166,66 +166,66 @@ public class ScoreBoardUI : MonoBehaviour
     {
         GameObject currRow;
 
-        s3_totalTime.text = ConvertTime(GameRoot.player.records.p3_totTime);
+        s3_totalTime.text = ConvertTime(GameRoot3D.player.records.p3_totTime);
 
         //level 1
         currRow = s3_Table.transform.Find("row1").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_1_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_1_time > 0 ? ConvertTime(GameRoot.player.records.p3_1_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_1_time > 0 ? GameRoot.player.records.p3_1_numMove.ToString() : "";
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot.player.records.p3_1_numMove);
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p3_1_movesList;
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_1_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_1_time > 0 ? ConvertTime(GameRoot3D.player.records.p3_1_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_1_time > 0 ? GameRoot3D.player.records.p3_1_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot3D.player.records.p3_1_numMove);
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p3_1_movesList;
 
         //level 2
         currRow = s3_Table.transform.Find("row2").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_2_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_2_time > 0 ? ConvertTime(GameRoot.player.records.p3_2_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_2_time > 0 ? GameRoot.player.records.p3_2_numMove.ToString() : "";
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot.player.records.p3_2_numMove);
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_2_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_2_time > 0 ? ConvertTime(GameRoot3D.player.records.p3_2_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_2_time > 0 ? GameRoot3D.player.records.p3_2_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot3D.player.records.p3_2_numMove);
 
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p3_2_movesList;
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p3_2_movesList;
 
         //level 3
         currRow = s3_Table.transform.Find("row3").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_3_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_3_time > 0 ? ConvertTime(GameRoot.player.records.p3_3_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p3_3_time > 0 ? GameRoot.player.records.p3_3_numMove.ToString() : "";
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot.player.records.p3_3_numMove);
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_3_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_3_time > 0 ? ConvertTime(GameRoot3D.player.records.p3_3_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p3_3_time > 0 ? GameRoot3D.player.records.p3_3_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(200, 50 * GameRoot3D.player.records.p3_3_numMove);
 
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p3_3_movesList;
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p3_3_movesList;
     }
 
     private void SetStage4Scores()
     {
         GameObject currRow;
 
-        s4_totalTime.text = ConvertTime(GameRoot.player.records.p4_totTime);
+        s4_totalTime.text = ConvertTime(GameRoot3D.player.records.p4_totTime);
 
         //level 1
         currRow = s4_Table.transform.Find("row1").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_1_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_1_time > 0 ? ConvertTime(GameRoot.player.records.p4_1_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_1_time > 0 ? GameRoot.player.records.p4_1_numMove.ToString() : "";
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_1_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_1_time > 0 ? ConvertTime(GameRoot3D.player.records.p4_1_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_1_time > 0 ? GameRoot3D.player.records.p4_1_numMove.ToString() : "";
         currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 9);
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p4_1_questions;
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p4_1_questions;
 
         //level 2
         currRow = s4_Table.transform.Find("row2").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_2_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_2_time > 0 ? ConvertTime(GameRoot.player.records.p4_2_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_2_time > 0 ? GameRoot.player.records.p4_2_numMove.ToString() : "";
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_2_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_2_time > 0 ? ConvertTime(GameRoot3D.player.records.p4_2_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_2_time > 0 ? GameRoot3D.player.records.p4_2_numMove.ToString() : "";
         currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 8);
 
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p4_2_questions;
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p4_2_questions;
 
         //level 3
         currRow = s4_Table.transform.Find("row3").gameObject;
-        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_3_attempts.ToString();
-        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_3_time > 0 ? ConvertTime(GameRoot.player.records.p4_3_time) : "";
-        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot.player.records.p4_3_time > 0 ? GameRoot.player.records.p4_3_numMove.ToString() : "";
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_3_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_3_time > 0 ? ConvertTime(GameRoot3D.player.records.p4_3_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p4_3_time > 0 ? GameRoot3D.player.records.p4_3_numMove.ToString() : "";
         currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 5);
 
-        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot.player.records.p4_3_questions;
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p4_3_questions;
 
     }
     #endregion
@@ -256,7 +256,7 @@ public class ScoreBoardUI : MonoBehaviour
     #region BUTTONS
     public void ClickOverallButton()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         ov_Panel.SetActive(true);
 
@@ -268,7 +268,7 @@ public class ScoreBoardUI : MonoBehaviour
 
     public void ClickS1Button()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         s1_Panel.SetActive(true);
 
@@ -278,7 +278,7 @@ public class ScoreBoardUI : MonoBehaviour
     }
     public void ClickS2Button()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         //       s2_Panel.SetActive(true);
 
@@ -290,7 +290,7 @@ public class ScoreBoardUI : MonoBehaviour
 
     public void ClickS3Button()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         s3_Panel.SetActive(true);
 
@@ -302,7 +302,7 @@ public class ScoreBoardUI : MonoBehaviour
 
     public void ClickS4Button()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         s4_Panel.SetActive(true);
 
@@ -314,10 +314,10 @@ public class ScoreBoardUI : MonoBehaviour
 
     public void ClickBackButton()
     {
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
         mainPanelUI.SetActive(false);
-        GameRoot.instance.LockPlayerAndCam(false);
-        GameRoot.instance.ShowCursor(false);
+        GameRoot3D.instance.LockPlayerAndCam(false);
+        GameRoot3D.instance.ShowCursor(false);
     }
 
     #endregion

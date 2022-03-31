@@ -8,7 +8,7 @@ public class GameControllerCredit : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.E))
         {
-            GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.menuSceneName);
+            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.menuSceneName);
         }
     }
 }

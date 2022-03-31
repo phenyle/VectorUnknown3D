@@ -29,6 +29,6 @@ public class ChoiceClickButton : MonoBehaviour
         P03W.ClickClearChoice2Btn();
         GCP03.SetSpanValue(spanValue, choiceID);
         GCP03.activateOtherChoiceBtn(choiceID);
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03Click);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioP03Click);
     }
 }

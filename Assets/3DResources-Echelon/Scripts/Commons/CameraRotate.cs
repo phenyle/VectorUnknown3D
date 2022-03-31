@@ -80,38 +80,38 @@ public class CameraRotate : MonoBehaviour
         {
             //rotCamera.LookAt(cameraTarget);
             //rotCamera.RotateAround(cameraTarget, Vector3.up, rotateSpeed * 0.5f);
-            KeyboardRotate(Vector3.left * GameRoot.player.users.mouseSense * 0.006f);
+            KeyboardRotate(Vector3.left * GameRoot3D.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.L))
         {
             //rotCamera.LookAt(cameraTarget);
             //rotCamera.RotateAround(cameraTarget, Vector3.up, -rotateSpeed * 0.5f);
-            KeyboardRotate(Vector3.right * GameRoot.player.users.mouseSense * 0.006f);
+            KeyboardRotate(Vector3.right * GameRoot3D.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.I))
         {
             //rotCamera.LookAt(cameraTarget);
             //rotCamera.RotateAround(cameraTarget, Vector3.left, -rotateSpeed * 0.5f);
-            KeyboardRotate(Vector3.up * GameRoot.player.users.mouseSense * 0.006f);
+            KeyboardRotate(Vector3.up * GameRoot3D.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.K))
         {
             //rotCamera.LookAt(cameraTarget);
             //rotCamera.RotateAround(cameraTarget, Vector3.left, rotateSpeed * 0.5f);
-            KeyboardRotate(Vector3.down * GameRoot.player.users.mouseSense * 0.006f);
+            KeyboardRotate(Vector3.down * GameRoot3D.player.users.mouseSense * 0.006f);
         }
 
         if (Input.GetKey(KeyCode.U) && (rotCamera.position - cameraTarget).magnitude > 5)
         {
-            rotCamera.Translate(new Vector3(0, 0, GameRoot.player.users.mouseSense * 0.45f));
+            rotCamera.Translate(new Vector3(0, 0, GameRoot3D.player.users.mouseSense * 0.45f));
         }
 
         if (Input.GetKey(KeyCode.O) && (rotCamera.position - cameraTarget).magnitude < 150)
         {
-            rotCamera.Translate(new Vector3(0, 0, -GameRoot.player.users.mouseSense * 0.45f));
+            rotCamera.Translate(new Vector3(0, 0, -GameRoot3D.player.users.mouseSense * 0.45f));
         }
     }
 

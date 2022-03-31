@@ -10,7 +10,7 @@ public class PuzzleEnvironmentController : MonoBehaviour
     private void Start()
     {
         audioSource = this.GetComponent<AudioSource>();
-        audioSource.clip = GameRoot.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
+        audioSource.clip = GameRoot3D.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
 
     }
 
@@ -20,7 +20,7 @@ public class PuzzleEnvironmentController : MonoBehaviour
         {
             if(audioSource.clip == null)
             {
-                audioSource.clip = GameRoot.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
+                audioSource.clip = GameRoot3D.instance.audioService.GetFXAudioClip(Constants.audioP03RotatedPuzzleEnvironment);
             }
 
             audioSource.loop = true;

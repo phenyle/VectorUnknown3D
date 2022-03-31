@@ -7,11 +7,15 @@ using UnityEngine.UI;
 public class AwaitingServerPopup : WindowRoot
 {
     [Header("Objects")]
-    public GameObject parrot;
+    public GameObject backNForthImage;
     public GameObject computer;
-    public GameObject ship;
+    public GameObject goal;
     public Text statusText;
     public Text flavorText;
+    public Sprite pirateShip;
+    public Sprite carrotBowl;
+    public GameObject parrotObj;
+    public GameObject bunnyObj;
     private string currStatus;
 
     [Header("Text Waiting Periods")]
@@ -27,7 +31,7 @@ public class AwaitingServerPopup : WindowRoot
     public float flightHeight;
     private Vector3 halfway;
 
-    private bool computer2ship;
+    private bool computer2goal;
     private int numDots;
     private int flavor_iter;
     private float timeSec_status;
@@ -42,20 +46,20 @@ public class AwaitingServerPopup : WindowRoot
     void Start()
     {
         numDots = 0;
-        computer2ship = true;
+        computer2goal = true;
         flavor_iter = UnityEngine.Random.Range(0, flavorScripts.Length - 1);
         flavorText.text = flavorScripts[flavor_iter];
         timeSec_status = Time.time;
         timeSec_flavor = Time.time;
-        halfway = (ship.transform.position - computer.transform.position) / 2;
+        halfway = (goal.transform.position - computer.transform.position) / 2;
     }
 
     private void OnEnable()
     {
         timeSec_status = Time.time;
         timeSec_flavor = Time.time;
-        parrot.GetComponent<ParrotSpriteAnim>().ResetAnim();
-        parrot.transform.position = computer.transform.position;
+        backNForthImage.GetComponent<ParrotSpriteAnim>().ResetAnim();
+        backNForthImage.transform.position = computer.transform.position;
     }
 
 
@@ -73,27 +77,27 @@ public class AwaitingServerPopup : WindowRoot
             ChangeFlavor();
         }
 
-        //Flight back and forth from computer to ship
-        if (computer2ship)
+        //Flight back and forth from computer to goal
+        if (computer2goal)
         {
             //parrot to ship
-            parrot.transform.position = Vector3.MoveTowards(parrot.transform.position, ship.transform.position, flightSpeed);
+            backNForthImage.transform.position = Vector3.MoveTowards(backNForthImage.transform.position, goal.transform.position, flightSpeed);
 
-            if ((parrot.transform.position - ship.transform.position).magnitude < 1)
+            if ((backNForthImage.transform.position - goal.transform.position).magnitude < 1)
             {
-                computer2ship = false;
-                parrot.transform.localScale = new Vector3(parrot.transform.localScale.x * -1, parrot.transform.localScale.y, 1);
+                computer2goal = false;
+                backNForthImage.transform.localScale = new Vector3(backNForthImage.transform.localScale.x * -1, backNForthImage.transform.localScale.y, 1);
             }
         }
         else
         {
             //parrot to computer
-            parrot.transform.position = Vector3.MoveTowards(parrot.transform.position, computer.transform.position, flightSpeed);
+            backNForthImage.transform.position = Vector3.MoveTowards(backNForthImage.transform.position, computer.transform.position, flightSpeed);
 
-            if ((parrot.transform.position - computer.transform.position).magnitude < 1)
+            if ((backNForthImage.transform.position - computer.transform.position).magnitude < 1)
             {
-                computer2ship = true;
-                parrot.transform.localScale = new Vector3(parrot.transform.localScale.x * -1, parrot.transform.localScale.y, 1);
+                computer2goal = true;
+                backNForthImage.transform.localScale = new Vector3(backNForthImage.transform.localScale.x * -1, backNForthImage.transform.localScale.y, 1);
             }
         }
     }
@@ -124,5 +128,23 @@ public class AwaitingServerPopup : WindowRoot
         } while (flavor_iter == temp);
 
         flavorText.text = flavorScripts[flavor_iter];
+    }
+
+    public void AwaitingPopUp(bool bunny)
+    {
+        if(bunny)
+        {
+            backNForthImage = bunnyObj;
+            backNForthImage.SetActive(true);
+            parrotObj.SetActive(false);
+            goal.GetComponent<Image>().sprite = carrotBowl;
+        }
+        else
+        {
+            backNForthImage = parrotObj;
+            backNForthImage.SetActive(true);
+            bunnyObj.SetActive(false);
+            goal.GetComponent<Image>().sprite = pirateShip;
+        }
     }
 }

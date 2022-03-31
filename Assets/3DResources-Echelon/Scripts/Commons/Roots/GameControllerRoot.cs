@@ -8,8 +8,8 @@ public class GameControllerRoot : MonoBehaviour
 
     public virtual void InitGameController()
     {
-        resourceService = GameRoot.instance.resourceService;
-        audioService = GameRoot.instance.audioService;
+        resourceService = GameRoot3D.instance.resourceService;
+        audioService = GameRoot3D.instance.audioService;
     }
 
     public virtual void InitGameController(MainWindow MW)

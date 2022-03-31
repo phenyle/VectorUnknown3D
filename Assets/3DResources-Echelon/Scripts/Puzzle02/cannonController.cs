@@ -43,7 +43,7 @@ public class cannonController : MonoBehaviour
 
 
             //---------------------------------New Tips Function--------------------------------------
-                GameRoot.ShowTips("Press \"E\" to pick the Cannon", Color.green, true, false);
+                GameRoot3D.ShowTips("Press \"E\" to pick the Cannon", Color.green, true, false);
             //--------------------------------------------------------------------------------------------
         }
     }
@@ -71,7 +71,7 @@ public class cannonController : MonoBehaviour
             bracket.color = Color.white;
 
             //---------------------------------New Tips Function--------------------------------------
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             //--------------------------------------------------------------------------------------------
         }
     }

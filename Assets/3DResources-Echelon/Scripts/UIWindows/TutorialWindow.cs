@@ -288,7 +288,7 @@ public class TutorialWindow : WindowRoot
         {
             player.transform.position = startPosition;
             //Debug.Log("R pressed");
-            GameRoot.ShowTips("", true, false);
+            GameRoot3D.ShowTips("", true, false);
         }
 
 

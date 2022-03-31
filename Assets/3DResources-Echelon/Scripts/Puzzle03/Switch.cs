@@ -23,7 +23,7 @@ public class Switch : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            GameRoot.ShowTips("Press \"E\" to trigger the switch", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to trigger the switch", true, false);
 
             //GCP03.isChoosing = true;
             //GCP03.rx = spanValue.x;
@@ -36,7 +36,7 @@ public class Switch : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            GameRoot.ShowTips("Press \"E\" to trigger the switch", false, false);
+            GameRoot3D.ShowTips("Press \"E\" to trigger the switch", false, false);
 
             //GCP03.isChoosing = false;
         }

@@ -163,7 +163,7 @@ public class Puzzle03Window : WindowRoot
             txtFBChoice2.text = choice2Pos.x + "\n" + choice2Pos.y + "\n" + choice2Pos.z;
         }*/
 
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03Click);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioP03Click);
     }
 
     public void ClickSwitchBtn()
@@ -200,7 +200,7 @@ public class Puzzle03Window : WindowRoot
         choice1Pos = Vector3.zero;
 
 
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03ClickClear);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioP03ClickClear);
     }
 
     public void ClickClearChoice2Btn()
@@ -210,7 +210,7 @@ public class Puzzle03Window : WindowRoot
  //       choiceID2 = 0;
         choice2Pos = Vector3.zero;
 
-        GameRoot.instance.audioService.PlayUIAudio(Constants.audioP03ClickClear);
+        GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioP03ClickClear);
     }
 
     public void SwapFeedbackPanel()

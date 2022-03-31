@@ -8,8 +8,8 @@ public class SystemRoot : MonoBehaviour
 
     public virtual void InitSystem()
     {
-        resourceService = GameRoot.instance.resourceService;
-        audioService = GameRoot.instance.audioService;
+        resourceService = GameRoot3D.instance.resourceService;
+        audioService = GameRoot3D.instance.audioService;
     }
 
     protected void CloseAllWindow()

@@ -15,7 +15,7 @@ public class MenuSystem : SystemRoot
     {
         resourceService.AsynLoadScene(Constants.menuSceneName, () =>
         {
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             titleWindow.SetWindowState(true);
             audioService.PlayBgMusic(Constants.audioBgMenu, true);
         });

@@ -74,15 +74,15 @@ public class Puzzle01Window : WindowRoot
 
         if (iptScalar.text == "")
         {
-            GameRoot.AddTips("Please input the scalar value");
+            GameRoot3D.AddTips("Please input the scalar value");
         }
         else if (iptX.text == "" || iptY.text == "" || iptZ.text == "")
         {
-            GameRoot.AddTips("Please input the vector value");
+            GameRoot3D.AddTips("Please input the vector value");
         }
         else if (!float.TryParse(iptScalar.text, out scalarValue) || !float.TryParse(iptX.text, out xValue) || !float.TryParse(iptY.text, out yValue) || !float.TryParse(iptZ.text, out zValue))
         {
-            GameRoot.AddTips("Please input numbers");
+            GameRoot3D.AddTips("Please input numbers");
         }
         else
         {
@@ -102,7 +102,7 @@ public class Puzzle01Window : WindowRoot
 
             if(!DialogueManager.isInDialogue)
             {
-                GameRoot.instance.LockPlayerAndCam(false);
+                GameRoot3D.instance.LockPlayerAndCam(false);
  //              GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
             }
         }

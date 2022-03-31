@@ -46,7 +46,7 @@ public class cannonballController : MonoBehaviour
 
 
             //---------------------------------New Tips Function--------------------------------------
-            GameRoot.ShowTips("Press \"E\" to pick the Matrix", Color.green, true, false);
+            GameRoot3D.ShowTips("Press \"E\" to pick the Matrix", Color.green, true, false);
             //--------------------------------------------------------------------------------------------
         }
     }
@@ -76,7 +76,7 @@ public class cannonballController : MonoBehaviour
             bracket.color = Color.white;
 
             //---------------------------------New Tips Function--------------------------------------
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             //--------------------------------------------------------------------------------------------
         }
     }

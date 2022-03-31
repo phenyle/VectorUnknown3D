@@ -211,7 +211,7 @@ public class GrappleCode : MonoBehaviour
         muzzleFlash.transform.LookAt(demoTarget.transform.position, Vector3.up);
         muzzleFlash.GetComponent<ParticleSystem>().Play();
 
-        GameRoot.instance.LockPlayer(true);
+        GameRoot3D.instance.LockPlayer(true);
 
         failGrapple = false;
         failFall = false;
@@ -230,10 +230,10 @@ public class GrappleCode : MonoBehaviour
 
         player.GetComponent<Rigidbody>().isKinematic = true;
 
-        player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
+        player.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.moveEvents);
         player.GetComponent<ObjectGlide>().glideObject = ropeEnd;
         player.GetComponent<ObjectGlide>().SetArrivedAtDistance(1.0f);
-        GameRoot.moveEvents.AddListener(PlayerGlideMove);
+        GameRoot3D.moveEvents.AddListener(PlayerGlideMove);
         player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(ropeEnd, goalPoint, goalPoint, 0.0f, 0.5f * speedIncri, 0.0f);
 
 
@@ -243,7 +243,7 @@ public class GrappleCode : MonoBehaviour
     {
         gunSmoke.SetActive(false);
         muzzleFlash.SetActive(false);
-        GameRoot.moveEvents.RemoveAllListeners();
+        GameRoot3D.moveEvents.RemoveAllListeners();
 
         if (rightAnswer)
         {
@@ -258,11 +258,11 @@ public class GrappleCode : MonoBehaviour
 
             player.GetComponent<Animator>().Play("Airborne");
 
-            player.GetComponent<ObjectGlide>().SetEventSys(GameRoot.moveEvents);
+            player.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.moveEvents);
             player.GetComponent<ObjectGlide>().glideObject = player;
             player.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.4f * speedIncri);
             player.GetComponent<ObjectGlide>().SetArrivedAtDistance(2.0f);
-            GameRoot.moveEvents.AddListener(EndOfPlayerGlide);
+            GameRoot3D.moveEvents.AddListener(EndOfPlayerGlide);
             player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(player, PC04.goalPoint, player, 0.0f, 0.4f * speedIncri, 0.0f);
             PC04.OnPortalExit();
 
@@ -287,12 +287,12 @@ public class GrappleCode : MonoBehaviour
         ropeEnd.SetActive(false);
         grappleAnimation = false;
         playerglide = false;
-        GameRoot.moveEvents.RemoveAllListeners();
-        GameRoot.moveEvents.AddListener(ReleaseGrapple);
+        GameRoot3D.moveEvents.RemoveAllListeners();
+        GameRoot3D.moveEvents.AddListener(ReleaseGrapple);
         player.GetComponent<Rigidbody>().isKinematic = false;
 
         player.GetComponent<Collider>().enabled = true;
-        GameRoot.instance.LockPlayer(false);
+        GameRoot3D.instance.LockPlayer(false);
 
         player.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(player, PC04.landPoint, player, arcHeight, 0.4f * speedIncri, 0.0f);
         this.gameObject.SetActive(false);
@@ -355,7 +355,7 @@ public class GrappleCode : MonoBehaviour
 
     public void ReleaseGrapple()
     {
-        GameRoot.moveEvents.RemoveAllListeners();
+        GameRoot3D.moveEvents.RemoveAllListeners();
         player.GetComponent<ObjectGlide>().enabled = false;
         PC04.ToggleAllTriggers(true);
         player.GetComponent<ThirdPersonUserControl>().enableUnstuck = true;
@@ -368,7 +368,7 @@ public class GrappleCode : MonoBehaviour
         player.GetComponent<Rigidbody>().useGravity = true;
 
         //    player.GetComponent<Collider>().enabled = true;
-        GameRoot.instance.LockPlayer(false);
+        GameRoot3D.instance.LockPlayer(false);
 
         ropeStart.transform.localPosition = Vector3.zero;
         ropeEnd.transform.localPosition = Vector3.zero;

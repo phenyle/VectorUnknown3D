@@ -3351,7 +3351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7024020349616395430}
-  - component: {fileID: 7024020349616395431}
+  - component: {fileID: 5117440234261008331}
   - component: {fileID: 7024020349616395448}
   - component: {fileID: 7024020349616395449}
   - component: {fileID: 7024020349616395450}
@@ -3383,7 +3383,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7024020349616395431
+--- !u!114 &5117440234261008331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3392,22 +3392,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 7024020349616395428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba9e69863bdc9e44812d8c16f087b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: d62ec6926a950ab479f47ba19c54e72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scenePlayer: {fileID: 0}
+  sceneCameraMain: {fileID: 0}
   loadingWindow: {fileID: 1609908000606873357}
   dynamicWindow: {fileID: 1892429441944864601}
   pauseWindow: {fileID: 5532277951401551964}
-  resourceService: {fileID: 0}
-  audioService: {fileID: 0}
   menuSystem: {fileID: 0}
   puzzleSystem: {fileID: 0}
   score: 0
   firstCompletion: 0
   prevStage: 0
   prevLevel: 0
-  puzzleCompleted: 000000
-  exitPuzzle: 1
+  puzzleCompleted: 00000000
+  exitPuzzle: 0
 --- !u!114 &7024020349616395448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6078,6 +6078,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3858605964434472070}
     m_Modifications:
+    - target: {fileID: 1981175323167542185, guid: 89fca4df243d38c4487452e3a917007b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6201341227524761673, guid: 89fca4df243d38c4487452e3a917007b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6191,7 +6196,7 @@ PrefabInstance:
     - target: {fileID: 6201341227524761678, guid: 89fca4df243d38c4487452e3a917007b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89fca4df243d38c4487452e3a917007b, type: 3}

@@ -34,7 +34,7 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         instance = this;
-        audioService = GameRoot.instance.audioService;
+        audioService = GameRoot3D.instance.audioService;
         endOfSentence = false;
     }
 
@@ -64,9 +64,9 @@ public class DialogueManager : MonoBehaviour
         dialogueWindow.gameObject.SetActive(true);
 
         isInDialogue = true;
-        GameRoot.instance.FindPlayerAndCamera();
-        GameRoot.instance.LockPlayerAndCam(true);
-        GameRoot.instance.ShowCursor(true);
+        GameRoot3D.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.LockPlayerAndCam(true);
+        GameRoot3D.instance.ShowCursor(true);
         uiWindows.gameObject.SetActive(false);
 
         //try
@@ -231,10 +231,10 @@ public class DialogueManager : MonoBehaviour
         yield return new WaitForSeconds(sec);
 
         //if not in a puzzle
-        if (!isPuzzleLock || !GameRoot.isPuzzleLock)
+        if (!isPuzzleLock || !GameRoot3D.isPuzzleLock)
         {
-            GameRoot.instance.LockPlayerAndCam(false);
-            GameRoot.instance.ShowCursor(false);
+            GameRoot3D.instance.LockPlayerAndCam(false);
+            GameRoot3D.instance.ShowCursor(false);
             Debug.Log("Unlock From Dialogue");
 
             Debug.Log("Start Try");
@@ -249,7 +249,7 @@ public class DialogueManager : MonoBehaviour
             Debug.Log("After Try Catch");
         }
         else
-            GameRoot.instance.ShowCursor(true);
+            GameRoot3D.instance.ShowCursor(true);
 
         isInDialogue = false;
 

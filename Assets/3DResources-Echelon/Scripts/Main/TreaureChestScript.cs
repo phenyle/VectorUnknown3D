@@ -34,7 +34,7 @@ public class TreaureChestScript : GameControllerRoot
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Chest.SetActive(false);
-                GameRoot.ShowTips("", false, false);
+                GameRoot3D.ShowTips("", false, false);
             }
         }
     }
@@ -45,7 +45,7 @@ public class TreaureChestScript : GameControllerRoot
     {
         if (other.gameObject.tag == "Player")
         {
-            GameRoot.ShowTips("Press \"E\" to collect Ship Parts", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to collect Ship Parts", true, false);
             ClosedLid.SetActive(false);
             OpenLid.SetActive(true);
             isTrue = true;
@@ -57,7 +57,7 @@ public class TreaureChestScript : GameControllerRoot
     {
         if (other.gameObject.tag == "Player")
         {
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             isTrue = false;
             ClosedLid.SetActive(true);
             OpenLid.SetActive(false);

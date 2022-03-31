@@ -51,7 +51,7 @@ public class PauseWindow : WindowRoot
         if (!popupActive)
         {
             audioService.PlayUIAudio(Constants.audioUIClickBtn);
-            GameRoot.instance.Resume();
+            GameRoot3D.instance.Resume();
         }
     }
 
@@ -63,9 +63,9 @@ public class PauseWindow : WindowRoot
 
             SetActive(panelPause, false);
             SetActive(panelOption, true);
-            sliderMouseSense.value = GameRoot.player.users.mouseSense;
-            sliderSoundFX.value = GameRoot.player.users.soundFX;
-            sliderVolume.value = GameRoot.player.users.soundVol;
+            sliderMouseSense.value = GameRoot3D.player.users.mouseSense;
+            sliderSoundFX.value = GameRoot3D.player.users.soundFX;
+            sliderVolume.value = GameRoot3D.player.users.soundVol;
         }
     }
 
@@ -75,9 +75,9 @@ public class PauseWindow : WindowRoot
         {
             audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
-            GameRoot.player.users.mouseSense = sliderMouseSense.value;
-            GameRoot.player.users.soundFX = sliderSoundFX.value;
-            GameRoot.player.users.soundVol = sliderVolume.value;
+            GameRoot3D.player.users.mouseSense = sliderMouseSense.value;
+            GameRoot3D.player.users.soundFX = sliderSoundFX.value;
+            GameRoot3D.player.users.soundVol = sliderVolume.value;
 
             if (GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>() != null)
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().SetRotateSpeed(sliderMouseSense.value);
@@ -122,11 +122,11 @@ public class PauseWindow : WindowRoot
         {
             case 0: //Return to Hub
                 audioService.PlayUIAudio(Constants.audioUIClickBtn);
-                GameRoot.instance.Resume();
+                GameRoot3D.instance.Resume();
                 ResetPauseMenu();
 
-                GameRoot.instance.exitPuzzle = 0;
-                GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
+                GameRoot3D.instance.exitPuzzle = 0;
+                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
                 // hides mouse when loading game
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
@@ -136,19 +136,19 @@ public class PauseWindow : WindowRoot
                 audioService.PlayUIAudio(Constants.audioUIClickBtn);
                 GameObject.Find("DialogueManager").GetComponent<DialogueManager>().EndDialogue();
                 //Resume can unlock the lock
-                GameRoot.isPuzzleLock = false;
+                GameRoot3D.isPuzzleLock = false;
 
-                GameRoot.player.users.last_login = System.DateTime.Now.ToString();
-                GameRoot.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot.player.users.username);
-                GameRoot.player = new PlayerData();
+                GameRoot3D.player.users.last_login = System.DateTime.Now.ToString();
+                GameRoot3D.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                GameRoot3D.player = new PlayerData();
 
                 ResetPauseMenu();
 
                 //Dialogue manager can unlock the lock;
                 DialogueManager.isPuzzleLock = false;
-                GameRoot.instance.InitUI();
-                GameRoot.instance.menuSystem.EnterMenu();
-                GameRoot.instance.Resume();
+                GameRoot3D.instance.InitUI();
+                GameRoot3D.instance.menuSystem.EnterMenu();
+                GameRoot3D.instance.Resume();
                 break;
         }
     }

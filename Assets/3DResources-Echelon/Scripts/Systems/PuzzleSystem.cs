@@ -34,7 +34,7 @@ public class PuzzleSystem : SystemRoot
         resourceService.AsynLoadScene(puzzleName, () =>
         {
             CloseAllWindow();
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             switch (puzzleName)
             {
                 case Constants.menuSceneName:

@@ -58,7 +58,7 @@ public class EnterExitSelect : WindowRoot
             SetActive(levelSelectUI, true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            GameRoot.instance.LockCamera(true);
+            GameRoot3D.instance.LockCamera(true);
  //           mainCamera.isLock = true;
 
             levelSelectUI.GetComponent<LevelSelectButtons>().setLevel(0);
@@ -79,18 +79,18 @@ public class EnterExitSelect : WindowRoot
                     playerController.sceneName = Constants.mainSceneName;
 
                     if (SceneManager.GetActiveScene().name == Constants.puzzle01SceneName)
-                        GameRoot.instance.exitPuzzle = 1;
+                        GameRoot3D.instance.exitPuzzle = 1;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle02_2SceneName)
-                        GameRoot.instance.exitPuzzle = 2;
+                        GameRoot3D.instance.exitPuzzle = 2;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle03_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle03_2SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle03_3SceneName)
-                        GameRoot.instance.exitPuzzle = 3;
+                        GameRoot3D.instance.exitPuzzle = 3;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle04_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle04_2SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle04_3SceneName)
-                        GameRoot.instance.exitPuzzle = 4;
+                        GameRoot3D.instance.exitPuzzle = 4;
 
                     break;
 
@@ -134,19 +134,19 @@ public class EnterExitSelect : WindowRoot
             switch(puzzleComplete)
             {
                 case PuzzleCompleteMod.Puzzle01Complete:
-                    GameRoot.instance.puzzleCompleted[0] = true;
+                    GameRoot3D.instance.puzzleCompleted[0] = true;
                     break;
 
                 case PuzzleCompleteMod.Puzzle02Complete:
-                    GameRoot.instance.puzzleCompleted[1] = true;
+                    GameRoot3D.instance.puzzleCompleted[1] = true;
                     break;
 
                 case PuzzleCompleteMod.Puzzle03Complete:
-                    GameRoot.instance.puzzleCompleted[2] = true;
+                    GameRoot3D.instance.puzzleCompleted[2] = true;
                     break;
 
                 case PuzzleCompleteMod.Puzzle04Complete:
-                    GameRoot.instance.puzzleCompleted[3] = true;
+                    GameRoot3D.instance.puzzleCompleted[3] = true;
                     break;
 
 
@@ -168,10 +168,10 @@ public class EnterExitSelect : WindowRoot
             SetActive(levelSelectUI, false);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            GameRoot.instance.LockCamera(false);
+            GameRoot3D.instance.LockCamera(false);
 //            mainCamera.isLock = false;
 
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
         }
     }
 }

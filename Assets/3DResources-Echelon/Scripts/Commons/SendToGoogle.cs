@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GoogleSheetsForUnity
 {
@@ -10,6 +11,7 @@ namespace GoogleSheetsForUnity
         public PlayerData tmp_player;
 
         public bool retrieved { get; set; }
+        public static UnityEvent callback;
 
         public static string cellval { get; set; }
 
@@ -24,6 +26,7 @@ namespace GoogleSheetsForUnity
         {
             tmp_player = new PlayerData();
             retrieved = false;
+            callback = new UnityEvent();
         }
 
         private void OnEnable()
@@ -40,7 +43,7 @@ namespace GoogleSheetsForUnity
 
         public void SaveNewPlayer()
         {
-            tmp_player = GameRoot.player;
+            tmp_player = GameRoot3D.player;
             string jsonPlayer = JsonUtility.ToJson(tmp_player.users);
 
             Debug.Log("<color=yellow>Creating the following player table: " + PlayerData.sheets.users.ToString() + "\n</color>" + jsonPlayer);
@@ -93,7 +96,7 @@ namespace GoogleSheetsForUnity
 
         public void UpdatePlayerTable(bool create, PlayerData.sheets sheetname, string searchName)
         {
-            tmp_player = GameRoot.player;
+            tmp_player = GameRoot3D.player;
 
             string jsonPlayer = "";
             string columnName = "usernameAttempt";
@@ -147,7 +150,7 @@ namespace GoogleSheetsForUnity
 
         public void UpdatePlayerAll(bool create)
         {
-            tmp_player = GameRoot.player;
+            tmp_player = GameRoot3D.player;
             PlayerData.sheets sheetName;
             int length = System.Enum.GetNames(typeof(PlayerData.sheets)).Length;
 
@@ -304,7 +307,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.users = tmp_users[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.users = tmp_player.users;
+                        GameRoot3D.player.users = tmp_player.users;
                         break;
 
                     case "records":
@@ -317,7 +320,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.records = tmp_records[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.records = tmp_player.records;
+                        GameRoot3D.player.records = tmp_player.records;
                         break;
 
                     case "p1_1":
@@ -330,7 +333,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p1_1 = tmp_p1_1[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p1_1 = tmp_player.p1_1;
+                        GameRoot3D.player.p1_1 = tmp_player.p1_1;
                         break;
 
                     case "p2_1":
@@ -343,7 +346,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p2_1 = tmp_p2_1[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p2_1 = tmp_player.p2_1;
+                        GameRoot3D.player.p2_1 = tmp_player.p2_1;
                         break;
 
                     case "p2_2":
@@ -356,7 +359,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p2_2 = tmp_p2_2[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p2_2 = tmp_player.p2_2;
+                        GameRoot3D.player.p2_2 = tmp_player.p2_2;
                         break;
 
                     case "p2_3":
@@ -369,7 +372,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p2_3 = tmp_p2_3[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p2_3 = tmp_player.p2_3;
+                        GameRoot3D.player.p2_3 = tmp_player.p2_3;
                         break;
 
                     case "p3_1":
@@ -382,7 +385,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p3_1 = tmp_p3_1[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p3_1 = tmp_player.p3_1;
+                        GameRoot3D.player.p3_1 = tmp_player.p3_1;
                         break;
 
                     case "p3_2":
@@ -395,7 +398,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p3_2 = tmp_p3_2[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p3_2 = tmp_player.p3_2;
+                        GameRoot3D.player.p3_2 = tmp_player.p3_2;
                         break;
 
                     case "p3_3":
@@ -408,7 +411,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p3_3 = tmp_p3_3[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p3_3 = tmp_player.p3_3;
+                        GameRoot3D.player.p3_3 = tmp_player.p3_3;
                         break;
 
                     case "p4_1":
@@ -421,7 +424,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p4_1 = tmp_p4_1[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p4_1 = tmp_player.p4_1;
+                        GameRoot3D.player.p4_1 = tmp_player.p4_1;
                         break;
 
                     case "p4_2":
@@ -434,7 +437,7 @@ namespace GoogleSheetsForUnity
                             tmp_player.p4_2 = tmp_p4_2[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p4_2 = tmp_player.p4_2;
+                        GameRoot3D.player.p4_2 = tmp_player.p4_2;
                         break;
 
                     case "p4_3":
@@ -447,95 +450,10 @@ namespace GoogleSheetsForUnity
                             tmp_player.p4_3 = tmp_p4_3[i];
                             Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>");
                         }
-                        GameRoot.player.p4_3 = tmp_player.p4_3;
+                        GameRoot3D.player.p4_3 = tmp_player.p4_3;
                         break;
                 }
 
-                /**
-                //Walk through the tables on the Worksheet
-                for(int i = 0; i < player.sheetNames.Length; i++)
-                {
-                    switch(i)
-                    {
-                        case 0: //users
-                            // Parse from json to the desired object type.
-                            PlayerData.tbl_Users[] user_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_Users>(rawJSon);
-                            for (int j = 0; j < user_datas.Length; j++)
-                            {
-                                player.users = user_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-
-                            break;
-                        case 1: //p1-1
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P1_1[] p1_1_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P1_1>(rawJSon);
-                            for (int j = 0; j < p1_1_datas.Length; j++)
-                            {
-                                player.p1_1 = p1_1_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-
-                            break;
-                        case 2: //p2-1
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P2_1[] p2_1_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P2_1>(rawJSon);
-                            for (int j = 0; j < p2_1_datas.Length; j++)
-                            {
-                                player.p2_1 = p2_1_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-                        case 3: //p2-2
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P2_2[] p2_2_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P2_2>(rawJSon);
-                            for (int j = 0; j < p2_2_datas.Length; j++)
-                            {
-                                player.p2_2 = p2_2_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-                        case 4: //p3-1
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P3_1[] p3_1_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P3_1>(rawJSon);
-                            for (int j = 0; j < p3_1_datas.Length; j++)
-                            {
-                                player.p3_1 = p3_1_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-                        case 5: //p4-1
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P4_1[] p4_1_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P4_1>(rawJSon);
-                            for (int j = 0; j < p4_1_datas.Length; j++)
-                            {
-                                player.p4_1 = p4_1_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-                        case 6: //p4-2
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P4_2[] p4_2_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P4_2>(rawJSon);
-                            for (int j = 0; j < p4_2_datas.Length; j++)
-                            {
-                                player.p4_2 = p4_2_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-                        case 7: //p4-3
-                                // Parse from json to the desired object type.
-                            PlayerData.tbl_P4_3[] p4_3_datas = JsonHelper.ArrayFromJson<PlayerData.tbl_P4_3>(rawJSon);
-                            for (int j = 0; j < p4_3_datas.Length; j++)
-                            {
-                                player.p4_3 = p4_3_datas[j];
-                                Debug.Log("<color=yellow>Object retrieved from the cloud and parsed: \n</color>" + player.sheetNames[i]);
-                            }
-                            break;
-
-                    }
-                
-                }
-**/
             }
 
             if(dataContainer.QueryType == Drive.QueryType.getCellValue)
@@ -543,53 +461,8 @@ namespace GoogleSheetsForUnity
                 cellval = dataContainer.payload;
             }
 
-/**
-            // First check the type of answer.
-            if (dataContainer.QueryType == Drive.QueryType.getTable)
-            {
-                string rawJSon = dataContainer.payload;
-                Debug.Log(rawJSon);
+            callback.Invoke();
 
-                // Check if the type is correct.
-                if (string.Compare(dataContainer.objType, "users") == 0)
-                {
-                    // Parse from json to the desired object type.
-                    Player[] players = JsonHelper.ArrayFromJson<Player>(rawJSon);
-
-                    string logMsg = "<color=yellow>" + players.Length.ToString() + " objects retrieved from the cloud and parsed:</color>";
-                    for (int i = 0; i < players.Length; i++)
-                    {
-                        logMsg += "\n" +
-                            "<color=blue>Name: " + players[i].name + "</color>\n" +
-                            "Hash: " + players[i].hash + "\n" +
-                            "Salt: " + players[i].salt + "\n" +
-                            "Education: " + players[i].education + "\n" +
-                            "Total Time: " + players[i].tot_time + "\n";
-                    }
-                    Debug.Log(logMsg);
-                }
-            }
-
-            // First check the type of answer.
-            if (dataContainer.QueryType == Drive.QueryType.getAllTables)
-            {
-                string rawJSon = dataContainer.payload;
-
-                // The response for this query is a json list of objects that hold tow fields:
-                // * objType: the table name (we use for identifying the type).
-                // * payload: the contents of the table in json format.
-                Drive.DataContainer[] tables = JsonHelper.ArrayFromJson<Drive.DataContainer>(rawJSon);
-
-                // Once we get the list of tables, we could use the objTypes to know the type and convert json to specific objects.
-                // On this example, we will just dump all content to the console, sorted by table name.
-                string logMsg = "<color=yellow>All data tables retrieved from the cloud.\n</color>";
-                for (int i = 0; i < tables.Length; i++)
-                {
-                    logMsg += "\n<color=blue>Table Name: " + tables[i].objType + "</color>\n" + tables[i].payload + "\n";
-                }
-                Debug.Log(logMsg);
-            }
-**/
         }
     }
 

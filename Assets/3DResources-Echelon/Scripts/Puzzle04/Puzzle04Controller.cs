@@ -219,7 +219,7 @@ public class Puzzle04Controller : MonoBehaviour
     {
         if (inPortal)
         {
-            if (!DialogueManager.isInDialogue && !GameRoot.isPause)
+            if (!DialogueManager.isInDialogue && !GameRoot3D.isPause)
                 obstacleTime += Time.deltaTime;
 
             isActive = true;
@@ -238,7 +238,7 @@ public class Puzzle04Controller : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 OnPortalExit();
-                GameRoot.instance.LockPlayerAndCam(false);
+                GameRoot3D.instance.LockPlayerAndCam(false);
             }
         }
         else
@@ -331,7 +331,7 @@ public class Puzzle04Controller : MonoBehaviour
                     GameControllerPuzzle04.instance.P04W.SetComplete();
                 correct = true;
 
-                GameRoot.instance.LockCamera(false);
+                GameRoot3D.instance.LockCamera(false);
                 answer1events.RemoveAllListeners();
                 answer2events.RemoveAllListeners();
                 turnOffVisualVectors();
@@ -378,7 +378,7 @@ public class Puzzle04Controller : MonoBehaviour
         }
         else
         {
-            GameRoot.instance.dynamicWindow.ShowTips("You must select two answer cards", true, true);
+            GameRoot3D.instance.dynamicWindow.ShowTips("You must select two answer cards", true, true);
 
             return false;
         }
@@ -417,8 +417,8 @@ public class Puzzle04Controller : MonoBehaviour
 
 
 
-        GameRoot.isPuzzleLock = true;
-        GameRoot.instance.LockPlayer(true);
+        GameRoot3D.isPuzzleLock = true;
+        GameRoot3D.instance.LockPlayer(true);
 
         visVectCamera.GetComponent<Camera>().enabled = true;
         visVectCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Nothing;
@@ -433,12 +433,12 @@ public class Puzzle04Controller : MonoBehaviour
        
 
         cameraGlide.SetObjectRotateSpeed(0.07f);
-        GameRoot.camEvents.RemoveAllListeners();
+        GameRoot3D.camEvents.RemoveAllListeners();
         cameraGlide.SetArrivedAtDistance(0.01f);
-        cameraGlide.SetEventSys(GameRoot.camEvents);
+        cameraGlide.SetEventSys(GameRoot3D.camEvents);
         cameraGlide.GlideAndLookMovingTarget(puzzleCamera, CameraStartPosition, cameraTarget, 0, 0.1f, 0.02f);
 
-        GameRoot.camEvents.AddListener(activateCamRotate);
+        GameRoot3D.camEvents.AddListener(activateCamRotate);
 
         GameControllerPuzzle04.instance.P04W.setPuzzleController(this);
         GameControllerPuzzle04.instance.visVector.InitVisVector();
@@ -471,7 +471,7 @@ public class Puzzle04Controller : MonoBehaviour
 
         turnOnVisualVectors(false);
 
-        GameRoot.instance.ShowCursor(true);
+        GameRoot3D.instance.ShowCursor(true);
     }
 
     public void OnPortalExit()
@@ -481,7 +481,7 @@ public class Puzzle04Controller : MonoBehaviour
         GameControllerPuzzle04.instance.SetPuzzlePause(true);
         GameControllerPuzzle04.instance.currPuzzle = null;
 
-        GameRoot.isPuzzleLock = true;
+        GameRoot3D.isPuzzleLock = true;
 
         answer1events.RemoveAllListeners();
         answer2events.RemoveAllListeners();
@@ -500,12 +500,12 @@ public class Puzzle04Controller : MonoBehaviour
         portal.alarmCollider();
 
         cameraRotate.enabled = false;
-        GameRoot.camEvents.RemoveAllListeners();
+        GameRoot3D.camEvents.RemoveAllListeners();
         cameraGlide.SetArrivedAtDistance(0.01f);
-        cameraGlide.SetEventSys(GameRoot.camEvents);
+        cameraGlide.SetEventSys(GameRoot3D.camEvents);
         cameraGlide.GlideAndLookMovingTarget(puzzleCamera, mainCamera, player, 0, 0.08f, 0.02f);
 
-        GameRoot.camEvents.AddListener(activateCamPlayer);
+        GameRoot3D.camEvents.AddListener(activateCamPlayer);
 
         GameControllerPuzzle04.instance.P04W.ShowInputPanel(false);
         GameControllerPuzzle04.instance.P04W.ShowFeedbackPanel(false);
@@ -528,7 +528,7 @@ public class Puzzle04Controller : MonoBehaviour
 
         DialogueManager.isPuzzleLock = false;
 
-        GameRoot.instance.ShowCursor(false);
+        GameRoot3D.instance.ShowCursor(false);
     }
 
 
@@ -612,7 +612,7 @@ public class Puzzle04Controller : MonoBehaviour
     private void activateCamRotate()
     {
         GameControllerPuzzle04.instance.SetPuzzlePause(false);  
-        GameRoot.camEvents.RemoveListener(activateCamRotate);
+        GameRoot3D.camEvents.RemoveListener(activateCamRotate);
  //       player.GetComponent<ThirdPersonCharacter>().enabled = true;
         cameraRotate.enabled = true;
     }
@@ -620,13 +620,13 @@ public class Puzzle04Controller : MonoBehaviour
     private void activateCamPlayer()
     {
         GameControllerPuzzle04.instance.SetPuzzlePause(false);
-        GameRoot.camEvents.RemoveListener(activateCamPlayer);
+        GameRoot3D.camEvents.RemoveListener(activateCamPlayer);
 
         puzzleCamera.transform.position = mainCamera.transform.position;
         puzzleCamera.transform.LookAt(player.transform, Vector3.up);
         cameraRotate.enabled = false;
 
-        GameRoot.instance.LockPlayer(false);
+        GameRoot3D.instance.LockPlayer(false);
 
         visVectCamera.GetComponent<Camera>().enabled = false;
         puzzleCamera.GetComponent<Camera>().enabled = false;

@@ -22,6 +22,7 @@ public class PlayerData : MonoBehaviour
     {
         users,
         records,
+        bunny,
         p1_1,
         p2_1,
         p2_2,
@@ -141,6 +142,28 @@ public class PlayerData : MonoBehaviour
         public float p4_3_time;
         public int p4_3_numMove;
         public string p4_3_questions;
+
+    }
+
+    [System.Serializable]
+    public struct tbl_Bunny 
+    {
+        public string username;
+        public string sessionID;
+
+        public int attemptNum;
+        public string attemptDate;
+        public string usernameAttempt;
+
+        public int stage;
+        public int level;
+
+        public string answer;
+        public string a;
+        public string b;
+        public string c;
+        public string d;
+        public int steps;
 
     }
 
@@ -421,6 +444,7 @@ public class PlayerData : MonoBehaviour
     //Player Data Items
     public tbl_Users users;
     public tbl_Records records;
+    public tbl_Bunny bunny;
     public tbl_P1_1 p1_1;
     public tbl_P2_1 p2_1;
     public tbl_P2_2 p2_2;
@@ -437,6 +461,7 @@ public class PlayerData : MonoBehaviour
     {
         users = new tbl_Users();
         records = new tbl_Records();
+        bunny = new tbl_Bunny();
         p1_1 = new tbl_P1_1();
         p2_1 = new tbl_P2_1();
         p2_2 = new tbl_P2_2();
@@ -521,6 +546,7 @@ public class PlayerData : MonoBehaviour
     {
         users.username = new_name;
         records.username = new_name;
+        bunny.username = new_name;
         p1_1.username = new_name;
         p2_1.username = new_name;
         p2_2.username = new_name;

@@ -101,13 +101,13 @@ public class ShipRepair : MonoBehaviour
         {  
             if (playFX)
             {
-                FXSelect(GameRoot.instance.prevStage, GameRoot.instance.prevLevel, fxIter);
+                FXSelect(GameRoot3D.instance.prevStage, GameRoot3D.instance.prevLevel, fxIter);
                 fxIter++;
 
                 fxTime += Time.deltaTime;
                 if (fxTime > fxMaxTime)
                 {
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
                     ShipUpdate();
                     playFX = false;
                 }
@@ -117,8 +117,8 @@ public class ShipRepair : MonoBehaviour
                 waitTime += Time.deltaTime;
                 if (waitTime > waitMaxTime)
                 {
-                    GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
-                    GameRoot.camEvents.AddListener(camAtPlayer);
+                    GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
+                    GameRoot3D.camEvents.AddListener(camAtPlayer);
                     float speed = ((shipCamera.transform.position - mainCamera.transform.position).magnitude / 1400.0f) * 6.0f;
                     GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(speed);
                     GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, mainCamera, mainCamera.GetComponent<CameraController>().target.gameObject, -5.0f, speed, 0.1f);
@@ -146,7 +146,7 @@ public class ShipRepair : MonoBehaviour
         //since this only runs when a new part is unlocked
         //we must turn that part OFF first before running ShipUpdate()
         //then we'll turn that puzzleDones[][] back on after the sparkles and fanfair
-        GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = false;
+        GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = false;
         ShipUpdate();
         this.player = player;
         this.mainCamera = camera;
@@ -161,7 +161,7 @@ public class ShipRepair : MonoBehaviour
         shipCamera.GetComponent<Camera>().enabled = true;
 
 
-        switch (GameRoot.instance.prevStage)
+        switch (GameRoot3D.instance.prevStage)
         {
             case 1:
                 cameraPos = fromPuzzle1.gameObject;
@@ -170,7 +170,7 @@ public class ShipRepair : MonoBehaviour
 
             case 2:
                 cameraPos = fromPuzzle2.gameObject;
-                switch(GameRoot.instance.prevLevel)
+                switch(GameRoot3D.instance.prevLevel)
                 {
                     case 1:
                         targetPos = stbdCannons;
@@ -184,7 +184,7 @@ public class ShipRepair : MonoBehaviour
 
             case 3:
                 cameraPos = fromPuzzle3.gameObject;
-                switch(GameRoot.instance.prevLevel)
+                switch(GameRoot3D.instance.prevLevel)
                 {
                     case 1:
                         targetPos = treasureStern;
@@ -200,7 +200,7 @@ public class ShipRepair : MonoBehaviour
 
             case 4:
                 cameraPos = fromPuzzle4.gameObject;
-                switch(GameRoot.instance.prevLevel)
+                switch(GameRoot3D.instance.prevLevel)
                 {
                     case 1:
                         targetPos = sail3;
@@ -216,8 +216,8 @@ public class ShipRepair : MonoBehaviour
                 break;
         }
 
-        GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot.camEvents);
-        GameRoot.camEvents.AddListener(camAtShip);
+        GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
+        GameRoot3D.camEvents.AddListener(camAtShip);
         float speed = ((this.player.transform.position - cameraPos.transform.position).magnitude / 1400.0f) * 6.0f;
         GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(speed);
         GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, cameraPos, targetPos, 30.0f, speed, 0.1f);
@@ -230,7 +230,7 @@ public class ShipRepair : MonoBehaviour
         fxIter = 0;
         fxTime = 0.0f;
         waitTime = 0.0f;
-        GameRoot.camEvents.RemoveListener(camAtShip);
+        GameRoot3D.camEvents.RemoveListener(camAtShip);
     }
 
     public void camAtPlayer()
@@ -246,7 +246,7 @@ public class ShipRepair : MonoBehaviour
         fxIter = 0;
         fxTime = 0.0f;
         waitTime = 0.0f;
-        GameRoot.camEvents.RemoveListener(camAtPlayer);
+        GameRoot3D.camEvents.RemoveListener(camAtPlayer);
     }
 
 
@@ -364,7 +364,7 @@ public class ShipRepair : MonoBehaviour
         {
             pulses.SetActive(true);
             pulses.GetComponent<ParticleSystem>().Play(true);
-            GameRoot.instance.audioService.PlayFXAudio("ShipRepair/" + fixedPulseSound.name.ToString());            
+            GameRoot3D.instance.audioService.PlayFXAudio("ShipRepair/" + fixedPulseSound.name.ToString());            
         }
 
         if (randomEffects)
@@ -380,7 +380,7 @@ public class ShipRepair : MonoBehaviour
                 randPulse.SetActive(true);
                 randPulse.GetComponent<ParticleSystem>().Play(true);
                 int soundRand = Random.Range(0, randomPulseSounds.Length - 1);
-                GameRoot.instance.audioService.PlayFXAudio("ShipRepair/" + randomPulseSounds[soundRand].name.ToString());
+                GameRoot3D.instance.audioService.PlayFXAudio("ShipRepair/" + randomPulseSounds[soundRand].name.ToString());
             }
         }
     }
@@ -389,16 +389,16 @@ public class ShipRepair : MonoBehaviour
     public void ShipUpdate()
     {
         //Stage1 Completed
-        hullBroken.SetActive(!GameRoot.instance.puzzlesDone[1][1]); //toggle off the broken ship
-        hullFixed.SetActive(GameRoot.instance.puzzlesDone[1][1]); //toggle on the fixed ship
+        hullBroken.SetActive(!GameRoot3D.instance.puzzlesDone[1][1]); //toggle off the broken ship
+        hullFixed.SetActive(GameRoot3D.instance.puzzlesDone[1][1]); //toggle on the fixed ship
 
 
         //Stage2 Completed
-        portCannons.SetActive(GameRoot.instance.puzzlesDone[2][1]);
-        portCannonBalls.SetActive(GameRoot.instance.puzzlesDone[2][1]);
+        portCannons.SetActive(GameRoot3D.instance.puzzlesDone[2][1]);
+        portCannonBalls.SetActive(GameRoot3D.instance.puzzlesDone[2][1]);
 
-        stbdCannons.SetActive(GameRoot.instance.puzzlesDone[2][2]);
-        stbdCannonBalls.SetActive(GameRoot.instance.puzzlesDone[2][2]);
+        stbdCannons.SetActive(GameRoot3D.instance.puzzlesDone[2][2]);
+        stbdCannonBalls.SetActive(GameRoot3D.instance.puzzlesDone[2][2]);
         //this can be later broken up with more levels into something like:
         //level1 done: both port/stbd cannonballs
         //level2 done: portside Cannons
@@ -407,13 +407,13 @@ public class ShipRepair : MonoBehaviour
 
 
         //Stage3 Completed        
-        treasureStern.SetActive(GameRoot.instance.puzzlesDone[3][1]);
-        treasureForecastle.SetActive(GameRoot.instance.puzzlesDone[3][2]);
-        treasureChests.SetActive(GameRoot.instance.puzzlesDone[3][3]);
+        treasureStern.SetActive(GameRoot3D.instance.puzzlesDone[3][1]);
+        treasureForecastle.SetActive(GameRoot3D.instance.puzzlesDone[3][2]);
+        treasureChests.SetActive(GameRoot3D.instance.puzzlesDone[3][3]);
 
-        if (GameRoot.instance.puzzlesDone[3][1] &&
-                GameRoot.instance.puzzlesDone[3][2] &&
-                GameRoot.instance.puzzlesDone[3][3])
+        if (GameRoot3D.instance.puzzlesDone[3][1] &&
+                GameRoot3D.instance.puzzlesDone[3][2] &&
+                GameRoot3D.instance.puzzlesDone[3][3])
         {
             treasureSparkles.SetActive(true);
         }
@@ -425,17 +425,17 @@ public class ShipRepair : MonoBehaviour
 
 
         //Stage4 Completed
-        mast1.SetActive(GameRoot.instance.puzzlesDone[4][2]);
-        mast2.SetActive(GameRoot.instance.puzzlesDone[4][3]); //mast2 is the main, so making it for level 3
-        mast3.SetActive(GameRoot.instance.puzzlesDone[4][1]);
+        mast1.SetActive(GameRoot3D.instance.puzzlesDone[4][2]);
+        mast2.SetActive(GameRoot3D.instance.puzzlesDone[4][3]); //mast2 is the main, so making it for level 3
+        mast3.SetActive(GameRoot3D.instance.puzzlesDone[4][1]);
 
-        sail1.SetActive(GameRoot.instance.puzzlesDone[4][2]);
-        sail2.SetActive(GameRoot.instance.puzzlesDone[4][3]); //sail2 is the main, so making it for level 3
-        sail3.SetActive(GameRoot.instance.puzzlesDone[4][1]);
+        sail1.SetActive(GameRoot3D.instance.puzzlesDone[4][2]);
+        sail2.SetActive(GameRoot3D.instance.puzzlesDone[4][3]); //sail2 is the main, so making it for level 3
+        sail3.SetActive(GameRoot3D.instance.puzzlesDone[4][1]);
 
-        if(GameRoot.instance.puzzlesDone[4][1] &&
-            GameRoot.instance.puzzlesDone[4][2] &&
-            GameRoot.instance.puzzlesDone[4][3])
+        if(GameRoot3D.instance.puzzlesDone[4][1] &&
+            GameRoot3D.instance.puzzlesDone[4][2] &&
+            GameRoot3D.instance.puzzlesDone[4][3])
         {
             rigging.SetActive(true);
             sailMisc1.SetActive(true);

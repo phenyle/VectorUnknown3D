@@ -50,7 +50,7 @@ public class EnterExit : MonoBehaviour
         if(other.tag == "Player")
         {
             playerController.isEnterExit = true;
-            GameRoot.ShowTips("Press \"E\" to enter", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to enter", true, false);
 
             switch(sceneName)
             {
@@ -60,26 +60,26 @@ public class EnterExit : MonoBehaviour
                     break;
 
                 case SceneName.MainSceneName:
-                    if((GameRoot.player.users.isClass || GameRoot.player.users.isExpo) && GameRoot.player.users.forceStage)
+                    if((GameRoot3D.player.users.isClass || GameRoot3D.player.users.isExpo) && GameRoot3D.player.users.forceStage)
                         playerController.sceneName = SceneManager.GetActiveScene().name;
                     else
                         playerController.sceneName = Constants.mainSceneName;
 
                     if (SceneManager.GetActiveScene().name == Constants.menuSceneName)
-                        GameRoot.instance.exitPuzzle = 0;                   
+                        GameRoot3D.instance.exitPuzzle = 0;                   
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle01SceneName)
-                        GameRoot.instance.exitPuzzle = 1;
+                        GameRoot3D.instance.exitPuzzle = 1;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle02_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle02_2SceneName)
-                        GameRoot.instance.exitPuzzle = 2;
+                        GameRoot3D.instance.exitPuzzle = 2;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle03_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle03_2SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle03_3SceneName)
-                        GameRoot.instance.exitPuzzle = 3;
+                        GameRoot3D.instance.exitPuzzle = 3;
                     else if (SceneManager.GetActiveScene().name == Constants.puzzle04_1SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle04_2SceneName ||
                                 SceneManager.GetActiveScene().name == Constants.puzzle04_3SceneName)
-                        GameRoot.instance.exitPuzzle = 4;                   
+                        GameRoot3D.instance.exitPuzzle = 4;                   
 
                     break;
 
@@ -112,175 +112,175 @@ public class EnterExit : MonoBehaviour
             {
                 case PuzzleComplete.Puzzle01Complete:
 
-                    GameRoot.instance.prevStage = 1;
-                    GameRoot.instance.prevLevel = 1;
+                    GameRoot3D.instance.prevStage = 1;
+                    GameRoot3D.instance.prevLevel = 1;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[0] = true;
+                    GameRoot3D.instance.puzzleCompleted[0] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle01>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p1_1, GameRoot.player.p1_1.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p1_1, GameRoot3D.player.p1_1.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
 
                     break;
 
                 case PuzzleComplete.Puzzle02_1Complete:
 
-                    GameRoot.instance.prevStage = 2;
-                    GameRoot.instance.prevLevel = 1;
+                    GameRoot3D.instance.prevStage = 2;
+                    GameRoot3D.instance.prevLevel = 1;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[1] = true;
+                    GameRoot3D.instance.puzzleCompleted[1] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_1, GameRoot.player.p2_1.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_1, GameRoot3D.player.p2_1.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle02_2Complete:
 
 
-                    GameRoot.instance.prevStage = 2;
-                    GameRoot.instance.prevLevel = 2;
+                    GameRoot3D.instance.prevStage = 2;
+                    GameRoot3D.instance.prevLevel = 2;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[1] = true;
+                    GameRoot3D.instance.puzzleCompleted[1] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_2, GameRoot.player.p2_2.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_2, GameRoot3D.player.p2_2.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle02_3Complete:
 
 
-                    GameRoot.instance.prevStage = 2;
-                    GameRoot.instance.prevLevel = 3;
+                    GameRoot3D.instance.prevStage = 2;
+                    GameRoot3D.instance.prevLevel = 3;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[1] = true;
+                    GameRoot3D.instance.puzzleCompleted[1] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_3, GameRoot.player.p2_3.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_3, GameRoot3D.player.p2_3.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle03_1Complete:
 
-                    GameRoot.instance.prevStage = 3;
-                    GameRoot.instance.prevLevel = 1;
+                    GameRoot3D.instance.prevStage = 3;
+                    GameRoot3D.instance.prevLevel = 1;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[2] = true;
+                    GameRoot3D.instance.puzzleCompleted[2] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_1, GameRoot.player.p3_1.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_1, GameRoot3D.player.p3_1.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle03_2Complete:
 
-                    GameRoot.instance.prevStage = 3;
-                    GameRoot.instance.prevLevel = 2;
+                    GameRoot3D.instance.prevStage = 3;
+                    GameRoot3D.instance.prevLevel = 2;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[2] = true;
+                    GameRoot3D.instance.puzzleCompleted[2] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_2, GameRoot.player.p3_2.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_2, GameRoot3D.player.p3_2.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle03_3Complete:
 
-                    GameRoot.instance.prevStage = 3;
-                    GameRoot.instance.prevLevel = 3;
+                    GameRoot3D.instance.prevStage = 3;
+                    GameRoot3D.instance.prevLevel = 3;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[2] = true;
+                    GameRoot3D.instance.puzzleCompleted[2] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_3, GameRoot.player.p3_3.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_3, GameRoot3D.player.p3_3.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle04_1Complete:
 
-                    GameRoot.instance.prevStage = 4;
-                    GameRoot.instance.prevLevel = 1;
+                    GameRoot3D.instance.prevStage = 4;
+                    GameRoot3D.instance.prevLevel = 1;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[3] = true;
+                    GameRoot3D.instance.puzzleCompleted[3] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_1, GameRoot.player.p4_1.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_1, GameRoot3D.player.p4_1.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle04_2Complete:
 
-                    GameRoot.instance.prevStage = 4;
-                    GameRoot.instance.prevLevel = 2;
+                    GameRoot3D.instance.prevStage = 4;
+                    GameRoot3D.instance.prevLevel = 2;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[3] = true;
+                    GameRoot3D.instance.puzzleCompleted[3] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_2, GameRoot.player.p4_2.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_2, GameRoot3D.player.p4_2.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
                 case PuzzleComplete.Puzzle04_3Complete:
 
-                    GameRoot.instance.prevStage = 4;
-                    GameRoot.instance.prevLevel = 3;
+                    GameRoot3D.instance.prevStage = 4;
+                    GameRoot3D.instance.prevLevel = 3;
 
-                    if (!GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel])
-                        GameRoot.instance.firstCompletion = true;
+                    if (!GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel])
+                        GameRoot3D.instance.firstCompletion = true;
 
-                    GameRoot.instance.puzzlesDone[GameRoot.instance.prevStage][GameRoot.instance.prevLevel] = true;
+                    GameRoot3D.instance.puzzlesDone[GameRoot3D.instance.prevStage][GameRoot3D.instance.prevLevel] = true;
 
-                    GameRoot.instance.puzzleCompleted[3] = true;
+                    GameRoot3D.instance.puzzleCompleted[3] = true;
                     GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot.player.users.username);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_3, GameRoot.player.p4_3.usernameAttempt);
-                    GameRoot.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_3, GameRoot3D.player.p4_3.usernameAttempt);
+                    GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                     break;
 
 
@@ -298,7 +298,7 @@ public class EnterExit : MonoBehaviour
         {
             playerController.isEnterExit = false;
 
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
         }
     }
 }

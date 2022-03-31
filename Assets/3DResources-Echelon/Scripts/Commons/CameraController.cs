@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
         isLock = false;
         postPuzzleLock = false;
         enableMovement = true;
-        rotatedSpeed = GameRoot.player.users.mouseSense;
+        rotatedSpeed = GameRoot3D.player.users.mouseSense;
     }
 
     private void LateUpdate()
@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot.isPuzzleLock) && postPuzzleLock == false)
+            if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot3D.isPuzzleLock) && postPuzzleLock == false)
                 toggleMouse();
     }
 
@@ -82,7 +82,7 @@ public class CameraController : MonoBehaviour
 
     private void toggleMouse()
     {
-        if ((!DialogueManager.isInDialogue || !DialogueManager.isPuzzleLock || !GameRoot.isPuzzleLock) && postPuzzleLock == true)
+        if ((!DialogueManager.isInDialogue || !DialogueManager.isPuzzleLock || !GameRoot3D.isPuzzleLock) && postPuzzleLock == true)
             isLock = !isLock;
 
         if (isLock)

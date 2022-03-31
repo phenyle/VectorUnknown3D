@@ -32,7 +32,7 @@ public class SelectionTutorial : MonoBehaviour
                 pressedE = tutorialWindow.pressE;
             }
 
-            GameRoot.ShowTips("Press \"E\" to select", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to select", true, false);
 			bkObj.SetActive(true);
             Text.SetActive(true);
         }
@@ -47,7 +47,7 @@ public class SelectionTutorial : MonoBehaviour
                 pressedE = tutorialWindow.pressE;
             }
 
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
             Text.SetActive(false);
 			bkObj.SetActive(false);
 		}

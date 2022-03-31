@@ -33,7 +33,7 @@ public class NextLevel : MonoBehaviour
         if(other.tag == "Player")
         {
  //           playerController.level2ChangeStage = false;
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
         }
     }
 }

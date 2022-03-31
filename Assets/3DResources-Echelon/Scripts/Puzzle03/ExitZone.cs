@@ -24,7 +24,7 @@ public class ExitZone : MonoBehaviour
 
             GCP03.FinishSubLevel();
 
-            GameRoot.instance.audioService.PlayFXAudio(Constants.audioP03FinishSubPuzzle);
+            GameRoot3D.instance.audioService.PlayFXAudio(Constants.audioP03FinishSubPuzzle);
         }
     }
 }

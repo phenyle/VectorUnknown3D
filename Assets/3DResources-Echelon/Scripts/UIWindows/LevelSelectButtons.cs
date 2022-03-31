@@ -56,19 +56,19 @@ public class LevelSelectButtons : MonoBehaviour
                 switch (level)
                 {
                     case 0:
-                        GameRoot.ShowTips("Please select a level", true, false);
+                        GameRoot3D.ShowTips("Please select a level", true, false);
                         break;
                     case 1:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
                         break;
                     case 2:
-                        GameRoot.ShowTips("That level doesn't exist right now\nCheck back later", true, false);
+                        GameRoot3D.ShowTips("That level doesn't exist right now\nCheck back later", true, false);
                         break;
                     case 3:
-                        GameRoot.ShowTips("That level doesn't exist right now\nCheck back later", true, false);
+                        GameRoot3D.ShowTips("That level doesn't exist right now\nCheck back later", true, false);
                         break;
                     default:
-                        GameRoot.ShowTips("Error: what?? how?", true, false);
+                        GameRoot3D.ShowTips("Error: what?? how?", true, false);
                         break;
 
                 }
@@ -80,19 +80,19 @@ public class LevelSelectButtons : MonoBehaviour
                 switch (level)
                 {
                     case 0:
-                        GameRoot.ShowTips("Please select a level", true, false);
+                        GameRoot3D.ShowTips("Please select a level", true, false);
                         break;
                     case 1:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
                         break;
                     case 2:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
                         break;
                     case 3:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
                         break;
                     default:
-                        GameRoot.ShowTips("Error: what?? how?", true, false);
+                        GameRoot3D.ShowTips("Error: what?? how?", true, false);
                         break;
 
                 }
@@ -104,19 +104,19 @@ public class LevelSelectButtons : MonoBehaviour
                 switch (level)
                 {
                     case 0:
-                        GameRoot.ShowTips("Please select a level", true, false);
+                        GameRoot3D.ShowTips("Please select a level", true, false);
                         break;
                     case 1:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
                         break;
                     case 2:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
                         break;
                     case 3:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
                         break;
                     default:
-                        GameRoot.ShowTips("Error: what?? how?", true, false);
+                        GameRoot3D.ShowTips("Error: what?? how?", true, false);
                         break;
 
                 }
@@ -128,19 +128,19 @@ public class LevelSelectButtons : MonoBehaviour
                 switch (level)
                 {
                     case 0:
-                        GameRoot.ShowTips("Please select a level", true, false);
+                        GameRoot3D.ShowTips("Please select a level", true, false);
                         break;
                     case 1:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
                         break;
                     case 2:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
                         break;
                     case 3:
-                        GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
+                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
                         break;
                     default:
-                        GameRoot.ShowTips("Error: what?? how?", true, false);
+                        GameRoot3D.ShowTips("Error: what?? how?", true, false);
                         break;
 
                 }
@@ -180,26 +180,26 @@ public class LevelSelectButtons : MonoBehaviour
         switch (sceneName)
         {
             case SceneNameMod.Puzzle02SceneName:
-                if (GameRoot.player.records.p2_1_time != 0)
+                if (GameRoot3D.player.records.p2_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.records.p2_1_time);
+                    lvl1time.text = ConvertTime(GameRoot3D.player.records.p2_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.records.p2_2_time != 0)
+                if (GameRoot3D.player.records.p2_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.records.p2_2_time);
+                    lvl2time.text = ConvertTime(GameRoot3D.player.records.p2_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
 
-                if (GameRoot.player.records.p2_3_time != 0)
+                if (GameRoot3D.player.records.p2_3_time != 0)
                 {
                     lvl3comp.SetActive(true);
-                    lvl3time.text = ConvertTime(GameRoot.player.records.p2_3_time);
+                    lvl3time.text = ConvertTime(GameRoot3D.player.records.p2_3_time);
                 }
                 else
                     lvl3comp.SetActive(false);
@@ -208,26 +208,26 @@ public class LevelSelectButtons : MonoBehaviour
                 break;
 
             case SceneNameMod.Puzzle03SceneName:
-                if (GameRoot.player.records.p3_1_time != 0)
+                if (GameRoot3D.player.records.p3_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.records.p3_1_time);
+                    lvl1time.text = ConvertTime(GameRoot3D.player.records.p3_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.records.p3_2_time != 0)
+                if (GameRoot3D.player.records.p3_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.records.p3_2_time);
+                    lvl2time.text = ConvertTime(GameRoot3D.player.records.p3_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
 
-                if (GameRoot.player.records.p3_3_time != 0)
+                if (GameRoot3D.player.records.p3_3_time != 0)
                 {
                     lvl3comp.SetActive(true);
-                    lvl3time.text = ConvertTime(GameRoot.player.records.p3_3_time);
+                    lvl3time.text = ConvertTime(GameRoot3D.player.records.p3_3_time);
                 }
                 else
                     lvl3comp.SetActive(false);
@@ -235,26 +235,26 @@ public class LevelSelectButtons : MonoBehaviour
                 break;
 
             case SceneNameMod.Puzzle04SceneName:
-                if (GameRoot.player.records.p4_1_time != 0)
+                if (GameRoot3D.player.records.p4_1_time != 0)
                 {
                     lvl1comp.SetActive(true);
-                    lvl1time.text = ConvertTime(GameRoot.player.records.p4_1_time);
+                    lvl1time.text = ConvertTime(GameRoot3D.player.records.p4_1_time);
                 }
                 else
                     lvl1comp.SetActive(false);
 
-                if (GameRoot.player.records.p4_2_time != 0)
+                if (GameRoot3D.player.records.p4_2_time != 0)
                 {
                     lvl2comp.SetActive(true);
-                    lvl2time.text = ConvertTime(GameRoot.player.records.p4_2_time);
+                    lvl2time.text = ConvertTime(GameRoot3D.player.records.p4_2_time);
                 }
                 else
                     lvl2comp.SetActive(false);
 
-                if (GameRoot.player.records.p4_3_time != 0)
+                if (GameRoot3D.player.records.p4_3_time != 0)
                 {
                     lvl3comp.SetActive(true);
-                    lvl3time.text = ConvertTime(GameRoot.player.records.p4_3_time);
+                    lvl3time.text = ConvertTime(GameRoot3D.player.records.p4_3_time);
                 }
                 else
                     lvl3comp.SetActive(false);

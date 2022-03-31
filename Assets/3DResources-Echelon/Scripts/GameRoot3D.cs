@@ -4,17 +4,15 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using GoogleSheetsForUnity;
 
-public class GameRoot : MonoBehaviour
+public class GameRoot3D : GameRootMaster
 {
-    public static PlayerData player;
-    public static SendToGoogle GSFU;
     public GameObject scenePlayer;
     public GameObject sceneCameraMain;
     public static bool isExpo = false;
     public static string expoName;
     public static bool isClass = false;
 
-    public static GameRoot instance = null;
+    public static GameRoot3D instance = null;
     public static bool isPause = false;
     public static bool isPuzzleLock = false;
     public static bool isTutortial = false;
@@ -27,9 +25,10 @@ public class GameRoot : MonoBehaviour
 
     //Services
     [HideInInspector]
-    public ResourceService resourceService;
+    public ResourceService resourceService { get; private set; }
     [HideInInspector]
-    public AudioService audioService;
+    public AudioService audioService { get; private set; }
+
 
     //Systems
     [HideInInspector]
@@ -54,9 +53,9 @@ public class GameRoot : MonoBehaviour
     private GameControllerPuzzle02 GCP02_01;
     private GameControllerPuzzle02 GCP02_02;
 
-
-    private void Awake()
+    public void GameMasterInit()
     {
+        instance = this;
         DontDestroyOnLoad(this);
 
         //First Array is Number of Stages
@@ -78,14 +77,9 @@ public class GameRoot : MonoBehaviour
             for (int j = 0; j < puzzlesDone[i].Length; j++)
                 puzzlesDone[i][j] = false;
 
-        instance = this;
-        GSFU = this.GetComponent<SendToGoogle>();
-        player = this.GetComponent<PlayerData>();
         camEvents = new UnityEvent();
         moveEvents = new UnityEvent();
 
-        DontDestroyOnLoad(GSFU);
-        DontDestroyOnLoad(player);
 
         if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
         {
@@ -95,11 +89,17 @@ public class GameRoot : MonoBehaviour
         InitGameRoot();
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         Debug.Log("Game Start...");
-        //InitUI();
-        //InitGameRoot();
+        GameMasterInit();
+        InitUI();
+        InitGameRoot();
 
     }
 

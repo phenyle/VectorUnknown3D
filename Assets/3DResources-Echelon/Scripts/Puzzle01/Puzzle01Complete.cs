@@ -15,7 +15,7 @@ public class Puzzle01Complete : MonoBehaviour
         {
             GCP01.isInMast = true;
 
-            GameRoot.ShowTips("Press \"E\" to grab the mast", true, false);
+            GameRoot3D.ShowTips("Press \"E\" to grab the mast", true, false);
         }
     }
 
@@ -25,7 +25,7 @@ public class Puzzle01Complete : MonoBehaviour
         {
             GCP01.isInMast = false;
 
-            GameRoot.ShowTips("", false, false);
+            GameRoot3D.ShowTips("", false, false);
         }
     }
 
@@ -35,11 +35,11 @@ public class Puzzle01Complete : MonoBehaviour
         {
             if (!GCP01.isTriggerMast)
             {
-                GameRoot.ShowTips("Press \"E\" to grab the mast", true, false);
+                GameRoot3D.ShowTips("Press \"E\" to grab the mast", true, false);
             }
             else
             {
-                GameRoot.ShowTips("", false, false);
+                GameRoot3D.ShowTips("", false, false);
             }
         }
     }

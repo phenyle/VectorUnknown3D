@@ -673,7 +673,7 @@ public class Puzzle04Window : WindowRoot
         if(PC04 != null)
         {
             PC04.OnPortalExit();
-            GameRoot.instance.LockPlayerAndCam(false);
+            GameRoot3D.instance.LockPlayerAndCam(false);
         }
     }
 

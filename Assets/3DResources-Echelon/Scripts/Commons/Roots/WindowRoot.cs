@@ -26,10 +26,10 @@ public class WindowRoot : MonoBehaviour
 
     protected virtual void InitWindow()
     {
-        resourceService = GameRoot.instance.resourceService;
-        audioService = GameRoot.instance.audioService;
-        GameRoot.instance.FindPlayerAndCamera();
-        GameRoot.instance.LockCamera(true);
+        resourceService = GameRoot3D.instance.resourceService;
+        audioService = GameRoot3D.instance.audioService;
+        GameRoot3D.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.LockCamera(true);
         //try
         //{
         //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
@@ -46,8 +46,8 @@ public class WindowRoot : MonoBehaviour
     {
         resourceService = null;
         audioService = null;
-        GameRoot.instance.FindPlayerAndCamera();
-        GameRoot.instance.LockCamera(false);
+        GameRoot3D.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.LockCamera(false);
         //try
         //{
         //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;

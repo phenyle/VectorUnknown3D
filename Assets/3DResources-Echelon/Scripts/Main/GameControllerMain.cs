@@ -42,7 +42,7 @@ public class GameControllerMain : GameControllerRoot
     {
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.FindPlayerAndCamera();
     }
 
     public override void InitGameController(MainWindow MW)
@@ -55,7 +55,7 @@ public class GameControllerMain : GameControllerRoot
 
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         CheckPlayerDataRecords();
@@ -64,7 +64,7 @@ public class GameControllerMain : GameControllerRoot
 
 
         //Load player in at portals
-        switch (GameRoot.instance.exitPuzzle)
+        switch (GameRoot3D.instance.exitPuzzle)
         {
             case 0: // new player object is activated and others are turned off
                 playerAndCam.transform.position = fromGameStart.position;
@@ -236,10 +236,10 @@ public class GameControllerMain : GameControllerRoot
 //        // DialogueManager.isPuzzleLock = false;
 
 
-        if (GameRoot.instance.firstCompletion)
+        if (GameRoot3D.instance.firstCompletion)
         {
             shipRepair.AnimatePartUnlock(player, mainCamera);
-            GameRoot.instance.firstCompletion = false;
+            GameRoot3D.instance.firstCompletion = false;
         }
         else
         {
@@ -276,7 +276,7 @@ public class GameControllerMain : GameControllerRoot
         if (Input.GetKeyDown(KeyCode.R))
         {
             player.transform.position = startPosition;
-            GameRoot.ShowTips("", true, false);
+            GameRoot3D.ShowTips("", true, false);
         }
 
 		// if (!DialogueManager.isInDialogue)
@@ -297,98 +297,98 @@ public class GameControllerMain : GameControllerRoot
     {
         //Puzzle 1-----------
         //legacy puzzle checks:
-        if (GameRoot.player.records.p1_time != 0.0f)
-            GameRoot.instance.puzzleCompleted[0] = true;
+        if (GameRoot3D.player.records.p1_time != 0.0f)
+            GameRoot3D.instance.puzzleCompleted[0] = true;
         else
-            GameRoot.instance.puzzleCompleted[0] = false;
+            GameRoot3D.instance.puzzleCompleted[0] = false;
 
         //new puzzle checks:
-        if (GameRoot.player.records.p1_time != 0.0f)
-            GameRoot.instance.puzzlesDone[1][1] = true;
+        if (GameRoot3D.player.records.p1_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[1][1] = true;
         else
-            GameRoot.instance.puzzlesDone[1][1] = false;
+            GameRoot3D.instance.puzzlesDone[1][1] = false;
 
         //Puzzle 2------------
         //legacy puzzle checks:
-        if (GameRoot.player.records.p2_1_time != 0.0f ||
-            GameRoot.player.records.p2_2_time != 0.0f ||
-            GameRoot.player.records.p2_3_time != 0.0f)
-            GameRoot.instance.puzzleCompleted[1] = true;
+        if (GameRoot3D.player.records.p2_1_time != 0.0f ||
+            GameRoot3D.player.records.p2_2_time != 0.0f ||
+            GameRoot3D.player.records.p2_3_time != 0.0f)
+            GameRoot3D.instance.puzzleCompleted[1] = true;
         else
-            GameRoot.instance.puzzleCompleted[1] = false;
+            GameRoot3D.instance.puzzleCompleted[1] = false;
 
         //new puzzle checks:
-        if (GameRoot.player.records.p2_1_time != 0.0f)
-            GameRoot.instance.puzzlesDone[2][1] = true;
+        if (GameRoot3D.player.records.p2_1_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[2][1] = true;
         else
-            GameRoot.instance.puzzlesDone[2][1] = false;
+            GameRoot3D.instance.puzzlesDone[2][1] = false;
 
-        if (GameRoot.player.records.p2_2_time != 0.0f)
-            GameRoot.instance.puzzlesDone[2][2] = true;
+        if (GameRoot3D.player.records.p2_2_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[2][2] = true;
         else
-            GameRoot.instance.puzzlesDone[2][2] = false;
+            GameRoot3D.instance.puzzlesDone[2][2] = false;
 
-        if (GameRoot.player.records.p2_3_time != 0.0f)
-            GameRoot.instance.puzzlesDone[2][3] = true;
+        if (GameRoot3D.player.records.p2_3_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[2][3] = true;
         else
-            GameRoot.instance.puzzlesDone[2][3] = false;
+            GameRoot3D.instance.puzzlesDone[2][3] = false;
 
 
         //Puzzle 3-----------
         //legacy puzzle checks:
-        if (GameRoot.player.records.p3_1_time != 0.0f ||
-            GameRoot.player.records.p3_2_time != 0.0f ||
-            GameRoot.player.records.p3_3_time != 0.0f)
-            GameRoot.instance.puzzleCompleted[2] = true;
+        if (GameRoot3D.player.records.p3_1_time != 0.0f ||
+            GameRoot3D.player.records.p3_2_time != 0.0f ||
+            GameRoot3D.player.records.p3_3_time != 0.0f)
+            GameRoot3D.instance.puzzleCompleted[2] = true;
         else
-            GameRoot.instance.puzzleCompleted[2] = false;
+            GameRoot3D.instance.puzzleCompleted[2] = false;
 
 
         //new puzzle checks:
-        if (GameRoot.player.records.p3_1_time != 0.0f)
-            GameRoot.instance.puzzlesDone[3][1] = true;
+        if (GameRoot3D.player.records.p3_1_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[3][1] = true;
         else
-            GameRoot.instance.puzzlesDone[3][1] = false;
+            GameRoot3D.instance.puzzlesDone[3][1] = false;
 
-        if (GameRoot.player.records.p3_2_time != 0.0f)
-            GameRoot.instance.puzzlesDone[3][2] = true;
+        if (GameRoot3D.player.records.p3_2_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[3][2] = true;
         else
-            GameRoot.instance.puzzlesDone[3][2] = false;
+            GameRoot3D.instance.puzzlesDone[3][2] = false;
 
-        if (GameRoot.player.records.p3_3_time != 0.0f)
-            GameRoot.instance.puzzlesDone[3][3] = true;
+        if (GameRoot3D.player.records.p3_3_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[3][3] = true;
         else
-            GameRoot.instance.puzzlesDone[3][3] = false;
+            GameRoot3D.instance.puzzlesDone[3][3] = false;
 
         //Puzzle 4-----------
         //legacy puzzle checks:
-        if (GameRoot.player.records.p4_1_time != 0.0f ||
-            GameRoot.player.records.p4_2_time != 0.0f ||
-            GameRoot.player.records.p4_3_time != 0.0f)
-            GameRoot.instance.puzzleCompleted[3] = true;
+        if (GameRoot3D.player.records.p4_1_time != 0.0f ||
+            GameRoot3D.player.records.p4_2_time != 0.0f ||
+            GameRoot3D.player.records.p4_3_time != 0.0f)
+            GameRoot3D.instance.puzzleCompleted[3] = true;
         else
-            GameRoot.instance.puzzleCompleted[3] = false;
+            GameRoot3D.instance.puzzleCompleted[3] = false;
 
         //new puzzle checks
-        if (GameRoot.player.records.p4_1_time != 0.0f)
-            GameRoot.instance.puzzlesDone[4][1] = true;
+        if (GameRoot3D.player.records.p4_1_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[4][1] = true;
         else
-            GameRoot.instance.puzzlesDone[4][1] = false;
+            GameRoot3D.instance.puzzlesDone[4][1] = false;
 
-        if (GameRoot.player.records.p4_2_time != 0.0f)
-            GameRoot.instance.puzzlesDone[4][2] = true;
+        if (GameRoot3D.player.records.p4_2_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[4][2] = true;
         else
-            GameRoot.instance.puzzlesDone[4][2] = false;
+            GameRoot3D.instance.puzzlesDone[4][2] = false;
 
-        if (GameRoot.player.records.p4_3_time != 0.0f)
-            GameRoot.instance.puzzlesDone[4][3] = true;
+        if (GameRoot3D.player.records.p4_3_time != 0.0f)
+            GameRoot3D.instance.puzzlesDone[4][3] = true;
         else
-            GameRoot.instance.puzzlesDone[4][3] = false;
+            GameRoot3D.instance.puzzlesDone[4][3] = false;
     }
 
     public void SetUserSettings()
     {
-        GameRoot.instance.audioService.bgVolume = GameRoot.player.users.soundVol;
-        GameRoot.instance.audioService.UIFXVolume = GameRoot.player.users.soundFX;
+        GameRoot3D.instance.audioService.bgVolume = GameRoot3D.player.users.soundVol;
+        GameRoot3D.instance.audioService.UIFXVolume = GameRoot3D.player.users.soundFX;
     }
 }

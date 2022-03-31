@@ -58,7 +58,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
         DBP01.InitDatabase();
 
         player = GameObject.FindGameObjectWithTag("Player");
-        GameRoot.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.FindPlayerAndCamera();
         startPosition = player.transform.position;
 
         if (DialogueManager.showP01_00)
@@ -67,7 +67,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
             DialogueManager.showP01_00 = false;
         }
 
-        if (GameRoot.instance.puzzleCompleted[0] == true && GameRoot.instance.puzzleCompleted[1] == true)
+        if (GameRoot3D.instance.puzzleCompleted[0] == true && GameRoot3D.instance.puzzleCompleted[1] == true)
         {
             SetActive(sunLight, false);
             SetActive(moonLight, true);
@@ -100,7 +100,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
         if (Input.GetKeyDown(KeyCode.R) && !isTriggerQuestion)
         {
             player.transform.position = startPosition;
-            GameRoot.ShowTips("", true, false);
+            GameRoot3D.ShowTips("", true, false);
         }
 		/*
         //Update the instruction text based on the player status
@@ -124,7 +124,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
         if (!DialogueManager.isInDialogue)
         {
-            if (!GameRoot.isPause)
+            if (!GameRoot3D.isPause)
                 puzzleTime += Time.deltaTime;
 
             // Z key to switch camera
@@ -173,11 +173,11 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     P01W.answerText.color = Color.red;
                     P01W.answerText.text = "s * ( x, y, z )";
 
-                    GameRoot.instance.LockPlayerAndCam(true);
-                    GameRoot.instance.ShowCursor(true);
+                    GameRoot3D.instance.LockPlayerAndCam(true);
+                    GameRoot3D.instance.ShowCursor(true);
 
                     //Resume cannot unlock the lock
-                    GameRoot.isPuzzleLock = true;
+                    GameRoot3D.isPuzzleLock = true;
  
                     //Dialogue manager cannot unlock the lock;
                     DialogueManager.isPuzzleLock = true;
@@ -201,11 +201,11 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     P01W.answerText.color = Color.red;
                     P01W.answerText.text = "s * ( x, y, z )";
 
-                    GameRoot.instance.LockPlayerAndCam(false);
-                    GameRoot.instance.ShowCursor(false);
+                    GameRoot3D.instance.LockPlayerAndCam(false);
+                    GameRoot3D.instance.ShowCursor(false);
 
                     //Resume can unlock the lock
-                    GameRoot.isPuzzleLock = false;
+                    GameRoot3D.isPuzzleLock = false;
 
                     //Dialogue manager can unlock the lock;
                     DialogueManager.isPuzzleLock = false;
@@ -214,7 +214,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     // lock mouse after leaving question and not finishing it
                     try
                     {
-                        GameRoot.instance.LockCamera(false);
+                        GameRoot3D.instance.LockCamera(false);
   //                      GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
                         Debug.Log("mouse locked");
                     }
@@ -254,8 +254,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
             case 1:
                 Camera.main.depth = -1;
                 topCamPlayer.GetComponent<TopCameraPlayer>().isTopCamera = true;
-                GameRoot.instance.LockCamera(true);
-                GameRoot.instance.ShowCursor(false);
+                GameRoot3D.instance.LockCamera(true);
+                GameRoot3D.instance.ShowCursor(false);
                 break;
 
             case -1:
@@ -264,8 +264,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
                 if (!isTriggerQuestion)
                 {
 //                    GameRoot.instance.LockPlayerAndCam(false);
-                    GameRoot.instance.LockCamera(false);
-                    GameRoot.instance.ShowCursor(true);
+                    GameRoot3D.instance.LockCamera(false);
+                    GameRoot3D.instance.ShowCursor(true);
  //                   GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
                 }
                 break;
@@ -303,8 +303,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
             answers += scalar + " * [ " + x + ", " + y + ", " + z + " ]\n";
 
-            GameRoot.instance.ShowCursor(false);
-            GameRoot.instance.LockPlayerAndCam(false);
+            GameRoot3D.instance.ShowCursor(false);
+            GameRoot3D.instance.LockPlayerAndCam(false);
             P01W.SetFeedback(formula, "Correct!", Color.green);
 
             //Prepare next question to show the question tips in feedback panel
@@ -356,7 +356,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
         }
 
         //Resume can unlock the lock
-        GameRoot.isPuzzleLock = false;
+        GameRoot3D.isPuzzleLock = false;
 
         //Dialogue manager can unlock the lock;
         DialogueManager.isPuzzleLock = false;
@@ -383,19 +383,19 @@ public class GameControllerPuzzle01 : GameControllerRoot
         switch(questionNum)
         {
             case 1:
-                GameRoot.player.p1_1.obs_answers1 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+                GameRoot3D.player.p1_1.obs_answers1 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
                 
                 break;
             case 2:
-                GameRoot.player.p1_1.obs_answers2 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+                GameRoot3D.player.p1_1.obs_answers2 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
 
                 break;
             case 3:
-                GameRoot.player.p1_1.obs_answers3 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+                GameRoot3D.player.p1_1.obs_answers3 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
 
                 break;
             case 4:
-                GameRoot.player.p1_1.obs_answers4 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+                GameRoot3D.player.p1_1.obs_answers4 += scal.ToString() + ", " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
 
                 break;
         }
@@ -404,35 +404,35 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
     public void RecordData()
     {
-        if (GameRoot.player.records.p1_time == 0.0f)
+        if (GameRoot3D.player.records.p1_time == 0.0f)
         {
 
-            GameRoot.player.records.p1_time = puzzleTime;
-            GameRoot.player.records.p1_numMove = moves;
-            GameRoot.player.records.p1_answers = answers;
+            GameRoot3D.player.records.p1_time = puzzleTime;
+            GameRoot3D.player.records.p1_numMove = moves;
+            GameRoot3D.player.records.p1_answers = answers;
         }
-        else if (puzzleTime < GameRoot.player.records.p1_time)
+        else if (puzzleTime < GameRoot3D.player.records.p1_time)
         {
 
-            GameRoot.player.records.p1_time = puzzleTime;
-            GameRoot.player.records.p1_numMove = moves;
-            GameRoot.player.records.p1_answers = answers;
+            GameRoot3D.player.records.p1_time = puzzleTime;
+            GameRoot3D.player.records.p1_numMove = moves;
+            GameRoot3D.player.records.p1_answers = answers;
         }
 
-        GameRoot.player.records.username = GameRoot.player.users.username;
-        GameRoot.player.records.p1_totAttempts++;
+        GameRoot3D.player.records.username = GameRoot3D.player.users.username;
+        GameRoot3D.player.records.p1_totAttempts++;
 
-        GameRoot.player.p1_1.attemptDate = System.DateTime.Now.ToString();
+        GameRoot3D.player.p1_1.attemptDate = System.DateTime.Now.ToString();
 
         //Attempt Username Construction
-        GameRoot.player.p1_1.username = GameRoot.player.users.username;
-        GameRoot.player.records.sessionID = GameRoot.player.users.sessionID;
-        GameRoot.player.p1_1.sessionID = GameRoot.player.users.sessionID;
+        GameRoot3D.player.p1_1.username = GameRoot3D.player.users.username;
+        GameRoot3D.player.records.sessionID = GameRoot3D.player.users.sessionID;
+        GameRoot3D.player.p1_1.sessionID = GameRoot3D.player.users.sessionID;
 
-        GameRoot.player.p1_1.attemptNum = GameRoot.player.records.p1_totAttempts;
-        GameRoot.player.p1_1.usernameAttempt = GameRoot.player.p1_1.username + GameRoot.player.p1_1.attemptNum.ToString();
+        GameRoot3D.player.p1_1.attemptNum = GameRoot3D.player.records.p1_totAttempts;
+        GameRoot3D.player.p1_1.usernameAttempt = GameRoot3D.player.p1_1.username + GameRoot3D.player.p1_1.attemptNum.ToString();
 
-        GameRoot.player.records.p1_totTime += puzzleTime;
+        GameRoot3D.player.records.p1_totTime += puzzleTime;
     }
 
 }
