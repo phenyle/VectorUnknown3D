@@ -7,8 +7,16 @@ public class LoadingWindow : WindowRoot
 
     protected override void InitWindow()
     {
-        base.InitWindow();
-        Debug.Log("Init loading window");
+        if (GameRoot3D.instance != null)
+        {
+            base.InitWindow();
+            Debug.Log("Init loading window");
+        }
+    }
+
+    public void AltInit()
+    {
+        InitWindow();
     }
 
     public void SetProgress(float percentage)

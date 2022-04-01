@@ -7,10 +7,14 @@ public class PlayerData : MonoBehaviour
     //This string array of sheet names MUST MATCH EXACTLY
     //to the sheet names on the Google Sheets spreadsheet
     public string[] sheetNames = { 
-                    "users", 
+                    "users",
+                    "records",
+                    "bunRecords",
+                    "bunny",
                     "p1-1", 
                     "p2-1", 
-                    "p2-2", 
+                    "p2-2",
+                    "p2-3",
                     "p3-1",
                     "p3-2",
                     "p3-3",
@@ -22,6 +26,7 @@ public class PlayerData : MonoBehaviour
     {
         users,
         records,
+        bunRecords,
         bunny,
         p1_1,
         p2_1,
@@ -63,6 +68,7 @@ public class PlayerData : MonoBehaviour
         public bool admin;
         public bool isClass;
         public bool isExpo;
+        public bool isBunny;
         public int stageNum;
         public int difficultyNum;
         public bool forceStage;
@@ -73,7 +79,7 @@ public class PlayerData : MonoBehaviour
     }
 
     [System.Serializable]
-    public struct tbl_Records 
+    public struct tbl_Records
     {
         public string username;
         public string sessionID;
@@ -142,7 +148,39 @@ public class PlayerData : MonoBehaviour
         public float p4_3_time;
         public int p4_3_numMove;
         public string p4_3_questions;
+    }
 
+    [System.Serializable]
+    public struct tbl_bunRecords
+    {
+        public string username;
+        public string sessionID;
+
+        public int bun_00_attempts;
+
+        public int bun_11_attempts;
+        public int bun_21_attempts;
+        public int bun_31_attempts;
+        public int bun_41_attempts;
+        public int bun_51_attempts;
+        public int bun_61_attempts;
+        public int bun_71_attempts;
+
+        public int bun_12_attempts;
+        public int bun_22_attempts;
+        public int bun_32_attempts;
+        public int bun_42_attempts;
+        public int bun_52_attempts;
+        public int bun_62_attempts;
+        public int bun_72_attempts;
+
+        public int bun_13_attempts;
+        public int bun_23_attempts;
+        public int bun_33_attempts;
+        public int bun_43_attempts;
+        public int bun_53_attempts;
+        public int bun_63_attempts;
+        public int bun_73_attempts;
     }
 
     [System.Serializable]
@@ -158,12 +196,14 @@ public class PlayerData : MonoBehaviour
         public int stage;
         public int level;
 
+        public int idealSteps;
         public string answer;
         public string a;
         public string b;
         public string c;
         public string d;
-        public int steps;
+        public string steps;
+        public string results;
 
     }
 
@@ -444,6 +484,7 @@ public class PlayerData : MonoBehaviour
     //Player Data Items
     public tbl_Users users;
     public tbl_Records records;
+    public tbl_bunRecords bunRecords;
     public tbl_Bunny bunny;
     public tbl_P1_1 p1_1;
     public tbl_P2_1 p2_1;
@@ -461,6 +502,7 @@ public class PlayerData : MonoBehaviour
     {
         users = new tbl_Users();
         records = new tbl_Records();
+        bunRecords = new tbl_bunRecords();
         bunny = new tbl_Bunny();
         p1_1 = new tbl_P1_1();
         p2_1 = new tbl_P2_1();
@@ -477,12 +519,14 @@ public class PlayerData : MonoBehaviour
         //player.users INIT
         users.username = "default";
         users.isExpo = false;
+        users.isBunny = false;
         users.ID_num = -1;
         users.last_login = System.DateTime.Now.ToString();
         users.admin = false;
         users.mouseSense = 2.0f;
         users.soundVol = 0.25f;
         users.soundFX = 1.0f;
+
         //users.p1_1clear_time = 0.0f;
         //users.p2_1clear_time = 0.0f;
         //users.p2_2clear_time = 0.0f;
@@ -546,6 +590,7 @@ public class PlayerData : MonoBehaviour
     {
         users.username = new_name;
         records.username = new_name;
+        bunRecords.username = new_name;
         bunny.username = new_name;
         p1_1.username = new_name;
         p2_1.username = new_name;

@@ -541,7 +541,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
             case 1: //Level 1 Dialogs
                 if (DialogueManager.showP03_1[val])
                 {
-                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle03-1_0" + val.ToString()));
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 1, val));
                     DialogueManager.showP03_1[val] = false;
                 }
 
@@ -549,7 +549,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
             case 2: //Level 2 Dialogs
                 if (DialogueManager.showP03_2[val])
                 {
-                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle03-2_0" + val.ToString()));
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 2, val));
                     DialogueManager.showP03_2[val] = false;
                 }
 
@@ -557,7 +557,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
             case 3: //Level 3 Dialogs
                 if (DialogueManager.showP03_3[val])
                 {
-                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle03-3_0" + val.ToString()));
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 3, val));
                     DialogueManager.showP03_3[val] = false;
                 }
 

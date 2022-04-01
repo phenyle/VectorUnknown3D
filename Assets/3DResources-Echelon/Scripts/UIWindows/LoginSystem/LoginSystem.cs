@@ -3,26 +3,29 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
 using GoogleSheetsForUnity;
+using System.Text;
+using UnityEngine.SceneManagement;
+using MyBox;
 
 public class LoginSystem : MonoBehaviour
 {
-    [SerializeField] protected static LoginSystem loginRoot { get; private set; }
-    [SerializeField] protected static DualLogin dualLoginWindow { get; private set; }
-    [SerializeField] protected static LoginWindow loginWindow { get; private set; }
-    [SerializeField] protected static NewAccountWindow newAccountWindow { get; private set; }
-    [SerializeField] protected static PopUpWindow popUpsWindow { get; private set; }
-    [SerializeField] protected static JoinWindow joinWindow { get; private set; }
+
+    [SerializeField] protected static LoginSystem loginRoot;
+    public static DualLogin dualLoginWindow;
+    public static NewAccountWindow newAccountWindow;
+    public static JoinWindow joinWindow;
+    public static PopUpWindow popUpsWindow;
+
 
     protected static UnityEvent messageEvents;
     protected static UnityEvent loginEvents;
 
     protected static PlayerData tmp_player;
 
-    protected static int attemptNum = 0;
     protected static bool checkingGFSU = false;
-    protected static float connectionTime = 0.0f;
-    private static float connectionAttmpTimeout = 8.0f;
-    protected static bool checkingConnection = false;
+    [ReadOnly]
+    public float connectionTime = 0.0f;
+    private static float connectionAttmpTimeout = 10.0f;
 
     protected static bool loadingPlayer = false;
     protected static bool newAcctCheck = false;
@@ -32,24 +35,28 @@ public class LoginSystem : MonoBehaviour
 
 
 
+    public void Awake()
+    {
+        loginRoot = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        loginRoot = this;
-        dualLoginWindow = GetComponentInChildren<DualLogin>();
-        loginWindow = GetComponentInChildren<LoginWindow>();
-        newAccountWindow = GetComponentInChildren<NewAccountWindow>();
-        popUpsWindow = GetComponentInChildren<PopUpWindow>();
-        joinWindow = GetComponentInChildren<JoinWindow>();
 
         messageEvents = new UnityEvent();
         loginEvents = new UnityEvent();
 
         tmp_player = new PlayerData();
 
-
-        newAccountWindow.panelNewAcct.gameObject.SetActive(false);
-        joinWindow.panelJoin.gameObject.SetActive(false);
+        if(dualLoginWindow == null)
+            dualLoginWindow = GetComponentInChildren<DualLogin>();
+        if (newAccountWindow == null)
+            newAccountWindow = GetComponentInChildren<NewAccountWindow>();
+        if (popUpsWindow == null)
+            popUpsWindow = GetComponentInChildren<PopUpWindow>();
+        if (joinWindow == null)
+            joinWindow = GetComponentInChildren<JoinWindow>();
     }
 
     // Update is called once per frame
@@ -60,8 +67,22 @@ public class LoginSystem : MonoBehaviour
             connectionTime += Time.deltaTime;
             if (connectionTime > connectionAttmpTimeout)
             {
-                //Connection time out
-
+                //When creating an account it looks for duplicate names
+                //but when it does this, if it cant find name in the database it just
+                //doesn't return, which means it won't call GFSU.callback.
+                //Essentially, if after our first connection check (to debug) is good
+                //but our second connection check (to the username) is bad, then what
+                //we need to do is invoke account creation.
+                if (query == queryType.creating)
+                    loginEvents.Invoke();
+                else
+                {
+                    //Connection time out
+                    popUpsWindow.GeneralPopUp("ERROR:\nConnection Timed Out");
+                    popUpsWindow.awaitServerPop.panel.SetActive(false);
+                    checkingGFSU = false;
+                    connectionTime = 0.0f;
+                }
             }
         }
     }
@@ -74,60 +95,83 @@ public class LoginSystem : MonoBehaviour
         joining,
     }
 
-    protected static queryType query { private get; set; }
-    protected static void ConnectionsCheck()
+    protected static queryType query { get; set; }
+    protected void ConnectionsCheck()
     {
-        checkingGFSU = false;
         connectionTime = 0.0f;
         SendToGoogle.callback.RemoveAllListeners();
 
         switch (query)
         {
             case queryType.echelon: //query type: Logging into Echelon Game
-                    //call to database for "username" to find login name
-                    //                      panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-     //           SendToGoogle.callback.AddListener(EchelonLogin);
+                                    //call to database for "username" to find login name
+                                    //                      panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
+                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
+                popUpsWindow.awaitServerPop.AwaitingPopUp(false);
+
+                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
                 GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
-                loadingPlayer = true;
                 break;
 
             case queryType.bunny: //query type: Creating a new Account
-                    //call to database for "first.last" to check for duplicates
-                    //                     panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
-                    //SendToGoogle.callback.AddListener(CreateAccount);
+                                  //call to database for "first.last" to check for duplicates
+                                  //                     panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
+                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
+                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
 
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", newAccountWindow.na_first.text.ToLower() + "." + newAccountWindow.na_last.text.ToLower(), false);
-                creatingAcct = true;
+                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
+                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
                 break;
 
             case queryType.creating: //query type: Joining Session
-                    //                    panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Session");
-
-                //GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", js_Name.text);
-                joiningSession = true;
+                loginEvents.AddListener(newAccountWindow.CreatingNewAccount);
+                SendToGoogle.callback.AddListener(newAccountWindow.CreatingIncrimentedAccount);
                 break;
+
             case queryType.joining:
-                //                    panel_awaitServer.gameObject.SetActive(false);
-
-                newAccountWindow.NA_setSchools();
-       //         LG_ClearLoginFields();
-
-        //        panelLogin.gameObject.SetActive(false);
-                newAccountWindow.panelNewAcct.gameObject.SetActive(true);
+                checkingGFSU = false;
+                checkingGFSU = false;
+                newAccountWindow.panel.SetActive(true);
                 break;
-            case 5: //query type: Logging into Bunny Game
-                    //call to database for "username" to find login name
-                    //                    panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text, false);
-                loadingPlayer = true;
-                break;
+        }
+    }
 
-
+    protected void PlayEchelon()
+    {
+        if (query == queryType.joining)
+        {
 
         }
+        else
+        {
+            loginEvents.RemoveAllListeners();
+            messageEvents.RemoveAllListeners();
+            SendToGoogle.callback.RemoveAllListeners();
+            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", GameRootMaster.player.users.username);
+            GameRootMaster.resourceService.AsynLoadScene(Constants.gameRootSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start() );
+        }
 
+    }
 
-        protected static string ComputeHash(byte[] bytesToHash, byte[] salt)
+    protected void PlayBunny()
+    {
+        if (query == queryType.joining)
+        {
+
+        }
+        else
+        {
+            Debug.LogWarning("Loading Bunny Menu");
+            loginEvents.RemoveAllListeners();
+            messageEvents.RemoveAllListeners();
+            SendToGoogle.callback.RemoveAllListeners();
+            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.bunRecords, "username", GameRootMaster.player.users.username);
+            SceneManager.LoadScene("menu_scene");
+        }
+
+    }
+
+    protected static string ComputeHash(byte[] bytesToHash, byte[] salt)
     {
         var byteResult = new Rfc2898DeriveBytes(bytesToHash, salt, 10000);
         return Convert.ToBase64String(byteResult.GetBytes(24));
@@ -141,4 +185,8 @@ public class LoginSystem : MonoBehaviour
         return Convert.ToBase64String(bytes);
     }
 
+    protected void GotoJoinSession()
+    {
+        
+    }
 }

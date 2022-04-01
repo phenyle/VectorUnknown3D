@@ -8,9 +8,6 @@ public class GameRoot3D : GameRootMaster
 {
     public GameObject scenePlayer;
     public GameObject sceneCameraMain;
-    public static bool isExpo = false;
-    public static string expoName;
-    public static bool isClass = false;
 
     public static GameRoot3D instance = null;
     public static bool isPause = false;
@@ -19,13 +16,13 @@ public class GameRoot3D : GameRootMaster
     public static bool showCursor = true;
     
     [Header("Common API")]
-    public LoadingWindow loadingWindow;
+ //   public LoadingWindow loadingWindow;
     public DynamicWindow dynamicWindow;
     public PauseWindow pauseWindow;
 
     //Services
-    [HideInInspector]
-    public ResourceService resourceService { get; private set; }
+   // [HideInInspector]
+   // public ResourceService resourceService { get; private set; }
     [HideInInspector]
     public AudioService audioService { get; private set; }
 
@@ -48,6 +45,7 @@ public class GameRoot3D : GameRootMaster
     public bool[][] puzzlesDone;
     public bool[] puzzleCompleted = { false, false, false, false };
     public int exitPuzzle = 0;
+    private bool rootInitialized = false;
 
     //puzzle 2 
     private GameControllerPuzzle02 GCP02_01;
@@ -55,8 +53,6 @@ public class GameRoot3D : GameRootMaster
 
     public void GameMasterInit()
     {
-        instance = this;
-        DontDestroyOnLoad(this);
 
         //First Array is Number of Stages
         //Second Array is the Levels of that Stage
@@ -84,23 +80,31 @@ public class GameRoot3D : GameRootMaster
         if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
         {
             InitUI();
+            loadingWindow.AltInit();
         }
 
-        InitGameRoot();
+        //3.Enter Menu Scene
+        if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
+        {
+            menuSystem.EnterMenu();
+        }
     }
 
-    private void Awake()
+    public void Awake()
     {
-        instance = this;
     }
 
-    private void Start()
+    public void Start()
     {
-        Debug.Log("Game Start...");
-        GameMasterInit();
-        InitUI();
-        InitGameRoot();
-
+        if (!rootInitialized)
+        {
+            Debug.LogWarning("Game Start...");
+            rootInitialized = true;
+            instance = this;
+            DontDestroyOnLoad(this);
+            InitGameRoot();
+            GameMasterInit();
+        }
     }
 
     //On game shut down, save player info
@@ -165,8 +169,8 @@ public class GameRoot3D : GameRootMaster
     {
         //1. Init all services
         //a. Resource service
-        resourceService = GetComponent<ResourceService>();
-        resourceService.InitService();
+ //       resourceService = GetComponent<ResourceService>();
+  //      resourceService.InitService();
 
         //b. Audio service
         audioService = GetComponent<AudioService>();
@@ -181,11 +185,6 @@ public class GameRoot3D : GameRootMaster
         puzzleSystem = GetComponent<PuzzleSystem>();
         puzzleSystem.InitSystem();
 
-        //3.Enter Menu Scene
-        if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
-        {
-            menuSystem.EnterMenu();
-        }
     }
 
     public static void AddTips(string tips)

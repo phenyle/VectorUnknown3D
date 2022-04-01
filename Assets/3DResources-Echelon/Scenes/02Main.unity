@@ -778,7 +778,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 25:60
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1525,7 +1525,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Best Time:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2770,7 +2770,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 25:60
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5346,7 +5346,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 25:60
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6000,7 +6000,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Best Time:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6601,7 +6601,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1661700549}
   - component: {fileID: 1661700551}
-  - component: {fileID: 1661700550}
   m_Layer: 0
   m_Name: ShipRepCamera
   m_TagString: PuzzleCamera
@@ -6623,14 +6622,6 @@ Transform:
   m_Father: {fileID: 1350292203}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1661700550
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1661700548}
-  m_Enabled: 1
 --- !u!20 &1661700551
 Camera:
   m_ObjectHideFlags: 0
@@ -7933,7 +7924,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Best Time:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 95cb20e0475bc7a4e9530b213a901a7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

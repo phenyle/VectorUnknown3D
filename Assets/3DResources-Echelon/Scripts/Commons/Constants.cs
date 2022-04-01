@@ -10,6 +10,7 @@ public class Constants
     public const int numLvlsStage4 = 3;
 
     //Scene Names
+    public const string mainLoginScreen = "000Login";
     public const string gameRootSceneName = "00GameRoot";
     public const string menuSceneName = "01Menu";
     public const string mainSceneName = "02Main";

@@ -1993,11 +1993,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425d010c863f75b4da8f28528bb8cad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parrot: {fileID: 6939085028717133406}
+  connectionTime: 0
+  awaitServerPop: {fileID: 0}
+  generalPopPanel: {fileID: 0}
+  panel: {fileID: 0}
+  backNForthImage: {fileID: 0}
   computer: {fileID: 1418072841061732541}
-  ship: {fileID: 3963609555098498412}
+  goal: {fileID: 0}
   statusText: {fileID: 3399903089041011185}
   flavorText: {fileID: 1516425918603756716}
+  pirateShip: {fileID: 0}
+  carrotBowl: {fileID: 0}
+  parrotObj: {fileID: 0}
+  bunnyObj: {fileID: 0}
   statusSpeed: 3
   statusDotsLength: 4
   flavorSpeed: 10
@@ -16401,7 +16409,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1043503373}
-        m_MethodName: ClickPlayBtn
+        m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

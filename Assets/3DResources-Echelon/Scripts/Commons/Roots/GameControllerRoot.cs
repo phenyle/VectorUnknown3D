@@ -8,7 +8,7 @@ public class GameControllerRoot : MonoBehaviour
 
     public virtual void InitGameController()
     {
-        resourceService = GameRoot3D.instance.resourceService;
+        resourceService = GameRootMaster.resourceService;
         audioService = GameRoot3D.instance.audioService;
     }
 

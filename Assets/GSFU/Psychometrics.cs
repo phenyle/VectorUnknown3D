@@ -2,10 +2,12 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections.Generic;
 
 public class Psychometrics : MonoBehaviour
 {
     private static ArrayList metrics = new ArrayList();
+    public static List<string> steps = new List<string>();
     private static string sessionID = "";
     private static string temp = "";
     public static string id = "";
@@ -23,6 +25,7 @@ public class Psychometrics : MonoBehaviour
             int second = DateTime.Now.Second;
             sessionID = (month + "-" + day + "-" + year + "-" + hour + "-" + minute + "-" + second);
             logEvent(sessionID);
+            GameRootMaster.player.bunny.attemptDate = day + "/" + month + "/" + year + "(" + hour + ":" + minute + ":" + second + ")";
         }
     }
 
@@ -42,8 +45,20 @@ public class Psychometrics : MonoBehaviour
         metrics.Add(str);
     }
 
+    public static void logDatabaseEvent(string step, string result)
+    {
+        steps.Add(step);
+        GameRootMaster.player.bunny.steps += step + "\n";
+        GameRootMaster.player.bunny.results += result + "\n";
+    }
+
     public static void sendData()
     {
+        GameRootMaster.player.bunny.username = GameRootMaster.player.users.username;
+        GameRootMaster.player.bunny.attemptDate = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + 
+                                                "(" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ")";
+
+        GameRootMaster.GSFU.UpdatePlayerTable(true, PlayerData.sheets.bunny, GameRootMaster.player.bunny.usernameAttempt);
         while (metrics.Count > 255)
         {
             metrics.RemoveAt(metrics.Count - 1);

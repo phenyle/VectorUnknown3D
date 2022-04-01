@@ -10,7 +10,8 @@ public class menu_button_functions : MonoBehaviour
 
     public void exit()
     {
-        Application.Quit();
+        Destroy(GameObject.Find("LevelData"));
+        SceneManager.LoadScene("000Login");
     }
 
     public void set_title_banner( string title)

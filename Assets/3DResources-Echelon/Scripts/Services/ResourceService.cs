@@ -26,13 +26,13 @@ public class ResourceService : MonoBehaviour
         AsyncOperation sceneAsync = SceneManager.LoadSceneAsync(sceneName);
 
         //Active the loading window
-        GameRoot3D.instance.loadingWindow.SetWindowState(true);
+        GameRootMaster.masterInstance.loadingWindow.SetWindowState(true);
 
         //Action needs to be update during loading
         percentageCB = () =>
         {
             float percentage = sceneAsync.progress;
-            GameRoot3D.instance.loadingWindow.SetProgress(percentage);
+            GameRootMaster.masterInstance.loadingWindow.SetProgress(percentage);
 
             //Async loading is finished
             if (percentage == 1)
@@ -44,7 +44,7 @@ public class ResourceService : MonoBehaviour
                 }
 
                 //Inactive the loading window and clean relative values;
-                GameRoot3D.instance.loadingWindow.SetWindowState(false);
+                GameRootMaster.masterInstance.loadingWindow.SetWindowState(false);
                 sceneAsync = null;
                 percentageCB = null;
             }
@@ -70,9 +70,9 @@ public class ResourceService : MonoBehaviour
         return audioClip;
     }
 
-    public Conversation LoadConversation(string name)
+    public Conversation LoadConversation(int stage, int level, int dialog)
     {
-        return Resources.Load<Conversation>("Conversations/" + name);
+        return DialogLibrary.conversations[stage][level][dialog];
     }
 
 }

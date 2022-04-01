@@ -63,7 +63,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
         if (DialogueManager.showP01_00)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_00"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1,1,0));
             DialogueManager.showP01_00 = false;
         }
 
@@ -141,22 +141,22 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     //Show the dialogue when player trigger the question
                     if (questionNum == 1 && DialogueManager.showP01_01)
                     {                       
-                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_01"));
+                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1,1,1));
                         DialogueManager.showP01_01 = false;
                     }
                     else if (questionNum == 2 && DialogueManager.showP01_03)
                     {
-                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_03"));
+                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 3));
                         DialogueManager.showP01_03 = false;
                     }
                     else if (questionNum == 3 && DialogueManager.showP01_05)
                     {
-                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_05"));
+                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 5));
                         DialogueManager.showP01_05 = false;
                     }
                     else if (questionNum == 4 && DialogueManager.showP01_07)
                     {
-                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_07"));
+                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 7));
                         DialogueManager.showP01_07 = false;
                     }
                     //********************************************************
@@ -237,7 +237,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
                     if (DialogueManager.showP01_09)
                     {
-                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_09"));
+                        FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 9));
                         DialogueManager.showP01_09 = false;
                     }
                 }
@@ -330,22 +330,22 @@ public class GameControllerPuzzle01 : GameControllerRoot
         //Show the dialogue after player input the correct answer
         if (questionNum == 1 && check && DialogueManager.showP01_02)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_02"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 2));
             DialogueManager.showP01_02 = false;
         }
         else if (questionNum == 2 && check && DialogueManager.showP01_04)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_04"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 4));
             DialogueManager.showP01_04 = false;
         }
         else if (questionNum == 3 && check && DialogueManager.showP01_06)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_06"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 6));
             DialogueManager.showP01_06 = false;
         }
         else if (questionNum == 4 && check && DialogueManager.showP01_08)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle01_08"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(1, 1, 8));
             DialogueManager.showP01_08 = false;
         }
         //********************************************************

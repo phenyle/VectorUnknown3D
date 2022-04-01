@@ -45,82 +45,82 @@ public class PuzzleSystem : SystemRoot
                     catch { }
 
                     titleWindow.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgMenu, true);
+                    audioService.PlayBgMusic(0, true);
                     break;
 
                 case Constants.mainSceneName:
                     mainWindow.SetWindowState(true);
                     pauseWindow.showPuzzleControls(false);
-                    audioService.PlayBgMusic(Constants.audioBgMain, true);
+                    audioService.PlayBgMusic(1, true);
                     break;
 
                 case Constants.puzzle01SceneName:
                     puzzle01Window.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle1, true);
+                    audioService.PlayBgMusic(2, true);
                     break;
 
                 case Constants.puzzle02_1SceneName:
                     puzzle02Window.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle2, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle02_2SceneName:
                     puzzle02Window.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle2, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle02_3SceneName:
                     puzzle02Window.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle2, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle03_1SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
                     puzzle03Window.bVal = true;
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle3, true);
+                    audioService.PlayBgMusic(4, true);
                     break;
 
                 case Constants.puzzle03_2SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
                     puzzle03Window.bVal = true;
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle3, true);
+                    audioService.PlayBgMusic(4, true);
                     break;
 
                 case Constants.puzzle03_3SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
                     puzzle03Window.bVal = true;
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle3, true);
+                    audioService.PlayBgMusic(4, true);
                     break;
 
                 case Constants.puzzle04_1SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle1, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle04_2SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle1, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle04_3SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
-                    audioService.PlayBgMusic(Constants.audioBgPuzzle1, true);
+                    audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.creditSceneName:
                     creditsWindow.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgCredit, true);
+                    audioService.PlayBgMusic(5, true);
                     break;
 
                 case Constants.tutorialSceneName:
                     tutorialWindow.SetWindowState(true);
-                    audioService.PlayBgMusic(Constants.audioBgTutorial, true);
+                    audioService.PlayBgMusic(6, true);
                     break;
             }            
         });

@@ -597,6 +597,11 @@ public class UFO_PuzzleManager : MonoBehaviour
             return generate_solution(Num);
 
         }
+        GameRootMaster.player.bunny.answer = test_vec.ToString();
+        GameRootMaster.player.bunny.a = Choices[0].ToString();
+        GameRootMaster.player.bunny.b = Choices[1].ToString();
+        GameRootMaster.player.bunny.c = Choices[2].ToString();
+        GameRootMaster.player.bunny.d = Choices[3].ToString();
 
         return test_vec;
     }

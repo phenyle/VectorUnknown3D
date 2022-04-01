@@ -148,6 +148,7 @@ public class formula_controller : MonoBehaviour
             if (!doneReset)
             {
                 Psychometrics.logEvent(print_formula());
+                Psychometrics.logDatabaseEvent(databasePrintFormula(), databasePrintResult());
             }
             else
             {
@@ -182,6 +183,17 @@ public class formula_controller : MonoBehaviour
     public string print_formula()
     {//formats a vector equation for logging, "( c1 * < x1, y1>) + ( c2 * < x2, y2>) = <dx, dy>"
         return "( " + constant_1 + " * " + string_vector(vector_1) + ") + ( " + constant_2 + " * " + string_vector(vector_2) + ") = " + string_vector(output);
+    }
+
+    public string databasePrintFormula()
+    {
+        return "( " + constant_1 + " * " + string_vector(vector_1) + ") + ( " + constant_2 + " * " + string_vector(vector_2) + ")";
+    }
+
+    public string databasePrintResult()
+    {
+        Vector2 formOutput = constant_1 * vector_1 + constant_2 * vector_2;
+        return string_vector(formOutput);
     }
 
     public string string_vector(Vector2 vect)

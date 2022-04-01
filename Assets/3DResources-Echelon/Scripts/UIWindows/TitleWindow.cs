@@ -18,7 +18,7 @@ using UnityEngine.UI;
 
 public class TitleWindow : WindowRoot
 {
-    private bool DEBUG = true;
+    private bool DEBUG = false;
 
     //MAIN SCREEN
     [Header ("Main Screen")]
@@ -87,21 +87,6 @@ public class TitleWindow : WindowRoot
     public Button na_login;
     public Button js_login;
 
-    private PlayerData tmp_player;
-
-    private bool checkingConnection = false;
-    private int query; //0: error, 1:loadingPlayer, 2:creatingAcct, 3:joiningSession
-    private bool loadingPlayer = false;
-    private bool newAcctCheck = false;
-    private bool creatingAcct = false;
-    private bool joiningSession = false;
-    private bool bunnyGame = false;
-    private List<string> schools;
-    private int attemptNum = 0;
-    private int connectionAttmpTimeout = 600;
-
-
-    //private Resolution[] resolutions;
 
     protected override void InitWindow()
     {
@@ -109,7 +94,7 @@ public class TitleWindow : WindowRoot
 
         // SetBgVolume();
         sliderVolume.value = audioService.bgVolume;
-        audioService.PlayBgMusic(Constants.audioBgMenu, true);
+        audioService.PlayBgMusic(0, true);
 
         // SetSoundFXVolume();
         sliderSoundFX.value = audioService.UIFXVolume;
@@ -122,13 +107,6 @@ public class TitleWindow : WindowRoot
         SetActive(panel_awaitServer, false);
 
         //doubling down on my initial values
-        loadingPlayer = false;
-        creatingAcct = false;
-        joiningSession = false;
-        attemptNum = 0;
-        SetActive(na_otherSchool.gameObject, false);
-        schools = new List<string>();
-        tmp_player = new PlayerData();
 
         //admin stuff
         admin_dropMonth.value = DateTime.Now.Month - 1;
@@ -136,501 +114,100 @@ public class TitleWindow : WindowRoot
         ExpireYears();
         admin_dropYear.value = 0;
 
-        //Initialize Resolution Dropdown
-        /*
-        resolutions = Screen.resolutions;
-        ddResolution.ClearOptions();
 
-        List<string> options = new List<string>();
-        int currentResolutionIndex = 0;
-
-        for(int i = 0; i < resolutions.Length; i++)
-        {
-            if((double)resolutions[i].width/resolutions[i].height == 16.0/9.0)
-            {
-                string option = resolutions[i].width + " x " + resolutions[i].height;
-                options.Add(option);
-
-                if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
-                {
-                    currentResolutionIndex = i;
-                }
-            }
-        }
-
-        ddResolution.AddOptions(options);
-        ddResolution.value = currentResolutionIndex;
-        ddResolution.RefreshShownValue();*/
-        //*************************************
     }
 
-    //Title Screen Late Updates is only for awaiting response from
-    //database when logging in, joining sessions or creating accounts
-    public void LateUpdate()
-    {
-        if(DEBUG)
-        {
-            GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", "asdf.qwer", false);
-            GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", "asdf.qwer", false);
 
-            PlayGame();
-        }
-
-        #region Checking connection to database
-        //Checking for database/internet connection
-        if (checkingConnection)
-        {
-            //GSFU successfully respond, proceed with login actions
-            if(GameRoot3D.GSFU.retrieved)
-            {
-                GameRoot3D.GSFU.retrieved = false; //reset retrieved flag
-                checkingConnection = false;
-                attemptNum = 0;
-
-                switch (query)
-                {
-                    case 1: //query type: Logging into Echelon Game
-                        //call to database for "username" to find login name
-                        panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                        GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text, false);
-                        loadingPlayer = true;
-                        break;
-
-                    case 2: //query type: Creating a new Account
-                            //call to database for "first.last" to check for duplicates
-                        panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
-                        GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", na_first.text.ToLower() + "." + na_last.text.ToLower(), false);
-                        creatingAcct = true;
-                        break;
-
-                    case 3: //query type: Joining Session
-                        panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Session");
-
-                        GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", js_Name.text);
-                        joiningSession = true;
-                        break;
-                    case 4:
-                        SetActive(panel_awaitServer, false);
-
-                        NA_setSchools();
-                        LG_ClearLoginFields();
-
-                        SetActive(panelLogin, false);
-                        SetActive(panelNewAcct, true);
-                        break;
-                    case 5: //query type: Logging into Bunny Game
-                        //call to database for "username" to find login name
-                        panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                        GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text, false);
-                        loadingPlayer = true;
-                        break;
-
-                }
-            }
-            else //awaiting GSFU response
-            {
-                attemptNum++;
-
-                //timeout
-                if (attemptNum > connectionAttmpTimeout)
-                {
-                    //login timeout
-                    SetActive(panel_awaitServer, false);
-                    checkingConnection = false;
-                    Debug.Log("LOGIN ERROR: timeout");
-                    attemptNum = 0;
-                    errorText.text = "Error connecting to database.\nPlease try again later.";
-                    SetActive(panelError, true);
-                }
-            }
-        }
-        #endregion
-
-        #region Logging into personal player account
-        //Login Check awaiting response from database
-        if (loadingPlayer)
-        {
-            //database responded
-            //stop waiting for database and check credentials
-            if (GameRoot3D.GSFU.retrieved)
-            {
-
-                GameRoot3D.GSFU.retrieved = false; //reset retrieved flag
-                loadingPlayer = false;
-                attemptNum = 0;
-                lg_Echelonlogin.enabled = true; //reenable the login button, in case login fails
-                lg_Bunnylogin.enabled = true; //reenable the login button, in case login fails
-
-
-                string salt = GameRoot3D.player.users.salt;
-                string passattempt = ComputeHash(Encoding.UTF8.GetBytes(lg_pass.text), Encoding.UTF8.GetBytes(salt));
-
-                //Check for user/pass match
-                if(passattempt.CompareTo(GameRoot3D.player.users.hash) == 0)
-                {
-                    Debug.Log("LOGIN SUCCESFUL");
-
-                    //load in other player settings
-
-                    GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", lg_username.text.ToLower(), false);
-                    GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", lg_username.text.ToLower(), false);
-
-                    //for (int i = 1; i < GameRoot.player.sheetNames.Length; i++)
-                    //{
-                    //    GameRoot.GSFU.RetrievePlayerData(GameRoot.player.sheetNames[i], "username", lg_username.text);
-                    //}
-
-                    tmp_player.users.last_login = System.DateTime.Now.ToString();
-                    GameRoot3D.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                    LG_ClearLoginFields();
-
-                    awaitServePop.SetStatus("");
-                    SetActive(panel_awaitServer, false);
-
-                    //admin logins
-                    if(GameRoot3D.player.users.admin)
-                    {
-                        SetActive(panelAdmin, true);
-                        SetActive(panelLogin, false);
-                    }
-                    else
-                    {
-                        SetActive(panelLogin, false);
-                        SetActive(panelMain, true);
-
-                        PlayGame();
-                    }
-                }
-                //player password wrong
-                else
-                {
-                    Debug.Log("LOGIN ERROR: wrong user/pass");
-                    LG_ClearLoginFields();
-                    errorText.text = "Username or password Incorrect or Not Found";
-                    SetActive(panelError, true);
-                }
-
-            }
-            else  //awaiting database response
-            {
-                attemptNum++;
-
-                //username not found
-                //connection to database already confirmed, if drive has
-                //no response at this stage, it is because that name is not
-                //in the database
-                if(attemptNum > connectionAttmpTimeout)
-                {
-                    lg_Echelonlogin.enabled = true; //reenable login button
-                    loadingPlayer = false;
-                    Debug.Log("LOGIN ERROR: wrong user/pass");
-                    LG_ClearLoginFields();
-                    attemptNum = 0;
-                    errorText.text = "Username or password Incorrect or Not Found";
-                    SetActive(panelError, true);
-                }
-            }
-        }
-        #endregion
-
-        #region Creating a new player account
-        //CREATING NEW PLAYER
-        //create a player in the database using the entered username/password
-        //if a first.last already exists, create a username with an incriment
-        if (creatingAcct)
-        {
-            //database responded
-            //stop waiting for database and create new player
-            //if the database responded, we're almost guaranteed to have a
-            //duplicate user with first.last
-            if(GameRoot3D.GSFU.retrieved)
-            {
-                GameRoot3D.GSFU.retrieved = false;  
-                creatingAcct = false;
-                attemptNum = 0;
-                na_login.enabled = true;
-
-                tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
-
-                tmp_player.users.ID_num = GameRoot3D.player.users.ID_num;
-                tmp_player.users.ID_num++;
-                tmp_player.SetUserName(tmp_player.users.first_last + tmp_player.users.ID_num.ToString());
-
-                tmp_player.users.education = na_education.captionText.text;
-                tmp_player.users.tot_time = 0.0f;
-
-                string salt = GenerateSalt();
-                string hashedpass = ComputeHash(Encoding.UTF8.GetBytes(na_pass1.text), Encoding.UTF8.GetBytes(salt));
-                tmp_player.users.hash = "\'" + hashedpass;
-                tmp_player.users.salt = "\'" + salt;
-
-                userNameText.text = "<b>Your Username is:</b>\n" +
-                                    "<size=28>" + tmp_player.users.username + "</size>";
-
-                if (na_otherSel)
-                    tmp_player.users.school = na_otherSchool.text;
-                else
-                    tmp_player.users.school = na_schools.captionText.text;
-                
-                SetActive(panelNewUserName, true);
-
-                tmp_player.users.last_login = System.DateTime.Now.ToString();
-
-                GameRoot3D.player = tmp_player;
-                GameRoot3D.GSFU.SaveNewPlayer();
-
-
-            }
-            else //wait timer for database to respond to search for name first.last
-            {
-                attemptNum++;
-
-                //Since we know the connection is good from VerifyDatabaseConnection()
-                //no database response HERE means that the user entered "first.last" 
-                //doesn't exist in the database hence the DriveResponse did not trigger.
-                //Meaning, this new account is the first of its name
-                if (attemptNum > connectionAttmpTimeout)
-                {
-                    GameRoot3D.GSFU.retrieved = false;
-                    creatingAcct = false;
-                    attemptNum = 0;
-                    na_login.enabled = true;
-
-
-                    tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
-
-
-                    tmp_player.users.ID_num = 0;
-                    tmp_player.SetUserName(tmp_player.users.first_last);
-
-                    tmp_player.users.education = na_education.captionText.text;
-                    tmp_player.users.tot_time = 0.0f;
-
-                    string salt = GenerateSalt();
-                    string hashedpass = ComputeHash(Encoding.UTF8.GetBytes(na_pass1.text), Encoding.UTF8.GetBytes(salt));
-                    tmp_player.users.hash = "\'" + hashedpass;
-                    tmp_player.users.salt = "\'" + salt;
-
-                    userNameText.text = "<b>Your Username is:</b>\n" +
-                                        "<size=28>" + tmp_player.users.username + "</size>";
-
-                    if (na_otherSel)
-                        tmp_player.users.school = na_otherSchool.text;
-                    else
-                        tmp_player.users.school = na_schools.captionText.text;
-
-                    SetActive(panelNewUserName, true);
-
-                    tmp_player.users.last_login = System.DateTime.Now.ToString();
-
-                    GameRoot3D.player = tmp_player;
-                    GameRoot3D.GSFU.SaveNewPlayer();
-                }
-            }
-        }
-        #endregion
-
-        #region Joining an Admin created game session
-        //JOINING SESSION
-        //used for both isClass and isExpo sessions
-        if (joiningSession)
-        {
-            //database responded and found session name
-            //stop waiting for database create new session player
-            if (GameRoot3D.GSFU.retrieved)
-            {
-                GameRoot3D.GSFU.retrieved = false;
-                joiningSession = false;
-                attemptNum = 0;
-                Debug.Log("Session Found");
-
-                //Check that the session being joined has not expired
-                if(DateTime.Compare(DateTime.Now, DateTime.Parse(GameRoot3D.player.users.expires)) < 0)
-                {
-                    Debug.Log("Join Session SUCCESFUL");
-
-                    //Since there is a delay in database response, it's possible
-                    //for multiple people to "join session" at the same time and 
-                    //the database tell all of them they're the first to join and give
-                    //them all the same incrimented username.
-                    //This will cause problems later when that username is referenced
-                    //to save the session data.
-                    //To combat this and ensure that only ONE username matches the
-                    //sessionID, we'll reuse our salt and hash functions.  But since there
-                    //is no password for joining a session, instead we'll hash the current
-                    //DateTime and concatenate the resulting string onto the joining name.
-                    //This will ensure every joining player has a unique session name no 
-                    //matter how many people join at the same time.
-                    string salt = GenerateSalt();
-                    string hashID = ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString()), Encoding.UTF8.GetBytes(salt));
-
-                    tmp_player = new PlayerData();
-
-                    //if the loaded sessions is from an Expo, trigger this machine to
-                    //run in the Expo state using the session name
-                    if (GameRoot3D.player.users.isExpo)
-                    {
-                        GameRoot3D.isExpo = true;
-                        GameRoot3D.expoName = js_Name.text;
-
-                    }
-                    if(GameRoot3D.player.users.isClass)
-                    {
-                        GameRoot3D.isClass = true;
-                        GameRoot3D.expoName = js_Name.text;
-                        tmp_player.users.isClass = true;
-
-                    }
-
-                    tmp_player.users.stageNum = GameRoot3D.player.users.stageNum;
-                    tmp_player.users.difficultyNum = GameRoot3D.player.users.difficultyNum;
-                    tmp_player.users.forceStage = GameRoot3D.player.users.forceStage;
-
-                    if (GameRoot3D.isExpo)
-                    {
-                        tmp_player.SetUserName(GameRoot3D.expoName + hashID);
-                        tmp_player.users.isExpo = true;
-
-                    }
-                    else
-                        tmp_player.SetUserName(js_Name.text + hashID);
-
-                    tmp_player.users.last_login = System.DateTime.Now.ToString();
-                    tmp_player.users.sessionID = js_Name.text;
-                    GameRoot3D.player = tmp_player;
-                    GameRoot3D.GSFU.SaveNewPlayer();
-
-                    SetActive(panelJoin, false);
-                    SetActive(panelMain, true);
-
-                    PlayGame();
-                }
-                else
-                {
-                    joiningSession = false;
-                    Debug.Log("LOGIN ERROR:\nSession has expired");
-                    attemptNum = 0;
-                    errorText.text = "Sorry, that session has expired.";
-                    SetActive(panelError, true);
-                }
-
-               
-            }
-            else //awaiting database response
-            {
-                attemptNum++;
-
-                //no session with that name
-                if (attemptNum > connectionAttmpTimeout)
-                {
-                    //login timeout
-                    joiningSession = false;
-                    Debug.Log("LOGIN ERROR: wrong Session ID");
-                    attemptNum = 0;
-                    errorText.text = "No session with that name/ID found\nPlease verify the Session name/ID and try again.";
-                    SetActive(panelError, true);
-                }
-            }
-
-        }
-        #endregion
-    }
 
     public void PlayGame()
     {
-        if (bunnyGame)
+        //Reset puzzle complete status
+        for (int i = 0; i < GameRoot3D.instance.puzzleCompleted.Length; i++)
         {
+            GameRoot3D.instance.puzzleCompleted[i] = false;
+        }
+
+        DialogueManager.instance.ResetAll();
+
+        audioService.PlayUIAudio(Constants.audioUIStartBtn);
+        //GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);// original 
+
+        if (GameRootMaster.player.users.isClass || GameRootMaster.player.users.isExpo)
+        {
+            switch (GameRootMaster.player.users.stageNum)
+            {
+                case 0: //no level restrictions, join at main hub
+                    GameRoot3D.instance.exitPuzzle = 0;
+                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
+                    break;
+                case 1: //stage 1
+                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
+                    break;
+
+                case 2: //stage 2
+                    switch (GameRootMaster.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                case 3: //stage 3
+                    switch (GameRootMaster.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                case 4: //stage 4
+                    switch (GameRootMaster.player.users.difficultyNum)
+                    {
+                        case 1:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
+                            break;
+                        case 2:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
+                            break;
+                        case 3:
+                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    GameRoot3D.instance.exitPuzzle = 0;
+                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
+                    break;
+            }
 
         }
         else
         {
-            //Reset puzzle complete status
-            for (int i = 0; i < GameRoot3D.instance.puzzleCompleted.Length; i++)
-            {
-                GameRoot3D.instance.puzzleCompleted[i] = false;
-            }
-
-            DialogueManager.instance.ResetAll();
-
-            audioService.PlayUIAudio(Constants.audioUIStartBtn);
-            //GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);// original 
-
-            if (GameRoot3D.player.users.isClass || GameRoot3D.player.users.isExpo)
-            {
-                switch (GameRoot3D.player.users.stageNum)
-                {
-                    case 0: //no level restrictions, join at main hub
-                        GameRoot3D.instance.exitPuzzle = 0;
-                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
-                        break;
-                    case 1: //stage 1
-                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
-                        break;
-
-                    case 2: //stage 2
-                        switch (GameRoot3D.player.users.difficultyNum)
-                        {
-                            case 1:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
-                                break;
-                            case 2:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
-                                break;
-                            case 3:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-
-                    case 3: //stage 3
-                        switch (GameRoot3D.player.users.difficultyNum)
-                        {
-                            case 1:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
-                                break;
-                            case 2:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
-                                break;
-                            case 3:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-
-                    case 4: //stage 4
-                        switch (GameRoot3D.player.users.difficultyNum)
-                        {
-                            case 1:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
-                                break;
-                            case 2:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
-                                break;
-                            case 3:
-                                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-
-                    default:
-                        GameRoot3D.instance.exitPuzzle = 0;
-                        GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
-                        break;
-                }
-
-            }
-            else
-            {
-                GameRoot3D.instance.exitPuzzle = 0;
-                GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);//added by LaQuez Brown 1-26-21
-            }
+            GameRoot3D.instance.exitPuzzle = 0;
+            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);//added by LaQuez Brown 1-26-21
         }
+        
 
         // hides mouse when loading game
         Cursor.visible = false;
@@ -647,7 +224,6 @@ public class TitleWindow : WindowRoot
         if (GameRoot3D.isExpo)
         {
             GameRoot3D.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", GameRoot3D.expoName);
-            joiningSession = true;
         }
         else
         {
@@ -673,7 +249,7 @@ public class TitleWindow : WindowRoot
     public void ClickQuitBtn()
     {
         audioService.PlayUIAudio(Constants.audioUIClickBtn);
-        Application.Quit();
+        GameRootMaster.resourceService.AsynLoadScene(Constants.mainLoginScreen, () => Destroy(GameRoot3D.instance.gameObject));
     }
 
     //------------------------------------
@@ -717,244 +293,7 @@ public class TitleWindow : WindowRoot
     #endregion
 
 
-    //------------------------------------
-    // LOGIN Functions
-    //------------------------------------
-    #region Login
-    public void LG_ClickBackBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-        LG_ClearLoginFields();
 
-        SetActive(panelLogin, false);
-        SetActive(panelMain, true);
-    }
-
-    //TODO================
-    public void LG_ClickSessionBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        LG_ClearLoginFields();
-        SetActive(panelLogin, false);
-        SetActive(panelJoin, true);
-    }
-
-    public void LG_ClickNewAccount()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-    //    NA_setSchools();
-        LG_ClearLoginFields();
-
-        SetActive(panelLogin, false);
-        SetActive(panelNewAcct, true);
-
-        //SetActive(panel_awaitServer, true);
-        //awaitServePop.SetStatus("Checking Connection");
-
-        //query = 4;
-        //checkingConnection = true;
-        //GameRoot.GSFU.VerifyDatabaseConnection();  
-    }
-
-    public void LG_ClickEchelonBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        SetActive(panel_awaitServer, true);
-        panel_awaitServer.GetComponent<AwaitingServerPopup>().enabled = true;
-        awaitServePop.SetStatus("Checking Connection");
-
-        lg_Echelonlogin.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        lg_Bunnylogin.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        query = 1;
-        checkingConnection = true;
-        bunnyGame = false;
-        GameRoot3D.GSFU.VerifyDatabaseConnection();
-    }
-    public void LG_ClickBunnyBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        SetActive(panel_awaitServer, true);
-        panel_awaitServer.GetComponent<AwaitingServerPopup>().enabled = true;
-        awaitServePop.SetStatus("Checking Connection");
-
-        lg_Echelonlogin.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        lg_Bunnylogin.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        query = 4;
-        checkingConnection = true;
-        bunnyGame = true;
-        GameRoot3D.GSFU.VerifyDatabaseConnection();
-    }
-
-    public void LG_ClickPassPeekBtn()
-    {
-        passHide = !passHide;
-
-        if(passHide)
-            lg_pass.contentType = InputField.ContentType.Password;
-        else
-            lg_pass.contentType = InputField.ContentType.Standard;
-
-        lg_pass.ForceLabelUpdate();
-
-    }
-
-    private void LG_ClearLoginFields()
-    {
-        lg_username.text = "";
-        lg_pass.text = "";
-    }
-    #endregion
-
-
-    //------------------------------------
-    // CREATE ACCOUNT Functions
-    //------------------------------------
-    #region Create Account
-    public void NA_ClickLoginBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        if (na_first.text.Length == 0 && na_last.text.Length == 0)
-        {
-            errorText.text = "You must enter in both a First and Last name.";
-            SetActive(panelError, true);
-        }
-        else
-        {
-            if(na_pass1.text.CompareTo(na_pass2.text) != 0)
-            {
-                errorText.text = "The passwords do not match";
-                SetActive(panelError, true);
-            }
-            else
-            {
-                if (na_pass1.text.Length < 8 || na_pass2.text.Length < 8)
-                {
-                    errorText.text = "Password must be at least 8 characters long";
-                    SetActive(panelError, true);
-                }
-                else
-                {
-                    //if (na_schools.value == 0)
-                    //{
-                    //    errorText.text = "You must select a school";
-                    //    SetActive(panelError, true);
-                    //}
-                    if (na_otherSel && na_otherSchool.text.CompareTo("") == 0)
-                    {
-                        errorText.text = "You must enter in your other school's name";
-                        SetActive(panelError, true);
-                    }
-                    else {
-                        SetActive(panel_awaitServer, true);
-                        awaitServePop.SetStatus("Checking Connection");
-
-                        na_login.enabled = false; //disable button so player can't spam click login and overload database with login requests
-                        query = 2;
-                        checkingConnection = true;
-                        GameRoot3D.GSFU.VerifyDatabaseConnection();
-                    }
-                }
-            }
-        }
-    }
-
-    public void NA_ClickBackBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        NA_ClearNewAcctFields();
-
-        newAcctCheck = true;
-
-        SetActive(panelNewAcct, false);
-        SetActive(panelLogin, true);
-    }
-
-    public void NA_ClickUserNameOK()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        SetActive(panelNewUserName, false);
-        NA_ClearNewAcctFields();
-
-        SetActive(panelNewAcct, false);
-        SetActive(panelMain, true);
-
-        PlayGame();
-    }
-
-    private void NA_ClearNewAcctFields()
-    {
-        na_first.text = "";
-        na_last.text = "";
-        na_pass1.text = "";
-        na_pass2.text = "";
-        na_education.value = 0;
-    }
-
-    public void NA_SchoolChanged()
-    {
-        //Option selected is "Other"
-        if(na_schools.captionText.text.CompareTo("Other") == 0)
-            na_otherSel = true;
-        else
-            na_otherSel = false;
-
-        SetActive(na_otherSchool.gameObject, na_otherSel);
-    }
-
-    private void NA_setSchools()
-    {
-
-    }
-
-    private string ComputeHash(byte[] bytesToHash, byte[] salt)
-    {
-        var byteResult = new Rfc2898DeriveBytes(bytesToHash, salt, 10000);
-        return Convert.ToBase64String(byteResult.GetBytes(24));
-    }
-
-    private string GenerateSalt()
-    {
-        var bytes = new byte[128 / 8];
-        var rng = new RNGCryptoServiceProvider();
-        rng.GetBytes(bytes);
-        return Convert.ToBase64String(bytes);
-    }
-    #endregion
-
-
-    //--------------------------------
-    // JOIN SESSION Functions
-    //--------------------------------
-    #region Join Session
-    public void JS_ClickLoginBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        SetActive(panel_awaitServer, true);
-        awaitServePop.SetStatus("Checking Connection");
-
-        js_login.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        query = 3;
-        checkingConnection = true;
-        GameRoot3D.GSFU.VerifyDatabaseConnection();  
-    }
-
-    public void JS_ClickBackBtn()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        js_Name.text = "";
-        SetActive(panelLogin, true);
-        SetActive(panelJoin, false);
-    }
-    #endregion
 
     
     //--------------------------------
@@ -1200,23 +539,6 @@ public class TitleWindow : WindowRoot
     #endregion
 
 
-    //--------------------------------
-    // MISC
-    //--------------------------------
-    #region Misc
-    public void ErrorOKButton()
-    {
-        audioService.PlayUIAudio(Constants.audioUIClickBtn);
-
-        lg_Echelonlogin.enabled = true;
-        na_login.enabled = true;
-        js_login.enabled = true;
-
-        SetActive(panel_awaitServer, false);
-
-        SetActive(panelError, false);
-    }
-    #endregion
 
 
 }

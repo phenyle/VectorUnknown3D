@@ -159,7 +159,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         //Show Dialogue once
         if (showP02_00)
         {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation("Puzzle02_00"));
+            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 1, 0));
             showP02_00 = false;
         }
 

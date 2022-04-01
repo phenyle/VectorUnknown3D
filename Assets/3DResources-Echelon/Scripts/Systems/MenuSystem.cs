@@ -17,7 +17,7 @@ public class MenuSystem : SystemRoot
         {
             GameRoot3D.ShowTips("", false, false);
             titleWindow.SetWindowState(true);
-            audioService.PlayBgMusic(Constants.audioBgMenu, true);
+            audioService.PlayBgMusic(0, true);
         });
     }
 }

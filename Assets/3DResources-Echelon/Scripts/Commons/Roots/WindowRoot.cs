@@ -23,10 +23,9 @@ public class WindowRoot : MonoBehaviour
             ClearWindow();
         }
     }
-
     protected virtual void InitWindow()
     {
-        resourceService = GameRoot3D.instance.resourceService;
+        resourceService = GameRootMaster.resourceService;
         audioService = GameRoot3D.instance.audioService;
         GameRoot3D.instance.FindPlayerAndCamera();
         GameRoot3D.instance.LockCamera(true);

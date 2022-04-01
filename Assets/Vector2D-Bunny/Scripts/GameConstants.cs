@@ -36,13 +36,16 @@ public class GameConstants : MonoBehaviour {
     void Awake ()
     {
 		Instance = this;
-	}
+        GameRootMaster.player.bunny.level = GameConstants.difficulty;
+
+    }
 
     public void cry_havoc()
     {
         TMP_Dropdown dropdown = GameObject.Find("difficulty_dropdown").GetComponent<TMP_Dropdown>();
         GameConstants.difficulty = dropdown.value +1;
         PlayerPrefs.SetInt("CurrentDifficulty", dropdown.value);
+        GameRootMaster.player.bunny.level = GameConstants.difficulty;
     }
 
 	public void load_menu()

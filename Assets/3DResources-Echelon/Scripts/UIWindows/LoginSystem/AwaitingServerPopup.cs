@@ -4,9 +4,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AwaitingServerPopup : WindowRoot
+public class AwaitingServerPopup : PopUpWindow
 {
     [Header("Objects")]
+    public GameObject panel;
     public GameObject backNForthImage;
     public GameObject computer;
     public GameObject goal;
@@ -54,15 +55,6 @@ public class AwaitingServerPopup : WindowRoot
         halfway = (goal.transform.position - computer.transform.position) / 2;
     }
 
-    private void OnEnable()
-    {
-        timeSec_status = Time.time;
-        timeSec_flavor = Time.time;
-        backNForthImage.GetComponent<ParrotSpriteAnim>().ResetAnim();
-        backNForthImage.transform.position = computer.transform.position;
-    }
-
-
     void Update()
     {
         if (timeSec_status + statusSpeed < Time.time)
@@ -106,6 +98,7 @@ public class AwaitingServerPopup : WindowRoot
     {
         numDots = 0;
         currStatus = status;
+        StatusWaitingDots();
     }
 
     private void StatusWaitingDots()
@@ -132,7 +125,11 @@ public class AwaitingServerPopup : WindowRoot
 
     public void AwaitingPopUp(bool bunny)
     {
-        if(bunny)
+        panel.SetActive(true);
+        Start();
+        backNForthImage.transform.position = computer.transform.position;
+
+        if (bunny)
         {
             backNForthImage = bunnyObj;
             backNForthImage.SetActive(true);
@@ -141,6 +138,7 @@ public class AwaitingServerPopup : WindowRoot
         }
         else
         {
+            backNForthImage.GetComponent<ParrotSpriteAnim>().ResetAnim();
             backNForthImage = parrotObj;
             backNForthImage.SetActive(true);
             bunnyObj.SetActive(false);

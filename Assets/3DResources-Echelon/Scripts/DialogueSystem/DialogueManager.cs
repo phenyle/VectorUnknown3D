@@ -23,7 +23,6 @@ public class DialogueManager : MonoBehaviour
     private List<int> sentencesSize = new List<int>();
     private int dialogueIndex;
     private int sentenceIndex;
-    private AudioService audioService;
     private bool isFirstSentence;
     private string currSentence;
     private bool endOfSentence = false;
@@ -34,7 +33,6 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         instance = this;
-        audioService = GameRoot3D.instance.audioService;
         endOfSentence = false;
     }
 
@@ -107,7 +105,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            audioService.PlayUIAudio(Constants.audioUINextBtn);
+            GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUINextBtn);
         }
         //***********************************************************
 
