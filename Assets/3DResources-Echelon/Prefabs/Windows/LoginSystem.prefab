@@ -1623,8 +1623,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8401273d8d231458a7fd183e0de890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frames: []
-  anim_speed: 0
+  frames:
+  - {fileID: 7957680595679108297}
+  - {fileID: 7957680596414203617}
+  - {fileID: 7957680597204871641}
+  - {fileID: 7957680596090160283}
+  - {fileID: 7957680596140525198}
+  - {fileID: 7957680597024446071}
+  - {fileID: 7957680595396460918}
+  - {fileID: 7957680597163707638}
+  - {fileID: 7957680596016761678}
+  anim_speed: 0.15
 --- !u!1 &7957680595622067944
 GameObject:
   m_ObjectHideFlags: 0
