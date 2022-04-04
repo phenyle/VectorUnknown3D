@@ -334,7 +334,7 @@ public class Puzzle04Controller : MonoBehaviour
                 GameRoot3D.instance.LockCamera(false);
                 answer1events.RemoveAllListeners();
                 answer2events.RemoveAllListeners();
-                turnOffVisualVectors();
+                GameControllerPuzzle04.instance.visVector.ToggleVisualVectors(false);
                 GameControllerPuzzle04.instance.grappleKit.InitGrapple(correct, finalAnswerVector, goalPoint, player.transform.position, grappleArcHeight);
                 GameControllerPuzzle04.instance.grappleKit.grappleToGoal(this);
 
@@ -366,9 +366,9 @@ public class Puzzle04Controller : MonoBehaviour
             else
             {
                 correct = false;
-                GameControllerPuzzle04.instance.grappleKit.SetFailShot(GameControllerPuzzle04.instance.visVector.vector2end.transform.position, this);
+                GameControllerPuzzle04.instance.grappleKit.SetFailShot(VisVectController.playerVectors.GetAnswerEnd(), this);
                 GameControllerPuzzle04.instance.P04W.SubmitButton.interactable = false;
-                turnOffVisualVectors();
+                GameControllerPuzzle04.instance.visVector.ToggleVisualVectors(false);
                 //grappleKit.InitGrapple(correct, finalAnswerVector, VV01.vector2end, player.transform.position, grappleArcHeight);
                 //grappleKit.grappleToGoal(this);
 
@@ -441,7 +441,7 @@ public class Puzzle04Controller : MonoBehaviour
         GameRoot3D.camEvents.AddListener(activateCamRotate);
 
         GameControllerPuzzle04.instance.P04W.setPuzzleController(this);
-        GameControllerPuzzle04.instance.visVector.InitVisVector();
+        GameControllerPuzzle04.instance.visVector.InitVisVector(startPoint.transform.position, goalPoint.transform.position, finalAnswerVector);
 
 
         //Dialog Trigger
@@ -501,9 +501,10 @@ public class Puzzle04Controller : MonoBehaviour
 
         cameraRotate.enabled = false;
         GameRoot3D.camEvents.RemoveAllListeners();
-        cameraGlide.SetArrivedAtDistance(0.01f);
+        cameraGlide.SetArrivedAtDistance(0.02f);
         cameraGlide.SetEventSys(GameRoot3D.camEvents);
         cameraGlide.GlideAndLookMovingTarget(puzzleCamera, mainCamera, player, 0, 0.08f, 0.02f);
+        cameraGlide.SetCatchUpSpeedMod(0.0001f);
 
         GameRoot3D.camEvents.AddListener(activateCamPlayer);
 
@@ -524,7 +525,7 @@ public class Puzzle04Controller : MonoBehaviour
         GameControllerPuzzle04.instance.P04W.scalar1.value = 1;
         GameControllerPuzzle04.instance.P04W.scalar2.value = 1;
 
-        turnOffVisualVectors();
+        GameControllerPuzzle04.instance.visVector.ToggleVisualVectors(false);
 
         DialogueManager.isPuzzleLock = false;
 
@@ -549,60 +550,60 @@ public class Puzzle04Controller : MonoBehaviour
     #region Visual Vector
     public void turnOnVisualVectors(bool all)
     {
-        if (all)
-        {
-            GameControllerPuzzle04.instance.visVector.ToggleBasicVectors(true);
-        }
-        else
-        {
-            GameControllerPuzzle04.instance.visVector.getGapVector().SetActive(true);
-        }
-        if (GameControllerPuzzle04.instance.P04W.axisOn)
-            GameControllerPuzzle04.instance.visVector.AxisDirector();
-        if (GameControllerPuzzle04.instance.P04W.gridOn)
-            GameControllerPuzzle04.instance.visVector.GridDirector();
+        //if (all)
+        //{
+        //    GameControllerPuzzle04.instance.visVector.ToggleBasicVectors(true);
+        //}
+        //else
+        //{
+        //    GameControllerPuzzle04.instance.visVector.getGapVector().SetActive(true);
+        //}
+        //if (GameControllerPuzzle04.instance.P04W.axisOn)
+        //    GameControllerPuzzle04.instance.visVector.axis;
+        //if (GameControllerPuzzle04.instance.P04W.gridOn)
+        //    GameControllerPuzzle04.instance.visVector.GridDirector();
 
 
-        switch (GameControllerPuzzle04.instance.Difficulty)
-        {
-            case 1:
-                switch (getDirection())
-                {
-                    case Direction.X:
-                        GameControllerPuzzle04.instance.visVector.setAxisNodes(true, false, false);
-                        GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, false, false);
-                        break;
-                    case Direction.Y:
-                        GameControllerPuzzle04.instance.visVector.setAxisNodes(false, true, false);
-                        GameControllerPuzzle04.instance.visVector.setGridBarNodes(false, true, false);
-                        break;
-                }
-                break;
-            case 2:
-                GameControllerPuzzle04.instance.visVector.setAxisNodes(true, true, false);
-                GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, true, false);
-                break;
-            case 3:
-                GameControllerPuzzle04.instance.visVector.setAxisNodes(true, true, true);
-                GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, true, true);
-                break;
-        }
+        //switch (GameControllerPuzzle04.instance.Difficulty)
+        //{
+        //    case 1:
+        //        switch (getDirection())
+        //        {
+        //            case Direction.X:
+        //                GameControllerPuzzle04.instance.visVector.setAxisNodes(true, false, false);
+        //                GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, false, false);
+        //                break;
+        //            case Direction.Y:
+        //                GameControllerPuzzle04.instance.visVector.setAxisNodes(false, true, false);
+        //                GameControllerPuzzle04.instance.visVector.setGridBarNodes(false, true, false);
+        //                break;
+        //        }
+        //        break;
+        //    case 2:
+        //        GameControllerPuzzle04.instance.visVector.setAxisNodes(true, true, false);
+        //        GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, true, false);
+        //        break;
+        //    case 3:
+        //        GameControllerPuzzle04.instance.visVector.setAxisNodes(true, true, true);
+        //        GameControllerPuzzle04.instance.visVector.setGridBarNodes(true, true, true);
+        //        break;
+        //}
 
     }
 
     public void turnOffVisualVectors()
     {
         //Basic is player vectors, goal vector, orbs
-        GameControllerPuzzle04.instance.visVector.ToggleBasicVectors(false);
+        //GameControllerPuzzle04.instance.visVector.ToggleBasicVectors(false);
 
-        GameControllerPuzzle04.instance.visVector.getXvector().SetActive(false);
-        GameControllerPuzzle04.instance.visVector.getYvector().SetActive(false);
-        GameControllerPuzzle04.instance.visVector.getZvector().SetActive(false);
+        //GameControllerPuzzle04.instance.visVector.getXvector().SetActive(false);
+        //GameControllerPuzzle04.instance.visVector.getYvector().SetActive(false);
+        //GameControllerPuzzle04.instance.visVector.getZvector().SetActive(false);
 
-        GameControllerPuzzle04.instance.visVector.deactivateAxis();
-        GameControllerPuzzle04.instance.visVector.deactivateBarGrid();
-        GameControllerPuzzle04.instance.visVector.toggleProjections(false);
-        GameControllerPuzzle04.instance.visVector.toggleAnchors(false);
+        //GameControllerPuzzle04.instance.visVector.deactivateAxis();
+        //GameControllerPuzzle04.instance.visVector.deactivateBarGrid();
+        //GameControllerPuzzle04.instance.visVector.toggleProjections(false);
+        //GameControllerPuzzle04.instance.visVector.toggleAnchors(false);
     }
 
     #endregion

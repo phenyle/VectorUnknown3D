@@ -26,7 +26,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
     private bool pausePuzzTime;
     public List<Puzzle04Controller> puzzleDatas;
     public Puzzle04Controller currPuzzle;
-    public VisualVector visVector;
+    public VisVectController visVector;
     public GrappleCode grappleKit;
 
 

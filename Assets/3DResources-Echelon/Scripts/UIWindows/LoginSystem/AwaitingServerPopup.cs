@@ -20,14 +20,16 @@ public class AwaitingServerPopup : PopUpWindow
     private string currStatus;
 
     [Header("Text Waiting Periods")]
-    [Range(1, 20)]
-    public int statusSpeed;
-    [Range(1, 20)]
+    [Range(0.01f, 1f)]
+    public float statusSpeed;
+    [Range(1f, 10f)]
+    public float flavorSpeed;
+    [Range(1, 5)]
     public int statusDotsLength;
-    [Range(2, 20)]
-    public int flavorSpeed;
+
 
     [Header("Parrot Animation")]
+    [Range(0.01f, 2f)]
     public float flightSpeed;
     public float flightHeight;
     private Vector3 halfway;
@@ -50,22 +52,25 @@ public class AwaitingServerPopup : PopUpWindow
         computer2goal = true;
         flavor_iter = UnityEngine.Random.Range(0, flavorScripts.Length - 1);
         flavorText.text = flavorScripts[flavor_iter];
-        timeSec_status = Time.time;
-        timeSec_flavor = Time.time;
+        timeSec_status = 0.0f;
+        timeSec_flavor = 0.0f;
         halfway = (goal.transform.position - computer.transform.position) / 2;
     }
 
     void Update()
     {
-        if (timeSec_status + statusSpeed < Time.time)
+        timeSec_status += Time.deltaTime;
+        timeSec_flavor += Time.deltaTime;
+
+        if (timeSec_status > statusSpeed)
         {
-            timeSec_status = Time.time;
+            timeSec_status = 0.0f;
             StatusWaitingDots();
         }
 
-        if (timeSec_flavor + flavorSpeed < Time.time)
+        if (timeSec_flavor > flavorSpeed)
         {
-            timeSec_flavor = Time.time;
+            timeSec_flavor = 0.0f;
             ChangeFlavor();
         }
 
@@ -128,6 +133,7 @@ public class AwaitingServerPopup : PopUpWindow
         panel.SetActive(true);
         Start();
         backNForthImage.transform.position = computer.transform.position;
+        backNForthImage.transform.localScale = new Vector3(Math.Abs(backNForthImage.transform.localScale.x), Math.Abs(backNForthImage.transform.localScale.y), 1);
 
         if (bunny)
         {

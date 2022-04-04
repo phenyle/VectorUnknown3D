@@ -1,17 +1,12 @@
-﻿
-/**
-
-
-**/
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 
+
 public class VisualVector : MonoBehaviour
 {
-    private Vector3 puzzleScale;
     private float overallScale;
 
     //Puzzle Vector Components
@@ -61,7 +56,7 @@ public class VisualVector : MonoBehaviour
     public float axisThickness = 0.18f;
     public float gridThickness = 0.09f;
     public float gridNodeScale = 0.6f;
-    public int gridSize = 100;
+    public static int gridSize = 100;
     private Color gridOutline = new Color(0.1f, 0.1f, 0.1f, 0.5f);
     private Color grid5incriOutline = new Color(0.2f, 0.2f, 0.0f, 0.4f);
     private Color grid10incriOutline = new Color(0.5f, 0.5f, 0.0f, 0.4f);
@@ -128,10 +123,194 @@ public class VisualVector : MonoBehaviour
     private bool fudgeY;
     private bool fudgeZ;
 
+    public LineRenderer Vector1;
+
+
+    public enum VectorMaterials
+    {
+        playerVect1,
+        playerVect2,
+        playerAns,
+        AxisLine,
+        GridStd,
+        Grid5Incri,
+        Grid10Incri,
+        anchorVect1,
+        anchorVect2,
+        anchorGoal
+    }
+
+    public Material[] lineMaterials = new Material[typeof(VectorMaterials).GetFields().Length];
+
+    /// <summary>
+    /// These are the vector lines that the player is actually moving when changing around their answers
+    /// </summary>
+
+    /// <summary>
+    /// These are the 3 lines that illustrate the Axis of the grid
+    /// </summary>
+
+    /// <summary>
+    /// These are the colletions of lines for each plane that show the incrimenting
+    /// lines for drawing the grid
+    /// Each array of LineRenders has 2*grid size for pos/neg +1 for the zero/center
+    /// </summary>
+    public class Grid
+    {
+        public class XYplane
+        {
+            public LineRenderer[] Vertical;
+            public LineRenderer[] Horizontal;
+
+            public XYplane()
+            {
+                Vertical = new LineRenderer[gridSize * 2 + 1];
+                Horizontal = new LineRenderer[gridSize * 2 + 1];
+            }
+
+            public void TogglePlane(bool val)
+            {
+                for(int i = 0; i < gridSize * 2 + 1; i++)
+                {
+                    Vertical[i].enabled = val;
+                    Horizontal[i].enabled = val;
+                }
+            }
+        }
+        public class ZYplane
+        {
+            public LineRenderer[] Vertical;
+            public LineRenderer[] Horizontal;
+            public ZYplane()
+            {
+                Vertical = new LineRenderer[gridSize * 2 + 1];
+                Horizontal = new LineRenderer[gridSize * 2 + 1];
+            }
+            public void TogglePlane(bool val)
+            {
+                for (int i = 0; i < gridSize * 2 + 1; i++)
+                {
+                    Vertical[i].enabled = val;
+                    Horizontal[i].enabled = val;
+                }
+            }
+
+        }
+        public class XZplane
+        {
+            public LineRenderer[] Vertical;
+            public LineRenderer[] Horizontal;
+            public XZplane()
+            {
+                Vertical = new LineRenderer[gridSize * 2 + 1];
+                Horizontal = new LineRenderer[gridSize * 2 + 1];
+            }
+            public void TogglePlane(bool val)
+            {
+                for (int i = 0; i < gridSize * 2 + 1; i++)
+                {
+                    Vertical[i].enabled = val;
+                    Horizontal[i].enabled = val;
+                }
+            }
+
+        }
+
+        public XYplane xyPlane;
+        public ZYplane zyPlane;
+        public XZplane xzPlane;
+
+        public Grid()
+        {
+            xyPlane = new XYplane();
+            zyPlane = new ZYplane();
+            xzPlane = new XZplane();
+        }
+    }
+
+    public class Misc
+    {
+        /// <summary>
+        /// A class of lines that draw a line from the end of the player vectors in 3D space to that line's
+        /// position on each grid plane
+        /// </summary>
+        public class Anchors
+        {
+            public class Vector1
+            {
+                public LineRenderer xyAnchor;
+                public LineRenderer zyAnchor;
+                public LineRenderer xzAnchor;
+
+                public Vector1()
+                {
+                    xyAnchor = new LineRenderer();
+                    zyAnchor = new LineRenderer();
+                    xzAnchor = new LineRenderer();
+                }
+            }
+            public class Vector2
+            {
+                public LineRenderer xyAnchor;
+                public LineRenderer zyAnchor;
+                public LineRenderer xzAnchor;
+                public Vector2()
+                {
+                    xyAnchor = new LineRenderer();
+                    zyAnchor = new LineRenderer();
+                    xzAnchor = new LineRenderer();
+                }
+
+            }
+            public class Goal
+            {
+                public LineRenderer xyAnchor;
+                public LineRenderer zyAnchor;
+                public LineRenderer xzAnchor;
+                public Goal()
+                {
+                    xyAnchor = new LineRenderer();
+                    zyAnchor = new LineRenderer();
+                    xzAnchor = new LineRenderer();
+                }
+
+            }
+
+            public Vector1 vect1Anchor;
+            public Vector2 vect2Anchor;
+            public Goal goalAnchor;
+
+            public Anchors()
+            {
+                vect1Anchor = new Vector1();
+                vect2Anchor = new Vector2();
+                goalAnchor = new Goal();
+            }
+        }
+
+        public LineRenderer goal; //line from player start to goal (essentially the answer vector)
+        public Anchors anchors;
+
+        public Misc()
+        {
+            goal = new LineRenderer();
+            anchors = new Anchors();
+        }
+    }
+
+    public Vector3 startPosition; //start position of this puzzle in WorldSpace
+    public Vector3 goalPosition; //goal position of this puzzle in WorldSpace
+    private Vector3 puzzleScale; //this is the scaling factor for each dimension needed to marry the player values to WorldSpace values
+
+
+    private Grid grid = new Grid();
+    private Misc misc = new Misc();
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
+        InitAllLines();
+
         gapVectorVV.SetActive(false);
 
         vector1.SetActive(false);
@@ -175,6 +354,48 @@ public class VisualVector : MonoBehaviour
         isProjecting = false;
         isAnchored = false;
     }
+
+    private void InitAllLines()
+    {
+
+
+        for (int i = 0; i < gridSize; i++)
+        {
+            grid.xyPlane.Horizontal[i] = InitLine(grid.xyPlane.Horizontal[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+            grid.xyPlane.Vertical[i] = InitLine(grid.xyPlane.Vertical[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+
+            grid.zyPlane.Horizontal[i] = InitLine(grid.zyPlane.Horizontal[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+            grid.zyPlane.Vertical[i] = InitLine(grid.zyPlane.Vertical[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+
+            grid.xzPlane.Horizontal[i] = InitLine(grid.xzPlane.Horizontal[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+            grid.xzPlane.Vertical[i] = InitLine(grid.xzPlane.Vertical[i], lineMaterials[(int)VectorMaterials.GridStd], Color.white, 2.0f);
+        }
+
+        misc.goal = InitLine(misc.goal, lineMaterials[(int)VectorMaterials.GridStd], Color.white, 5.0f);
+
+
+        misc.anchors.vect1Anchor.xyAnchor = InitLine(misc.anchors.vect1Anchor.xyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.blue, 2.0f);
+        misc.anchors.vect1Anchor.zyAnchor = InitLine(misc.anchors.vect1Anchor.zyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.blue, 2.0f);
+        misc.anchors.vect1Anchor.xzAnchor = InitLine(misc.anchors.vect1Anchor.xzAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.blue, 2.0f);
+
+        misc.anchors.vect2Anchor.xyAnchor = InitLine(misc.anchors.vect2Anchor.xyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.red, 2.0f);
+        misc.anchors.vect2Anchor.zyAnchor = InitLine(misc.anchors.vect2Anchor.zyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.red, 2.0f);
+        misc.anchors.vect2Anchor.xzAnchor = InitLine(misc.anchors.vect2Anchor.xzAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.red, 2.0f);
+
+        misc.anchors.goalAnchor.xyAnchor = InitLine(misc.anchors.goalAnchor.xyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.white, 2.0f);
+        misc.anchors.goalAnchor.zyAnchor = InitLine(misc.anchors.goalAnchor.zyAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.white, 2.0f);
+        misc.anchors.goalAnchor.xzAnchor = InitLine(misc.anchors.goalAnchor.xzAnchor, lineMaterials[(int)VectorMaterials.anchorVect1], Color.white, 2.0f);
+    }
+
+    private LineRenderer InitLine(LineRenderer line, Material mat, Color clr, float width)
+    {
+        line.material = mat;
+        line.startColor = line.endColor = clr;
+        line.startWidth = line.endWidth = width;
+        line.enabled = false;
+        return line;
+    }
+
     public void InitVisVector()
     {
         setFudge();
@@ -182,10 +403,17 @@ public class VisualVector : MonoBehaviour
         start.transform.position = GameControllerPuzzle04.instance.currPuzzle.startPoint.transform.position;
         goal.transform.position = GameControllerPuzzle04.instance.currPuzzle.goalPoint.transform.position;
 
+        startPosition = GameControllerPuzzle04.instance.currPuzzle.startPoint.transform.position;
+        goalPosition = GameControllerPuzzle04.instance.currPuzzle.goalPoint.transform.position;
+
         overallScale = setOverallScale();
         puzzleScale = setPuzzleScale();
 
-        VectorBetweenPoints(gapVectorVV, goal.transform.position, start.transform.position, 0.25f);
+        misc.goal.SetPosition(0, startPosition);
+        misc.goal.SetPosition(1, goalPosition);
+        misc.goal.enabled = true;
+
+        //VectorBetweenPoints(gapVectorVV, goal.transform.position, start.transform.position, 0.25f);
 
         if (GameControllerPuzzle04.instance.Difficulty == 3)
         {
@@ -256,7 +484,7 @@ public class VisualVector : MonoBehaviour
                     else
                         XZfinal.SetActive(false);
 
-                    if (GameControllerPuzzle04.instance.P04W.getYZtoggle())
+                    if (GameControllerPuzzle04.instance.P04W.getZYtoggle())
                     {
                         YZfinal.SetActive(true);
                         VectorBetweenPoints(YZfinal, start.transform.position, YZvector2end.transform.position, 0.25f);
@@ -423,7 +651,6 @@ public class VisualVector : MonoBehaviour
                 fudgeZ = false;
                 break;
         }
-
     }
 
 
@@ -442,6 +669,9 @@ public class VisualVector : MonoBehaviour
                 vector1end.transform.position = start.transform.position + rescaledVector(GameControllerPuzzle04.instance.P04W.card1.cardVector * GameControllerPuzzle04.instance.P04W.getScalar1Value());
                 vector1.GetComponent<LineRenderer>().SetPosition(0, start.transform.position);
                 vector1.GetComponent<LineRenderer>().SetPosition(1, vector1end.transform.position);
+
+                Vector3 endPos = startPosition + rescaledVector(GameControllerPuzzle04.instance.P04W.card1.cardVector * GameControllerPuzzle04.instance.P04W.getScalar1Value());
+
             }
             else
             {
@@ -518,19 +748,15 @@ public class VisualVector : MonoBehaviour
 
     public int determineQuadrant()
     {
-        if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().x > 0)
-        {
-            if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().y > 0)
-            {
-                if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().z > 0)
-                {
+        if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().x > 0)        {
+            if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().y > 0)            {
+                if(GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().z > 0)                {
                     return 1;
                 }
                 else
                 {
                     return 2;
                 }
-
             }
             else
             {
@@ -548,8 +774,7 @@ public class VisualVector : MonoBehaviour
         }
         else
         {
-            if (GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().y > 0)
-            {
+            if (GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().y > 0)            {
                 if (GameControllerPuzzle04.instance.currPuzzle.getAnswerVector().z > 0)
                 {
                     return 5;
@@ -578,74 +803,120 @@ public class VisualVector : MonoBehaviour
 
     public void limitGraphSize()
     {
-
         switch(quadrant)
         {
             case 1:
                 Xnegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xpositive.transform.localPosition = new Vector3(xMax * puzzleScale.x, 0f, 0f);
+
                 Ynegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Ypositive.transform.localPosition = new Vector3(0f, yMax * puzzleScale.y, 0f);
+
                 Znegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Zpositive.transform.localPosition = new Vector3(0f, 0f, zMax * puzzleScale.z);
+
                 xMin = 0;
                 yMin = 0;
                 zMin = 0;
                 break;
             case 2:
                 Xnegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xpositive.transform.localPosition = new Vector3(xMax * puzzleScale.x, 0f, 0f);
+
                 Ynegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Ypositive.transform.localPosition = new Vector3(0f, yMax * puzzleScale.y, 0f);
+
+                Znegative.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
                 Zpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 xMin = 0;
                 yMin = 0;
                 zMax = 0;
                 break;
             case 3:
                 Xnegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xpositive.transform.localPosition = new Vector3(xMax * puzzleScale.x, 0f, 0f);
+
+                Ynegative.transform.localPosition = new Vector3(0f, yMin * puzzleScale.y, 0f);
                 Ypositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 Znegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Zpositive.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
+
                 xMin = 0;
                 yMax = 0;
                 zMin = 0;
                 break;
             case 4:
                 Xnegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xpositive.transform.localPosition = new Vector3(xMax * puzzleScale.x, 0f, 0f);
+
+                Ynegative.transform.localPosition = new Vector3(0f, yMin * puzzleScale.y, 0f);
                 Ypositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+                Znegative.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
                 Zpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 xMin = 0;
                 yMax = 0;
                 zMax = 0;
                 break;
             case 5:
                 Xpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xnegative.transform.localPosition = new Vector3(xMin * puzzleScale.x, 0f, 0f);
+
                 Ynegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Ypositive.transform.localPosition = new Vector3(0f, yMax * puzzleScale.y, 0f);
+
                 Znegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Zpositive.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
+
                 xMax = 0;
                 yMin = 0;
                 zMin = 0;
                 break;
             case 6:
                 Xpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xnegative.transform.localPosition = new Vector3(xMin * puzzleScale.x, 0f, 0f);
+
                 Ynegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Ypositive.transform.localPosition = new Vector3(0f, yMax * puzzleScale.y, 0f);
+
+                Znegative.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
                 Zpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 xMax = 0;
                 yMin = 0;
                 zMax = 0;
                 break;
             case 7:
                 Xpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xnegative.transform.localPosition = new Vector3(xMin * puzzleScale.x, 0f, 0f);
+
+                Ynegative.transform.localPosition = new Vector3(0f, yMin * puzzleScale.y, 0f);
                 Ypositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 Znegative.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Zpositive.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
+
                 xMax = 0;
                 yMax = 0;
                 zMin = 0;
                 break;
             case 8:
                 Xpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+                Xnegative.transform.localPosition = new Vector3(xMin * puzzleScale.x, 0f, 0f);
+
+                Ynegative.transform.localPosition = new Vector3(0f, yMin * puzzleScale.y, 0f);
                 Ypositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+                Znegative.transform.localPosition = new Vector3(0f, 0f, zMin * puzzleScale.z);
                 Zpositive.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 xMax = 0;
                 yMax = 0;
                 zMax = 0;
                 break;
-
         }
     }
 
@@ -1115,21 +1386,21 @@ public class VisualVector : MonoBehaviour
     {
         if (GameControllerPuzzle04.instance.P04W.axisOn)
         {
-            switch (GameControllerPuzzle04.instance.Difficulty)
-            {
-                case 1:
-                    if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("X") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateAxis(true, false, false);
-                    else if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("Y") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateAxis(false, true, false);
-                    break;
-                case 2:
-                    GameControllerPuzzle04.instance.visVector.activateAxis(true, true, false);
-                    break;
-                case 3:
-                    GameControllerPuzzle04.instance.visVector.activateAxis(true, true, true);
-                    break;
-            }
+            //switch (GameControllerPuzzle04.instance.Difficulty)
+            //{
+            //    case 1:
+            //        if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("X") == 0)
+            //            GameControllerPuzzle04.instance.visVector.activateAxis(true, false, false);
+            //        else if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("Y") == 0)
+            //            GameControllerPuzzle04.instance.visVector.activateAxis(false, true, false);
+            //        break;
+            //    case 2:
+            //        GameControllerPuzzle04.instance.visVector.activateAxis(true, true, false);
+            //        break;
+            //    case 3:
+            //        GameControllerPuzzle04.instance.visVector.activateAxis(true, true, true);
+            //        break;
+            //}
 
             GridDirector();
 
@@ -1141,22 +1412,22 @@ public class VisualVector : MonoBehaviour
 
         if (GameControllerPuzzle04.instance.P04W.gridOn)
         {
-            switch (GameControllerPuzzle04.instance.Difficulty)
-            {
-                case 1:
-                    if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("X") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateBarGrid(true, false, false);
-                    else if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("Y") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateBarGrid(false, true, false);
-                    break;
-                case 2:
-                    GameControllerPuzzle04.instance.visVector.activateBarGrid(true, true, false);
-                    break;
-                case 3:
-                    GameControllerPuzzle04.instance.visVector.activateBarGrid(GameControllerPuzzle04.instance.P04W.XYtoggle, GameControllerPuzzle04.instance.P04W.XZtoggle, GameControllerPuzzle04.instance.P04W.YZtoggle);
-                    GameControllerPuzzle04.instance.P04W.advGridControls.gameObject.SetActive(true);
-                    break;
-            }
+            //switch (GameControllerPuzzle04.instance.Difficulty)
+            //{
+            //    case 1:
+            //        if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("X") == 0)
+            //            GameControllerPuzzle04.instance.visVector.activateBarGrid(true, false, false);
+            //        else if (GameControllerPuzzle04.instance.currPuzzle.getDirection().ToString().CompareTo("Y") == 0)
+            //            GameControllerPuzzle04.instance.visVector.activateBarGrid(false, true, false);
+            //        break;
+            //    case 2:
+            //        GameControllerPuzzle04.instance.visVector.activateBarGrid(true, true, false);
+            //        break;
+            //    case 3:
+            //        GameControllerPuzzle04.instance.visVector.activateBarGrid(GameControllerPuzzle04.instance.P04W.XYtoggle, GameControllerPuzzle04.instance.P04W.XZtoggle, GameControllerPuzzle04.instance.P04W.ZYtoggle);
+            //        GameControllerPuzzle04.instance.P04W.advGridControls.gameObject.SetActive(true);
+            //        break;
+            //}
 
             toggleProjections(GameControllerPuzzle04.instance.P04W.projectionsOn);
 

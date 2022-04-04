@@ -50,7 +50,7 @@ MonoBehaviour:
   tot_puzzleTime: 0
   puzzleDatas: []
   currPuzzle: {fileID: 0}
-  visVector: {fileID: 1888412881188483973}
+  visVector: {fileID: 6738245943242436135}
   grappleKit: {fileID: 5158348274774403078}
   sunLight: {fileID: 0}
   moonLight: {fileID: 0}
@@ -275,15 +275,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5158348274832634617}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1888412881188483973 stripped
+--- !u!114 &6738245943242436135 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6747201411922461052, guid: b9e5d2bb69c20f543a071ef8dfd0012f,
+  m_CorrespondingSourceObject: {fileID: 1879457421131996382, guid: b9e5d2bb69c20f543a071ef8dfd0012f,
     type: 3}
   m_PrefabInstance: {fileID: 5158348274832634617}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b5b9c6d5e26fd4d821b219757ea1fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 3944e60f68ae8da418c78aaf96007b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

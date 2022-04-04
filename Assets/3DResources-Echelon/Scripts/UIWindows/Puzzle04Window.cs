@@ -54,8 +54,8 @@ public class Puzzle04Window : WindowRoot
     public bool projectionsOn { get; private set; }
     public bool anchorsOn { get; private set; }
     public bool XYtoggle { get; private set; }
-    public bool XZtoggle { get; private set; }
     public bool YZtoggle { get; private set; }
+    public bool XZtoggle { get; private set; }
 
 
     //UPPER LEFT PIN WINDOW------------
@@ -436,16 +436,11 @@ public class Puzzle04Window : WindowRoot
         axisOn = !axisOn;
 
         if(axisOn)
-        {
-            GameControllerPuzzle04.instance.visVector.AxisDirector();
-
             axisButton.GetComponent<Image>().color = Color.green;
-        }
         else
-        {
-            GameControllerPuzzle04.instance.visVector.deactivateAxis();
             axisButton.GetComponent<Image>().color = Color.white;
-        }
+
+        VisVectController.axis.ToggleAxis(axisOn);
     }
 
     public void toggleGrid()
@@ -453,58 +448,30 @@ public class Puzzle04Window : WindowRoot
         gridOn = !gridOn;
 
         if (gridOn)
-        {
-            switch(GCP04.Difficulty)
-            {
-                case 1:
-                    if(PC04.getDirection().ToString().CompareTo("X") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateBarGrid(true, false, false);
-                    else if(PC04.getDirection().ToString().CompareTo("Y") == 0)
-                        GameControllerPuzzle04.instance.visVector.activateBarGrid(false, true, false);
-                    break;
-                case 2:
-                    GameControllerPuzzle04.instance.visVector.activateBarGrid(true, true, false);
-                    break;
-                case 3:
-                    GameControllerPuzzle04.instance.visVector.activateBarGrid(XYtoggle, XZtoggle, YZtoggle);
-                    SetActive(advGridControls, true);
-                    break;
-            }
             gridButton.GetComponent<Image>().color = Color.green;
-
-
-
-            if(projectionsOn)
-            {
-                GameControllerPuzzle04.instance.visVector.toggleProjections(true);
-
-                projectionsButton.GetComponent<Image>().color = Color.green;
-
-                if (anchorsOn)
-                {
-                    anchorsButton.GetComponent<Image>().color = Color.green;
-                    GameControllerPuzzle04.instance.visVector.toggleAnchors(true);
-                }
-            }
-
-        }
         else
-        {
-            GameControllerPuzzle04.instance.visVector.deactivateBarGrid();
             gridButton.GetComponent<Image>().color = Color.white;
-        }
+
+
+        VisVectController.grid.ToggleGrid(gridOn);
+        VisVectController.projections.ToggleProjections(projectionsOn);
+        VisVectController.anchors.ToggleAnchors(anchorsOn);
     }
 
     public void toggleProjectionsButton()
     {
         projectionsOn = !projectionsOn;
 
+        VisVectController.projections.ToggleProjections(projectionsOn);
+        VisVectController.projections.ToggleXYprojections(XYtoggle);
+        VisVectController.projections.ToggleYZprojections(YZtoggle);
+        VisVectController.projections.ToggleXZprojections(XZtoggle);
+
         if (projectionsOn)
         {
+            projectionsButton.GetComponent<Image>().color = Color.green;            
+            SetActive(advProjectionControls, projectionsOn || anchorsOn);
 
-            projectionsButton.GetComponent<Image>().color = Color.green;
-            
-            SetActive(advProjectionControls, true);
             if (XYtoggle)
                 XYbutton.GetComponent<Image>().color = Color.green;
             else
@@ -523,23 +490,23 @@ public class Puzzle04Window : WindowRoot
 
             anchorsButton.SetActive(true);
 
+            VisVectController.anchors.ToggleAnchors(anchorsOn);
+            VisVectController.anchors.ToggleXYanchors(XYtoggle);
+            VisVectController.anchors.ToggleYZanchors(YZtoggle);
+            VisVectController.anchors.ToggleXZanchors(XZtoggle);
+
             if (anchorsOn)
-            {
-                GameControllerPuzzle04.instance.visVector.toggleAnchors(true);
                 anchorsButton.GetComponent<Image>().color = Color.green;
-            }
             else
                 anchorsButton.GetComponent<Image>().color = Color.white;
         }
         else
         {
- //           SetActive(advProjectionControls, false);
+    //        SetActive(advProjectionControls, false);
             anchorsButton.SetActive(false);
-            GameControllerPuzzle04.instance.visVector.toggleAnchors(false);
+            VisVectController.anchors.ToggleAnchors(false);
             projectionsButton.GetComponent<Image>().color = Color.white;
         }
-
-        GameControllerPuzzle04.instance.visVector.toggleProjections(projectionsOn);
     }
 
     public void toggleAnchorsButton()
@@ -551,7 +518,10 @@ public class Puzzle04Window : WindowRoot
         else
             anchorsButton.GetComponent<Image>().color = Color.white;
 
-        GameControllerPuzzle04.instance.visVector.toggleAnchors(anchorsOn);
+        VisVectController.anchors.ToggleAnchors(anchorsOn);
+        VisVectController.anchors.ToggleXYanchors(XYtoggle);
+        VisVectController.anchors.ToggleYZanchors(YZtoggle);
+        VisVectController.anchors.ToggleXZanchors(XZtoggle);
     }
 
     public void toggleXY()
@@ -563,7 +533,10 @@ public class Puzzle04Window : WindowRoot
         else
             XYbutton.GetComponent<Image>().color = Color.white;
 
-        GameControllerPuzzle04.instance.visVector.toggleXYplane(XYtoggle, gridOn);
+        VisVectController.grid.ToggleXYplane(XYtoggle);
+        VisVectController.anchors.ToggleXYanchors(XYtoggle);
+        VisVectController.projections.ToggleXYprojections(XYtoggle);
+
     }
 
     public bool getXYtoggle()
@@ -580,7 +553,10 @@ public class Puzzle04Window : WindowRoot
         else
             XZbutton.GetComponent<Image>().color = Color.white;
 
-        GameControllerPuzzle04.instance.visVector.toggleXZplane(XZtoggle, gridOn);
+        VisVectController.grid.ToggleXZplane(XZtoggle);
+        VisVectController.anchors.ToggleXZanchors(XZtoggle);
+        VisVectController.projections.ToggleXZprojections(XZtoggle);
+
     }
 
     public bool getXZtoggle()
@@ -597,10 +573,12 @@ public class Puzzle04Window : WindowRoot
         else
             YZbutton.GetComponent<Image>().color = Color.white;
 
-        GameControllerPuzzle04.instance.visVector.toggleYZplane(YZtoggle, gridOn);
+        VisVectController.grid.ToggleYZplane(YZtoggle);
+        VisVectController.anchors.ToggleYZanchors(YZtoggle);
+        VisVectController.projections.ToggleYZprojections(YZtoggle);
     }
 
-    public bool getYZtoggle()
+    public bool getZYtoggle()
     {
         return YZtoggle;
     }

@@ -29,6 +29,8 @@ public class ObjectGlide : MonoBehaviour
     public float objectMoveSpeed = 0.1f;
     private float baseMoveSpeed = 0.1f;
     private float modMoveSpeed = 0.0f;
+    private float catchUpMoveRate = 0.0f;
+    private float catchUpspeed = 0.0f;
     [Range(0.001f, 0.5f)]
     public float objectRotateSpeed = 0.07f;
     [Range(0.0f, 50.0f)]
@@ -52,6 +54,8 @@ public class ObjectGlide : MonoBehaviour
     {
         if (glide)
         {
+            catchUpspeed += catchUpMoveRate;
+
             if (!isAtDestination(destinationPos.transform.position))
             {
                 //if (arcHeight != 0)
@@ -61,7 +65,7 @@ public class ObjectGlide : MonoBehaviour
                 
                 distToTarget = (destinationPos.transform.position - glideObject.transform.position).magnitude;
 
-                float speed = baseMoveSpeed + modMoveSpeed * distToTarget;
+                float speed = baseMoveSpeed + (modMoveSpeed + catchUpspeed) * distToTarget;
 
                 if (arcHeight != 0)
                     glideObject.transform.position = Vector3.MoveTowards(glideObject.transform.position, destinationPos.transform.position + CalcArcHeight(), speed);
@@ -93,8 +97,14 @@ public class ObjectGlide : MonoBehaviour
         destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
         reachedDestination = false;
         glide = true;
+        catchUpMoveRate = 0;
 
         this.enabled = true;
+    }
+
+    public void SetCatchUpSpeedMod(float val)
+    {
+        catchUpMoveRate = val;
     }
 
     public void GlideAndLookMovingTarget(GameObject gobject, GameObject newDestionation, Vector3 Offset, GameObject target, float arc, float baseSpeed, float speedMod)
@@ -113,7 +123,7 @@ public class ObjectGlide : MonoBehaviour
         destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
         reachedDestination = false;
         glide = true;
-
+        catchUpMoveRate = 0;
         this.enabled = true;
     }
 
@@ -133,7 +143,7 @@ public class ObjectGlide : MonoBehaviour
         destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
         reachedDestination = false;
         glide = true;
-
+        catchUpMoveRate = 0;
         this.enabled = true;
     }
     #endregion
@@ -154,7 +164,7 @@ public class ObjectGlide : MonoBehaviour
         destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
         reachedDestination = false;
         glide = true;
-
+        catchUpMoveRate = 0;
         this.enabled = true;
     }
 
@@ -171,7 +181,7 @@ public class ObjectGlide : MonoBehaviour
         destMagnitude = new Vector3(Mathf.Abs(startPos.x - destinationPos.transform.position.x), 0, Mathf.Abs(startPos.z - destinationPos.transform.position.z)).magnitude;
         reachedDestination = false;
         glide = true;
-
+        catchUpMoveRate = 0;
         this.enabled = true;
     }
 

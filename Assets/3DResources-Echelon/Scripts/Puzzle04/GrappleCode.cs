@@ -160,7 +160,22 @@ public class GrappleCode : MonoBehaviour
                 ropeEnd.transform.position = PC04.startPoint.transform.position;
 
                 failGrapple = false;
-                GameControllerPuzzle04.instance.currPuzzle.turnOnVisualVectors(true);
+                GameControllerPuzzle04.instance.visVector.ToggleVisualVectors(true);
+                VisVectController.axis.ToggleAxis(GameControllerPuzzle04.instance.P04W.axisOn);
+                VisVectController.grid.ToggleGrid(GameControllerPuzzle04.instance.P04W.gridOn);
+                VisVectController.grid.ToggleXYplane(GameControllerPuzzle04.instance.P04W.XYtoggle);
+                VisVectController.grid.ToggleYZplane(GameControllerPuzzle04.instance.P04W.YZtoggle);
+                VisVectController.grid.ToggleXZplane(GameControllerPuzzle04.instance.P04W.XZtoggle);
+                VisVectController.projections.ToggleProjections(GameControllerPuzzle04.instance.P04W.projectionsOn);
+                VisVectController.projections.ToggleXYprojections(GameControllerPuzzle04.instance.P04W.XYtoggle);
+                VisVectController.projections.ToggleYZprojections(GameControllerPuzzle04.instance.P04W.YZtoggle);
+                VisVectController.projections.ToggleXZprojections(GameControllerPuzzle04.instance.P04W.XZtoggle);
+                VisVectController.anchors.ToggleAnchors(GameControllerPuzzle04.instance.P04W.anchorsOn);
+                VisVectController.anchors.ToggleXYanchors(GameControllerPuzzle04.instance.P04W.XYtoggle);
+                VisVectController.anchors.ToggleYZanchors(GameControllerPuzzle04.instance.P04W.YZtoggle);
+                VisVectController.anchors.ToggleXZanchors(GameControllerPuzzle04.instance.P04W.XZtoggle);
+
+
                 GameControllerPuzzle04.instance.P04W.SubmitButton.interactable = true;
                 DemoAnim = true;
 
@@ -170,7 +185,7 @@ public class GrappleCode : MonoBehaviour
 
     public void GrappleEventListener()
     {
-        demoTarget.transform.position = GameControllerPuzzle04.instance.visVector.vector2end.transform.position;
+        demoTarget.transform.position = VisVectController.playerVectors.GetAnswerEnd();
 
         if (GameControllerPuzzle04.instance.P04W.card1 != null &&
             GameControllerPuzzle04.instance.P04W.card1 != null &&
@@ -179,7 +194,7 @@ public class GrappleCode : MonoBehaviour
             gameObject.SetActive(true);
             enabled = true;
             DemoAnim = true;
-            SetDemoTargetPos(GameControllerPuzzle04.instance.visVector.vector2end.transform.position);
+            SetDemoTargetPos(VisVectController.playerVectors.GetAnswerEnd());
         }
         else
         {
