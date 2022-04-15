@@ -596,14 +596,55 @@ public class UFO_PuzzleManager : MonoBehaviour
         {
             return generate_solution(Num);
 
-        }
+        }        
+
         GameRootMaster.player.bunny.answer = test_vec.ToString();
         GameRootMaster.player.bunny.a = Choices[0].ToString();
         GameRootMaster.player.bunny.b = Choices[1].ToString();
         GameRootMaster.player.bunny.c = Choices[2].ToString();
         GameRootMaster.player.bunny.d = Choices[3].ToString();
+        GameRootMaster.player.bunny.idealSteps = FindIdeal(Mul, Choices);
 
         return test_vec;
+    }
+
+    private int FindIdeal(int[] muls, Vector2[] choices)
+    {
+        int moveTemp, result;
+        Vector2 vectTemp;
+        //initial Ideal: sum of scalar values plus 2 for moving the answer cards
+        result = 0;
+
+        //choice 0 and 2 are scalar multiples
+        vectTemp = muls[0] * choices[0]; //answer given by generation
+        moveTemp = muls[0];
+        for (int i = -10; i < 10; i++)
+        {
+            if (vectTemp == i * choices[2])
+            {
+                moveTemp = Mathf.Abs(i);
+                break;
+            }
+        }
+        result += moveTemp;
+
+
+        //choices 1 and 3 are scalar multiples
+        vectTemp = muls[1] * choices[1]; //answer given by generation
+        moveTemp = muls[1];
+        for (int i = -10; i < 10; i++)
+        {
+            if (vectTemp == i * choices[3])
+            {
+                moveTemp = Mathf.Abs(i);
+                break;
+            }
+        }
+        result += moveTemp;
+
+        result += 2; //two card selection moves
+
+        return result;
     }
 
     public void enforce_quadrants(int quad_1, int quad_2)

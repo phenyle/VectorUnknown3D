@@ -70,12 +70,12 @@ public class rotate_camera : MonoBehaviour
             reset_camera();
 
         //SmoothDamp to move the camera to the follow position, then retarget the center of the board
-        transform.position = Vector3.SmoothDamp(transform.position, follow.transform.position, ref velocity, 0.3f);
-        transform.LookAt(target);
+        //transform.position = Vector3.SmoothDamp(transform.position, follow.transform.position, ref velocity, 0.3f);
+        //transform.LookAt(target);
 
-        reflect.transform.position = Vector3.SmoothDamp(reflect.transform.position, follow_reflect.transform.position, ref reflect_velocity, 0.3f);
-        reflect.transform.LookAt(target);
-        keypress = false;
+        //reflect.transform.position = Vector3.SmoothDamp(reflect.transform.position, follow_reflect.transform.position, ref reflect_velocity, 0.3f);
+        //reflect.transform.LookAt(target);
+        //keypress = false;
     }
 
     void spin_vertical(float degree, int direction)
