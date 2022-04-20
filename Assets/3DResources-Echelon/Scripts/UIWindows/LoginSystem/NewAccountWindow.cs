@@ -29,6 +29,11 @@ public class NewAccountWindow : LoginSystem
         panel.SetActive(false);
     }
 
+    public void LookForUsername()
+    {
+
+    }
+
     /// <summary>
     /// This is the function called by the LoginSystem when the GFSU doesn't return and
     /// essentially times out.  LoginEvents calls this if the system times out, but the
@@ -39,6 +44,8 @@ public class NewAccountWindow : LoginSystem
         GameRootMaster.GSFU.retrieved = false;
         checkingGFSU = false;
         connectionTime = 0;
+        loginEvents.RemoveAllListeners();
+        SendToGoogle.callback.RemoveAllListeners();
 
         tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
 
@@ -80,6 +87,8 @@ public class NewAccountWindow : LoginSystem
         creatingAcct = false;
         checkingGFSU = false;
         connectionTime = 0;
+        loginEvents.RemoveAllListeners();
+        SendToGoogle.callback.RemoveAllListeners();
 
         tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
 
@@ -162,8 +171,14 @@ public class NewAccountWindow : LoginSystem
                     }
                     else
                     {
+                        messageEvents.AddListener(TimedOut);
                         popUpsWindow.AwaitPopUp(false);
                         popUpsWindow.awaitServerPop.SetStatus("Checking Connection");
+
+                        checkingGFSU = true;
+                        connectionTime = 0.0f;
+                        ToggleInteractable(false);
+
                         query = queryType.creating;
                         SendToGoogle.callback.AddListener(ConnectionsCheck);
                         GameRootMaster.GSFU.VerifyDatabaseConnection();
@@ -249,4 +264,15 @@ public class NewAccountWindow : LoginSystem
         dualLoginWindow.password.text = na_pass1.text;
         ClearNewAcctFields();
     }
+
+    public void TimedOut()
+    {
+        messageEvents.RemoveAllListeners();
+        connectionTime = 0.0f;
+        checkingGFSU = false;
+        popUpsWindow.generalPopPanel.SetActive(false);
+        popUpsWindow.awaitServerPop.panel.SetActive(false);
+        ToggleInteractable(true);
+    }
+
 }

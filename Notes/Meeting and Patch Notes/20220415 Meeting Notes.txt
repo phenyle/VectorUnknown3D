@@ -1,0 +1,21 @@
+
+>>>> BUNNY BUGS <<<<
+Clean Attempts String on Level Start
+
+Fix Menu Sprites
+
+Crash bug when Extending beyond play board
+
+Save player times (both in records and in bunny)
+
+Bunny Minimap Color Contrasting fixes
+
+Speed up Zoom In/Out with Keyboard
+
+Camera Reset Button
+
+Level3 key/lock bug, lock not unlocking.
+
+AdminLogin?
+
+Attempts Log UI scale fix

@@ -24,7 +24,7 @@ public class LoginSystem : MonoBehaviour
 
     protected static bool checkingGFSU = false;
     [ReadOnly]
-    public float connectionTime = 0.0f;
+    public static float connectionTime = 0.0f;
     private static float connectionAttmpTimeout = 10.0f;
 
     protected static bool loadingPlayer = false;
@@ -124,8 +124,10 @@ public class LoginSystem : MonoBehaviour
                 break;
 
             case queryType.creating: //query type: Joining Session
+                popUpsWindow.awaitServerPop.SetStatus("Creating Account");
                 loginEvents.AddListener(newAccountWindow.CreatingNewAccount);
-                SendToGoogle.callback.AddListener(newAccountWindow.CreatingIncrimentedAccount);
+                SendToGoogle.callback.AddListener(newAccountWindow.CreatingIncrimentedAccount);                
+                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", newAccountWindow.na_first.text.ToLower() + "." + newAccountWindow.na_last.text.ToLower(), false);              
                 break;
 
             case queryType.joining:
