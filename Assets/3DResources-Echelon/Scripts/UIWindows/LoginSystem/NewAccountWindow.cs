@@ -18,6 +18,7 @@ public class NewAccountWindow : LoginSystem
     public Dropdown na_education;
     public Dropdown na_schools;
     public InputField na_otherSchool;
+    public Button backButton;
 
     private bool na_otherSel = false;
 
@@ -245,6 +246,8 @@ public class NewAccountWindow : LoginSystem
         na_education.interactable = val;
         na_schools.interactable = val;
         na_otherSchool.interactable = val;
+        backButton.interactable = val;
+
     }
 
     public void ClickOkayGeneral()

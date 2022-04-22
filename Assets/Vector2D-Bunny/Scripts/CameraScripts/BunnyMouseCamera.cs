@@ -12,10 +12,9 @@ public class BunnyMouseCamera : MonoBehaviour
     public Transform rotCamera;
     public Transform[] cameraTarget;
     public int targetIndex = 0;
-    public float rotateSpeed = 1.0f;
-    public float zoomSpeed = 1.0f;
+    public float rotateSpeed = 1.25f;
+    public float zoomSpeed = 1f;
     public float maxZoomOut = 175.0f;
-    private CameraDragSurface dragController;
 
     private float distanceToTarget = 10;
     private Vector3 previousPosition;

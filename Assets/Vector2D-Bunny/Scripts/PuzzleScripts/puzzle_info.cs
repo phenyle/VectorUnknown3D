@@ -11,7 +11,7 @@ public class puzzle_info : MonoBehaviour {
 	public int display_upcoming_path;
 	public int display_past_paths;
 	public int game_mode;
-    public LineRenderer future, past;
+    public LineRenderer future, past, futureMinMap, pastMinMap;
 
     public bool tutorial;
 
@@ -30,14 +30,26 @@ public class puzzle_info : MonoBehaviour {
         }
 
         if (GetDisplayUpcomingPath() == 1)
+        {
             future.enabled = true;
+            futureMinMap.enabled = true;
+        }
         else
+        {
             future.enabled = false;
+            futureMinMap.enabled = false;
+        }
 
         if (GetDisplayPastPaths() == 1)
+        {
             past.enabled = true;
+            pastMinMap.enabled = true;
+        }
         else
+        {
             past.enabled = false;
+            pastMinMap.enabled = false;
+        }
     }
 
     GameObject[] FindGameObjectsWithName(string nameIt)
@@ -79,9 +91,7 @@ public class puzzle_info : MonoBehaviour {
         {
             level_data = go;          
         }
-        
-        
-        
+
         //GameObject level_data = GameObject.Find ("LevelData");
 		gui_select data = level_data.GetComponent< gui_select> ();
 

@@ -496,6 +496,9 @@ public class UFO_PuzzleManager : MonoBehaviour
 
     public void ResetGame()
     {
+        GameRootMaster.player.bunny.steps = "";
+        GameRootMaster.player.bunny.results = "";
+
         solutionFormat = "";
         solutionDisplaySet = false;
         if (levelFinished) SceneManager.LoadScene("menu_scene");
@@ -520,6 +523,9 @@ public class UFO_PuzzleManager : MonoBehaviour
 
     public void ResetScene()//Completely reset scene. Used in place of reset game method, which gave errors when players reset after collecting keys. This should fix that issue. 
     {
+        GameRootMaster.player.bunny.steps = "";
+        GameRootMaster.player.bunny.results = "";
+
         solutionFormat = "";
         solutionDisplaySet = false;
         if (levelFinished)
@@ -548,7 +554,7 @@ public class UFO_PuzzleManager : MonoBehaviour
         int[] Mul = new int[2]; //Container for the random constant that extends the length of the vectors
                                 // Adds two new vectors to the Choices array that are proportional to the first two vectors
                                 // i.e. Choices[0] and Choices[2] are linearly dependent 
-                                //      Choices[1] and Choices[3] are linearly dependent 
+                                // Choices[1] and Choices[3] are linearly dependent 
         for (int i = 0; i < 2; i++)
         {
             if (Num[i] <= 2)
@@ -558,7 +564,7 @@ public class UFO_PuzzleManager : MonoBehaviour
                 {          // To keep the vectors "nice", only certain constants can multiply Choices
                     int n = rnd.Next(2, 5); // If Mul[i]=6, Choices can be multiplied by 2,3,6 (Since 6 is divisible by 2,3,6)
                     if (n == 4) n = 6;       // 4 Maps to 6
-                    Choices[i + 2] = Choices[i] * n; // Add vector that is linearly dependent with Choices[i]
+                    Choices[i + 2] = Choices[i] * n; // Add vector that is linearly dependent with Choices[i]        
                 }
                 else if (Mul[i] == 10)
                 {    // If Mul[i]=10, Choices can be multiplied by 2,3,10
@@ -595,17 +601,34 @@ public class UFO_PuzzleManager : MonoBehaviour
         if (test_vec.x > 20 || test_vec.x < -20 || test_vec.y > 20 || test_vec.y < -20 || test_vec == Vector2.zero) //make sure goal is within boundaries and is not at origin, otherwise, regenerate
         {
             return generate_solution(Num);
+        }
 
-        }        
+        GameRootMaster.player.bunny.steps = "";
+        GameRootMaster.player.bunny.results = "";
 
         GameRootMaster.player.bunny.answer = test_vec.ToString();
+
         GameRootMaster.player.bunny.a = Choices[0].ToString();
         GameRootMaster.player.bunny.b = Choices[1].ToString();
         GameRootMaster.player.bunny.c = Choices[2].ToString();
         GameRootMaster.player.bunny.d = Choices[3].ToString();
+
+        GameRootMaster.player.bunny.x = Mul[0].ToString();
+        GameRootMaster.player.bunny.y = Mul[1].ToString();
+        GameRootMaster.player.bunny.k = FindScalar(Choices[0], Choices[2]).ToString();
+        GameRootMaster.player.bunny.j = FindScalar(Choices[1], Choices[3]).ToString();
+
         GameRootMaster.player.bunny.idealSteps = FindIdeal(Mul, Choices);
 
         return test_vec;
+    }
+
+    private int FindScalar(Vector2 orig, Vector2 scaled)
+    {
+        if (orig.x != 0)
+            return (int)(scaled.x / orig.x);
+        else
+            return (int)(scaled.y / orig.y);
     }
 
     private int FindIdeal(int[] muls, Vector2[] choices)

@@ -1959,7 +1959,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425d010c863f75b4da8f28528bb8cad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
   awaitServerPop: {fileID: 0}
   generalPopPanel: {fileID: 0}
   panel: {fileID: 7957680597297896653}
@@ -3015,7 +3014,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e1aff6f3de0cd4986eb50f50a5425f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
   panel: {fileID: 7957680595921339520}
   na_first: {fileID: 7957680595829487856}
   na_last: {fileID: 7957680595466804472}
@@ -3024,6 +3022,7 @@ MonoBehaviour:
   na_education: {fileID: 7957680597342887872}
   na_schools: {fileID: 7957680595811083076}
   na_otherSchool: {fileID: 7957680597191469902}
+  backButton: {fileID: 7957680596143971779}
 --- !u!1 &7957680595874765643
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,7 +3454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002cd785ebe06e14684e42555157148c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
 --- !u!1 &7957680595978220101
 GameObject:
   m_ObjectHideFlags: 0
@@ -6483,7 +6481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 991183bc36fe92c42aa3ad91716c2870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
   panel: {fileID: 7957680597224650840}
   username: {fileID: 7957680596695853377}
   password: {fileID: 7957680597257959600}
@@ -6550,7 +6547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaadd68baed271d439ee31c3d8d56fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
   panel: {fileID: 7957680595636287389}
   sessionName: {fileID: 7957680595428234762}
   btn_Join: {fileID: 7957680597133250400}
@@ -7517,7 +7513,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 125f171dab12b2549b3ae9691ceed49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionTime: 0
   awaitServerPop: {fileID: 0}
   generalPopPanel: {fileID: 7957680597099556437}
 --- !u!1 &7957680597092577073
