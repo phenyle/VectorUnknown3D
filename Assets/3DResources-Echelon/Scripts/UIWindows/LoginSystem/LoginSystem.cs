@@ -25,7 +25,7 @@ public class LoginSystem : MonoBehaviour
     protected static bool checkingGFSU = false;
     [ReadOnly]
     public static float connectionTime = 0.0f;
-    private static float connectionAttmpTimeout = 10.0f;
+    private static float connectionAttmpTimeout = 15.0f;
 
     protected static bool loadingPlayer = false;
     protected static bool newAcctCheck = false;
@@ -77,7 +77,7 @@ public class LoginSystem : MonoBehaviour
                     loginEvents.Invoke();
                 else
                 {
-                    //Connection time out
+                    //Connection time out                    
                     popUpsWindow.GeneralPopUp("ERROR:\nConnection Timed Out");
                     popUpsWindow.awaitServerPop.panel.SetActive(false);
                     checkingGFSU = false;

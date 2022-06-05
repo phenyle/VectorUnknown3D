@@ -41606,6 +41606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!1 &818186948
 GameObject:
   m_ObjectHideFlags: 0
@@ -41950,6 +41951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!1 &895704599
 GameObject:
   m_ObjectHideFlags: 0
@@ -42235,6 +42237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!114 &972212669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62834,7 +62837,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1392325223
 RectTransform:
   m_ObjectHideFlags: 0
@@ -63597,6 +63600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!1001 &1553710682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64553,6 +64557,7 @@ MonoBehaviour:
   cameraHorizontal: 0
   cameraVertical: 0
   movesList: 
+  recordsMoveList: 
   puzzleData:
     obsID: 0
     obsTime: 0
@@ -66122,6 +66127,12 @@ GameObject:
 --- !u!1 &1920456139 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7500924170378970949, guid: 4a8ceae58fb6f584eba5b4999d36b1a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1920456136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1920456140 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6481293919233197144, guid: 4a8ceae58fb6f584eba5b4999d36b1a4,
     type: 3}
   m_PrefabInstance: {fileID: 1920456136}
   m_PrefabAsset: {fileID: 0}
@@ -76101,6 +76112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!114 &1973331696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86098,6 +86110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1920456138}
+  lockAxis: 0
 --- !u!114 &2073651627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86400,6 +86413,11 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4131372191916778480, guid: ec5194b2318e9ea49b009e38ee9f416f,
+        type: 3}
+      propertyPath: mainCam
+      value: 
+      objectReference: {fileID: 1920456140}
     - target: {fileID: 4431624481505372612, guid: ec5194b2318e9ea49b009e38ee9f416f,
         type: 3}
       propertyPath: m_textInfo.lineCount

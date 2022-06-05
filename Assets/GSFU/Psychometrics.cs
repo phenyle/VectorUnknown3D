@@ -25,7 +25,7 @@ public class Psychometrics : MonoBehaviour
             int second = DateTime.Now.Second;
             sessionID = (month + "-" + day + "-" + year + "-" + hour + "-" + minute + "-" + second);
             logEvent(sessionID);
-            GameRootMaster.player.bunny.attemptDate = day + "/" + month + "/" + year + "(" + hour + ":" + minute + ":" + second + ")";
+            GameRootMaster.player.bunny.attemptDate = year + "/" + month + "/" + day + "(" + hour + ":" + minute + ":" + second + ")";
         }
     }
 
@@ -50,7 +50,9 @@ public class Psychometrics : MonoBehaviour
         steps.Add(step);
         GameRootMaster.player.bunny.steps += step + "\n";
         GameRootMaster.player.bunny.results += result + "\n";
+        GameRootMaster.player.bunny.time = scorekeeper.GetGameTime().ToString("0.00");
     }
+
 
     public static void sendData()
     {

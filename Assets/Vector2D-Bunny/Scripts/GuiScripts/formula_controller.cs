@@ -154,6 +154,7 @@ public class formula_controller : MonoBehaviour
             {
                 Psychometrics.logEvent(print_formula());
                 Psychometrics.logDatabaseEvent(databasePrintFormula(), databasePrintResult());
+
             }
             else
             {

@@ -19,3 +19,37 @@ Level3 key/lock bug, lock not unlocking.
 AdminLogin?
 
 Attempts Log UI scale fix
+
+
+================================================
+UPDATES 20220505
+Menus Sprites Fixed (changed to be more "open")
+
+Player times now apart of database:
+	Time saved as part of PlayerData
+	Updates time with each new attempt
+	Fixed a bug with the time not resetting on new level load
+
+Bunny Minmap color contrasts tweaked and fixed
+
+Camera zoom controls improved and sped up
+
+Fixed Wrong User/Pass error not displaying when logging in
+
+Added a Feature to Puzzle3 Camera:
+	MiniMap camera now rotates to replicate where the player cam is
+	Minimap text items face the minimap camera
+	Minimap now shows/hides with being in the question portal
+
+Changes to Puzzle2 VisVect
+	VisVect now "live updates" when a matrix is shown
+	Selecting a matrix auto-changes camera to top down and enables the Lattice
+	The lattice position shifts to the new changes
+	Color changes to Lattice
+		Axis colors now shown in 2 shades
+		X axis positive is blue, negative is cyan
+		Z axis positive is red, negative is pink
+	Fixes to Lattice Incriment coloring
+	Incriments should properly display at the 5 and 10 marks
+	Incriments are now Yellow and Green
+

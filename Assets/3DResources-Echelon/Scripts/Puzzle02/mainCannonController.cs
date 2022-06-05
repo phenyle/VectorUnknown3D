@@ -178,6 +178,7 @@ public class mainCannonController : MonoBehaviour
         else
             GameRoot3D.moveEvents.AddListener(CannonBallMiss);
         tempBall.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.moveEvents);
+        tempBall.GetComponent<ObjectGlide>().SetMoveSpeeds(0.6f, 0.0f, 0.0f);
         tempBall.GetComponent<ObjectGlide>().GlideOnly(temp, target, tempBall.transform.position);
 
         GCP02.chaseCamera.transform.position = GCP02.mainCamera.transform.position;
@@ -189,7 +190,7 @@ public class mainCannonController : MonoBehaviour
 
         GameRoot3D.camEvents.AddListener(EndCamChase);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
-        GCP02.chaseCamera.GetComponent<ObjectGlide>().SetObjectMoveSpeed(0.2f);
+        GCP02.chaseCamera.GetComponent<ObjectGlide>().SetMoveSpeeds(0.4f, 0.0f, 0.01f);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(GCP02.chaseCamera, (target - target.normalized *20) + Vector3.up*15, temp, GCP02.mainCamera.transform.position, -5f);
 
 

@@ -206,6 +206,7 @@ public class PlayerData : MonoBehaviour
         public string y;
         public string k;
         public string j;
+        public string time;
         public string steps;
         public string results;
 

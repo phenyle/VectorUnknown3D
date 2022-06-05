@@ -124,6 +124,7 @@ public class PuzzleController02 : MonoBehaviour
                                             new int[3]{ 2, 0, -3 },
                                             };
 
+    public string debugAnswer = "";
     public string debugAnsVector = "";
     public string debugAnsMatrix = "";
     public string debugVectrList = "";
@@ -205,6 +206,14 @@ public class PuzzleController02 : MonoBehaviour
 
     public void SetPosition(Vector3 pos)
     {
+        foreach (int[][] matrix in matrixList)
+        {
+            debugMatrxList += "{{ " + matrix[0][0].ToString() + ", " + matrix[0][1].ToString() + " }, { " + matrix[1][0].ToString() + ", " + matrix[1][1].ToString() + " }}\n";
+        }
+        debugAnsMatrix = "{{ " + ansMatrix[0][0].ToString() + ", " + ansMatrix[0][1].ToString() + " }, { " + ansMatrix[1][0].ToString() + ", " + ansMatrix[1][1].ToString() + " }}";
+        debugAnsVector = "{ " + ansVector[0].ToString() + ", " + ansVector[1].ToString() + " }";
+
+
         shipParent.transform.position = pos;
         shipPos = new int[3];
         shipPos[0] = (int)pos.x;
@@ -368,6 +377,7 @@ public class PuzzleController02 : MonoBehaviour
         int x = (ansVector[0] * ansMatrix[0][0]) + (ansVector[1] * ansMatrix[1][0]);
         int z = (ansVector[0] * ansMatrix[0][1]) + (ansVector[1] * ansMatrix[1][1]);
 
+        debugAnswer = "{" + x.ToString() + ", " + z.ToString() + "}";
         //alter ship position if changed to match output of matrix multiplication
         SetPosition(new Vector3(x, 0, z));
     }
@@ -621,13 +631,6 @@ public class PuzzleController02 : MonoBehaviour
 
     public void AltCreateMatrixList()
     {
-        Debug.LogWarning("Making New Matrix For ShipID# " + id.ToString() + "\tAttempt# " + attempt.ToString());
-
-        matrixList = new List<int[][]>();
-        for(int i = 0; i < 4; i++)
-        {
-            matrixList.Add(AltGenerateAnswerMatrix());
-        }
         ansMatrix = matrixList[Random.Range(0, 4)];
     }
 
@@ -643,7 +646,7 @@ public class PuzzleController02 : MonoBehaviour
         float theta;
 
         Vector2 x1 = new Vector2(1, 0);
-        theta = Random.Range(0.0f, 6.28f);
+        theta = Random.Range(0.0f, 2*Mathf.PI);
 
         float s = Mathf.Cos(theta) * x1.x - Mathf.Sin(theta) * x1.y;
         float t = Mathf.Sin(theta) * x1.x + Mathf.Cos(theta) * x1.y;
@@ -697,15 +700,28 @@ public class PuzzleController02 : MonoBehaviour
         ansVector = AltGenerateAnswerVector2();
         vectorList.Add(ansVector);
 
-        for(int i = 0; i < 3; i++)
+        //make modified copies of the correct vector as redherrings
+        for (int i = 0; i < 3; i++)
         {
-            vectorList.Add(new int[] { (int)Random.Range(-10, 10) + ansVector[0], (int)Random.Range(-10, 10) + ansVector[1] });
+            int[] temp = new int[] { (int)Random.Range(-10, 10) + ansVector[0], (int)Random.Range(-10, 10) + ansVector[1] };
+            if (vectorList.Contains(temp))
+                i--;
+            else
+                vectorList.Add(temp);
         }
 
+        //Shuffle Cards
+        int count = vectorList.Count;
+        int last = count - 1;
+        for (int i = 0; i < last; i++)
+        {
+            int r = Random.Range(i, count);
+            int[] temp = vectorList[i];
+            vectorList[i] = vectorList[r];
+            vectorList[r] = temp;
+        }
 
         AdjustShipPos();
-
-        //make modified copies of the correct vector as redherrings
     }
 
 
@@ -796,16 +812,16 @@ public class PuzzleController02 : MonoBehaviour
 
         if(!ShipInBounds( resultPos ) || !ShipsSpacedOut( resultPos ))
         {
-            matrixList.Clear();
-            matrixList.TrimExcess();
-            ansMatrix = new int[2][];
+            //matrixList.Clear();
+            //matrixList.TrimExcess();
+            //ansMatrix = new int[2][];
             vectorList.Clear();
             vectorList.TrimExcess();
             ansVector = new int[2];
             attempt++;
             Debug.LogWarning("ShipID# " + id.ToString() + "\tCleared Lists\nMatrixCount: " + matrixList.Count().ToString() + "\tVectorCount: " + vectorList.Count().ToString());
-            AltCreateMatrixList();
-            AltCreateVectorsList();
+            //AltCreateMatrixList();
+            return AltGenerateAnswerVector2();
         }
 
         return new int[2] { alpha, beta };
@@ -928,4 +944,8 @@ public class PuzzleController02 : MonoBehaviour
         return retRanges;
     }
 
-}
+    public void SetGameController(GameControllerPuzzle02 controller)
+    {
+        GCP02 = controller;
+    }
+}   

@@ -10,7 +10,7 @@ public class Puzzle02Window : WindowRoot
     private GameControllerPuzzle02 GCP02;
 
     private GameObject stage01;
-    private bool showOverlay = false;
+    public bool showOverlay = false;
     [HideInInspector]
     public bool showTargetLines = false;
 
@@ -21,6 +21,8 @@ public class Puzzle02Window : WindowRoot
     public Text txt_Complete;
     public Slider slider_Complete;
     public Text txt_Time;
+
+    public Button togCamera, togLattice, togLines;
 
     private void Start()
     {
@@ -70,6 +72,23 @@ public class Puzzle02Window : WindowRoot
     public void SetTime(string time)
     {
         txt_Time.text = time;
+    }
+
+    public void OnCameraSwitch(bool topView)
+    {
+        if (topView)
+        {
+            panelProgress.gameObject.SetActive(false);
+            togLattice.gameObject.SetActive(true);
+            togLines.gameObject.SetActive(true);
+        }
+        else
+        {
+            panelProgress.gameObject.SetActive(true);
+            togLattice.gameObject.SetActive(false);
+            togLines.gameObject.SetActive(false);
+
+        }
     }
 
     public void ClickChangeCamera()

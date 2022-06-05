@@ -236,6 +236,13 @@ public class ObjectGlide : MonoBehaviour
         objectMoveSpeed = val;
     }
 
+    public void SetMoveSpeeds(float baseSpeed, float modSpeed, float catchRate )
+    {
+        baseMoveSpeed = baseSpeed;
+        modMoveSpeed = modSpeed;
+        catchUpMoveRate = catchRate;
+    }
+
     public void SetObjectRotateSpeed(float val)
     {
         objectRotateSpeed = val;

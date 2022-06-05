@@ -24,7 +24,7 @@ public class scorekeeper : MonoBehaviour
     public Text time_display;
     public puzzle_info info;
     public UFO_PuzzleManager manager;
-    private float game_time;
+    private static float game_time;
     private bool active = true;
     private static int numAttempts;
     private static int maxAttempts;
@@ -91,8 +91,12 @@ public class scorekeeper : MonoBehaviour
         }
     }
 
-    void Start()
+    public void Start()
     {
+        time_display.text = "0:00";
+        game_time = 0.0f;
+        active = true;
+        numAttempts = 0;
     }
 
     void Update()
@@ -109,6 +113,16 @@ public class scorekeeper : MonoBehaviour
     public void toggle()
     {// on / off switch
         active = !active;
+    }
+
+    public static float GetGameTime()
+    {
+        return game_time;
+    }
+
+    public void Init()
+    {
+        
     }
 
     public void generate_score()

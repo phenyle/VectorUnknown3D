@@ -571,6 +571,8 @@ public class GameControllerPuzzle03 : GameControllerRoot
         GameRoot3D.instance.ShowCursor(true);
         isInQuestion = true;
         conversation(GameObject.Find("QuestionTrigger").GetComponent<QuestionTrigger>().convoNumber);
+        ConsoleCam.activeTrack = true;
+        mainCamera.transform.Find("Canvas").gameObject.SetActive(true);
 
         CamGlideToPuzzle();
         isTriggerQuestion = true;
@@ -591,6 +593,9 @@ public class GameControllerPuzzle03 : GameControllerRoot
         trigger.GetComponent<Collider>().enabled = false;
 
         CamGlideToPlayer();
+        ConsoleCam.activeTrack = false;
+        mainCamera.transform.Find("Canvas").gameObject.SetActive(false);
+
         GameRoot3D.instance.LockPlayerAndCam(false);
         GameRoot3D.isPuzzleLock = false;
         DialogueManager.isPuzzleLock = false;

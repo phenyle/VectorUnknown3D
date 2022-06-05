@@ -21,7 +21,9 @@ public class QuestionTrigger : MonoBehaviour
             if (exiting)
                 alarmCollider();
             else
+            {
                 GCP03.enterPuzzle();
+            }
         }
     }
 

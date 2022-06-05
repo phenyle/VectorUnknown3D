@@ -808,7 +808,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2681076100986072847
 Transform:
   m_ObjectHideFlags: 0
@@ -853,7 +853,10 @@ MonoBehaviour:
   xMax: 75
   zMin: 20
   zMax: 100
+  rValue: 10
+  id: 0
   ansVector: 
+  debugAnswer: 
   debugAnsVector: 
   debugAnsMatrix: 
   debugVectrList: 
@@ -866,6 +869,7 @@ MonoBehaviour:
     e_vect: 
     i_vect: 
   attemptsList: 
+  attemptNum: 0
 --- !u!1 &2681076101234919493
 GameObject:
   m_ObjectHideFlags: 0

@@ -125,8 +125,11 @@ public class DualLogin : LoginSystem
         {
             Debug.Log("LOGIN ERROR: wrong user/pass");
             ClearFields();
-            //errorText.text = "Username or password Incorrect or Not Found";
-            //panelError.gameObject.SetActive(true);
+
+            popUpsWindow.GeneralPopUp("LOGIN ERROR:\nWrong username/password");
+            popUpsWindow.awaitServerPop.panel.SetActive(false);
+            checkingGFSU = false;
+            connectionTime = 0.0f;
         }
 
     }
@@ -134,8 +137,8 @@ public class DualLogin : LoginSystem
     public void TimedOut()
     {
         messageEvents.RemoveAllListeners();
-        connectionTime = 0.0f;
         checkingGFSU = false;
+        connectionTime = 0.0f;
         popUpsWindow.generalPopPanel.SetActive(false);
         popUpsWindow.awaitServerPop.panel.SetActive(false);
         ToggleInteractable(true);

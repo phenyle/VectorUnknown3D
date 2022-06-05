@@ -58,6 +58,7 @@ public class UFO_PuzzleManager : MonoBehaviour
         if (puzzle_info.tutorial == false)
         {
             scorekeep = GameObject.FindGameObjectWithTag("Score").GetComponent<scorekeeper>();
+            scorekeep.Start();
             Solution = new Vector2(0, 0);
             solutionFormat = "";
             solutionDisplaySet = false;
