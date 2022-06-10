@@ -185,6 +185,7 @@ public class PuzzleController02 : MonoBehaviour
         puzzleData.obsTime = 0.0f;
         attemptNum = 0;
         attemptsList = "";
+        SetShipDirection();
     }
 
 
@@ -220,12 +221,13 @@ public class PuzzleController02 : MonoBehaviour
         shipPos[2] = (int)pos.z;
         SetText();
         SetLine();
+        SetShipDirection();
     }
 
 
     public void SetShipDirection()
     {
-        shipObject.transform.Rotate(Vector3.up, Random.Range(0.0f, Mathf.PI * 2));
+        shipObject.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
     }
 
 
@@ -602,8 +604,8 @@ public class PuzzleController02 : MonoBehaviour
     private void SetLine()
     {
         shipLine.positionCount = 2;
-        shipLine.SetPosition(0, Vector3.zero + Vector3.up * 10);
-        shipLine.SetPosition(1, new Vector3(shipParent.transform.position.x, 0, shipParent.transform.position.z) + Vector3.up * 10);
+        shipLine.SetPosition(0, Vector3.zero + Vector3.up * 11);
+        shipLine.SetPosition(1, new Vector3(shipParent.transform.position.x, 0, shipParent.transform.position.z) + Vector3.up * 11);
         shipLine.material = lineMatDef;
         shipLine.gameObject.SetActive(false);
     }

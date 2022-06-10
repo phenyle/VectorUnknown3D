@@ -79,7 +79,10 @@ public class Puzzle02Window : WindowRoot
         if (topView)
         {
             panelProgress.gameObject.SetActive(false);
-            togLattice.gameObject.SetActive(true);
+            if(GCP02.Difficulty != 3)
+                togLattice.gameObject.SetActive(true);
+            else
+                togLattice.gameObject.SetActive(false);
             togLines.gameObject.SetActive(true);
         }
         else

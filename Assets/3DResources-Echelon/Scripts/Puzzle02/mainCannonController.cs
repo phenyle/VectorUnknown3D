@@ -58,9 +58,7 @@ public class mainCannonController : MonoBehaviour
             Vector3 angleToTarget = ((GCP02.currAnswer + new Vector3(0, yawBase.transform.position.y, 0)) - yawBase.transform.position).normalized;
             if (GCP02.currAnswer.x != 0 && GCP02.currAnswer.z != 0)
                 if(Vector3.Angle(cannonCurrForward, angleToTarget) > 0)
-                    yawBase.transform.Rotate(Vector3.up, Vector3.Angle(cannonCurrForward, angleToTarget) * rotateSpeed);
-                else
-                    yawBase.transform.Rotate(Vector3.up, -Vector3.Angle(cannonCurrForward, angleToTarget) * rotateSpeed);
+                    yawBase.transform.Rotate(Vector3.up, Vector3.SignedAngle(cannonCurrForward, angleToTarget, Vector3.up) * rotateSpeed);
 
 
             if (Vector3.Angle(cannonCurrForward, angleToTarget) < angleToFire)
@@ -188,8 +186,8 @@ public class mainCannonController : MonoBehaviour
         GCP02.chaseCamera.SetActive(true);
         GCP02.chaseCamera.GetComponent<Camera>().enabled = true;
 
-        GameRoot3D.camEvents.AddListener(EndCamChase);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
+        GameRoot3D.camEvents.AddListener(EndCamChase);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().SetMoveSpeeds(0.4f, 0.0f, 0.01f);
         GCP02.chaseCamera.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(GCP02.chaseCamera, (target - target.normalized *20) + Vector3.up*15, temp, GCP02.mainCamera.transform.position, -5f);
 
@@ -199,6 +197,7 @@ public class mainCannonController : MonoBehaviour
 
     public void EndCamChase()
     {
+        GCP02.mainCamera.SetActive(true);
         GCP02.mainCamera.GetComponent<Camera>().enabled = true;
         GCP02.chaseCamera.GetComponent<Camera>().enabled = false;
         GCP02.chaseCamera.SetActive(false);

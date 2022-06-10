@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class VisVect2 : MonoBehaviour
 {
     //Axis
@@ -31,7 +32,11 @@ public class VisVect2 : MonoBehaviour
     public int LimitZ = 300;
     public int LimitX = 300;
     private Vector3 vectX { get; set; }
+    private bool xSet = false;
     private Vector3 vectZ { get; set; }
+    private bool zSet = false;
+    private Vector3 xCross;
+    private Vector3 zCross;
 
     //Settings
     private int numOfLines = 200;
@@ -72,8 +77,10 @@ public class VisVect2 : MonoBehaviour
 
         axisXneg = Instantiate(axisXpos).GetComponent<LineRenderer>();
         axisXneg.transform.SetParent(transform);
+        axisXneg.transform.position = axisXpos.transform.position;
         axisZneg = Instantiate(axisZpos).GetComponent<LineRenderer>();
         axisZneg.transform.SetParent(transform);
+        axisZneg.transform.position = axisZpos.transform.position;
         axisXneg.startColor = Color.cyan;
         axisXneg.endColor = Color.cyan;
 
@@ -81,6 +88,7 @@ public class VisVect2 : MonoBehaviour
         axisZneg.endColor = Color.magenta;
 
         ToggleLattice(false);
+        ToggleVectorLine(false);
     }
 
     // Update is called once per frame
@@ -90,13 +98,40 @@ public class VisVect2 : MonoBehaviour
         {
             //Vector3 temp1 = Vector3.RotateTowards(axisXpos.GetPosition(1).normalized, vectX.normalized, 0.01f, 0.1f);
             //Vector3 temp2 = Vector3.RotateTowards(axisZpos.GetPosition(1).normalized, vectZ.normalized, 0.01f, 0.1f);
+            Vector3 temp1 = vectX * numOfLines;
+            Vector3 temp2 = vectZ * numOfLines;
+            xCross = vectZ;
+            zCross = vectX;
+            if (axisXpos.GetPosition(1) != vectX * numOfLines)
+            {
+                temp1 = Vector3.RotateTowards(axisXpos.GetPosition(1), vectX * numOfLines, 0.01f, 50);
+                if ((axisXpos.GetPosition(1) - vectX * numOfLines).magnitude < 0.1f)
+                    temp1 = vectX * numOfLines;
 
-            Vector3 temp1 = Vector3.RotateTowards(axisXpos.GetPosition(1).normalized, vectX.normalized, 0.005f, 0.01f);
-            Vector3 temp2 = Vector3.RotateTowards(axisZpos.GetPosition(1).normalized, vectZ.normalized, 0.005f, 0.01f);
+                axisXpos.SetPosition(1, temp1);
+                xCross = CrossNormal(axisXpos.GetPosition(1), Vector3.down).normalized * vectZ.magnitude;
+            }
+            if (axisZpos.GetPosition(1) != vectZ * numOfLines)
+            {
+                temp2 = Vector3.RotateTowards(axisZpos.GetPosition(1), vectZ * numOfLines, 0.01f, 50);
+                if((axisZpos.GetPosition(1) - vectZ * numOfLines).magnitude < 0.1f)
+                    temp2 = vectZ * numOfLines;
 
+                axisZpos.SetPosition(1, temp2);
+                zCross = CrossNormal(axisZpos.GetPosition(1), Vector3.down).normalized * vectX.magnitude;
+            }
+
+            if (axisXpos.GetPosition(1) == vectX * numOfLines &&
+                axisZpos.GetPosition(1) == vectZ * numOfLines)
+            {
+                xCross = vectZ;
+                zCross = vectX;
+                updateLattice = false;
+            }
 
             SetMasterAxis(temp1, temp2);
         }
+
     }
     
     public void ToggleLattice(bool val)
@@ -108,7 +143,10 @@ public class VisVect2 : MonoBehaviour
 
         lattice1Lines.SetActive(val);
         lattice2Lines.SetActive(val);
+    }
 
+    public void ToggleVectorLine(bool val)
+    {
         vectorLine.gameObject.SetActive(val);
         vectorPoint.SetActive(val);
     }
@@ -126,41 +164,51 @@ public class VisVect2 : MonoBehaviour
 
     private void SetMasterAxis(Vector3 mat1, Vector3 mat2)
     {
-        if (mat1 != Vector3.zero)
-        {
-            XisZero = false;
-            axisXpos.SetPosition(0, Vector3.zero);
-            axisXpos.SetPosition(1, mat1.normalized * 500);
-            axisXneg.SetPosition(0, Vector3.zero);
-            axisXneg.SetPosition(1, mat1.normalized * -500);
-        }
-        else
-        {
-            XisZero = true;
-            lattice1Lines.SetActive(false);
-        }
+        //if (mat1 != Vector3.zero)
+        //{
+        //    XisZero = false;
+        //    axisXpos.SetPosition(0, Vector3.zero);
+        //    axisXpos.SetPosition(1, mat1.normalized * 500);
+        //    axisXneg.SetPosition(0, Vector3.zero);
+        //    axisXneg.SetPosition(1, mat1.normalized * -500);
+        //}
+        //else
+        //{
+        //    XisZero = true;
+        //    lattice1Lines.SetActive(false);
+        //}
 
-        if (mat2 != Vector3.zero)
-        {
-            ZisZero = false;
-            axisZpos.SetPosition(0, Vector3.zero);
-            axisZpos.SetPosition(1, mat2.normalized * 500);
-            axisZneg.SetPosition(0, Vector3.zero);
-            axisZneg.SetPosition(1, mat2.normalized * -500);
-        }
-        else
-        {
-            ZisZero = true;
-            lattice2Lines.SetActive(false);
-        }
+        //if (mat2 != Vector3.zero)
+        //{
+        //    ZisZero = false;
+        //    axisZpos.SetPosition(0, Vector3.zero);
+        //    axisZpos.SetPosition(1, mat2.normalized * 500);
+        //    axisZneg.SetPosition(0, Vector3.zero);
+        //    axisZneg.SetPosition(1, mat2.normalized * -500);
+        //}
+        //else
+        //{
+        //    ZisZero = true;
+        //    lattice2Lines.SetActive(false);
+        //}
+
+        XisZero = false;
+        axisXpos.SetPosition(0, Vector3.zero);
+        axisXneg.SetPosition(0, Vector3.zero);
+        axisXneg.SetPosition(1, -mat1);
+
+        ZisZero = false;
+        axisZpos.SetPosition(0, Vector3.zero);
+        axisZneg.SetPosition(0, Vector3.zero);
+        axisZneg.SetPosition(1, -mat2);
+
+        //if the axisX and axisZ are parallel to their respective vectors, stop updating.
+        //if (Vector3.Dot(axisXpos.GetPosition(1).normalized, vectX.normalized) == 1 &&
+        //    Vector3.Dot(axisZpos.GetPosition(1).normalized, vectZ.normalized) == 1 )
+        //    updateLattice = false;
 
         IncrimentsX();
         IncrimentsZ();
-
-
-        if (axisXpos.GetPosition(1).normalized == vectX.normalized &&
-            axisZpos.GetPosition(1).normalized == vectZ.normalized)
-            updateLattice = false;
     }
 
 
@@ -172,6 +220,17 @@ public class VisVect2 : MonoBehaviour
     }
 
 
+    private Vector3 CrossNormal(Vector3 vect1, Vector3 vect2)
+    {
+        Vector3 temp = Vector3.zero;
+
+        temp.x = (vect1.y * vect2.z) - (vect1.z * vect2.y);
+        temp.y = (vect1.z * vect2.x) - (vect1.x * vect2.z);
+        temp.z = (vect1.x * vect2.y) - (vect1.y * vect2.x);
+
+        return temp.normalized;
+    }
+
 
     private void IncrimentsX()
     {
@@ -180,20 +239,22 @@ public class VisVect2 : MonoBehaviour
             linesXpos[0].gameObject.SetActive(false);
             linesXneg[0].gameObject.SetActive(false);
 
-            Vector3 cross = Vector3.Cross(axisXpos.GetPosition(1).normalized, Vector3.down).normalized;
-            cross *= vectX.magnitude;
+            if (Vector3.Dot(xCross, axisXpos.GetPosition(1).normalized) != 0)
+                Debug.LogWarning("LinesX Cross Product is NOT orthogonal\n" +
+                    "LineX normal: " + axisZpos.GetPosition(1).normalized + "\tCross: " + xCross);
+            Debug.Log("VectZ: " + vectZ + "\tLineX: " + xCross);
 
             //walk
             for (int i = 1; i < numOfLines; i++)
             {
                 //postive
 
-                linesXpos[i].SetPosition(0, axisXpos.GetPosition(1) + (cross * i));
-                linesXpos[i].SetPosition(1, axisXneg.GetPosition(1) + (cross * i));
+                linesXpos[i].SetPosition(0, axisXpos.GetPosition(1) + (xCross * i));
+                linesXpos[i].SetPosition(1, axisXneg.GetPosition(1) + (xCross * i));
 
                 //negative
-                linesXneg[i].SetPosition(0, axisXpos.GetPosition(1) - (cross * i));
-                linesXneg[i].SetPosition(1, axisXneg.GetPosition(1) - (cross * i));
+                linesXneg[i].SetPosition(0, axisXpos.GetPosition(1) - (xCross * i));
+                linesXneg[i].SetPosition(1, axisXneg.GetPosition(1) - (xCross * i));
 
 
                 if (i % 10 == 0)
@@ -232,19 +293,20 @@ public class VisVect2 : MonoBehaviour
             linesZpos[0].gameObject.SetActive(false);
             linesZneg[0].gameObject.SetActive(false);
 
-            Vector3 cross = Vector3.Cross(axisZpos.GetPosition(1).normalized, Vector3.down).normalized;
-            cross *= vectZ.magnitude;
-
+            if (Vector3.Dot(zCross, axisZpos.GetPosition(1).normalized) != 0)
+                Debug.LogWarning("LinesZ Cross Product is NOT orthogonal\n" + 
+                    "LineZ normal: " + axisZpos.GetPosition(1).normalized + "\tCross: " + zCross);
+            Debug.Log("VectX: " + vectX + "\tLineZ: " + zCross);
 
             for (int i = 1; i < numOfLines; i++)
             {
                 //postive
-                linesZpos[i].SetPosition(0, axisZpos.GetPosition(1) + (cross * i));
-                linesZpos[i].SetPosition(1, axisZneg.GetPosition(1) + (cross * i));
+                linesZpos[i].SetPosition(0, axisZpos.GetPosition(1) + (zCross * i));
+                linesZpos[i].SetPosition(1, axisZneg.GetPosition(1) + (zCross * i));
 
                 //negative
-                linesZneg[i].SetPosition(0, axisZpos.GetPosition(1) - (cross * i));
-                linesZneg[i].SetPosition(1, axisZneg.GetPosition(1) - (cross * i));
+                linesZneg[i].SetPosition(0, axisZpos.GetPosition(1) - (zCross * i));
+                linesZneg[i].SetPosition(1, axisZneg.GetPosition(1) - (zCross * i));
 
                 if (i % 10 == 0)
                 {

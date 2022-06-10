@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MyBox;
 
 public class GameControllerPuzzle02 : GameControllerRoot
 {
@@ -24,6 +25,21 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public GameObject topCamera;
     public GameObject visVectCamera;
     public bool topCameraActive = false;
+    private bool showVector = false;
+
+
+    [Header("--------Matrix Controls---------")]
+    [MinMaxRange(1, 50)]
+    public MinMaxInt magRange = new MinMaxInt(6, 10);
+    [MinMaxRange(0, 180)]
+    public MinMaxFloat thetaRange = new MinMaxFloat(60, 120);
+    [MinMaxRange(0.5f, 2.0f)]
+    public MinMaxFloat aspectRange = new MinMaxFloat(0.75f, 1.25f);
+    [Range(1,20)]
+    [Tooltip("The ratio value of the matrix vector magnitudes vs the vector magnitudes\n" +
+        "A higher value here favors larger vectors, a lower value favors larger matricies")]
+    public int ratioValue = 10;
+
 
     [Header("--------Ship Parts---------")]
     public GameObject shipMaster;
@@ -47,12 +63,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public List<cannonballController> balls;
     public cannonballController currBall;
 
-    [Header("--------Puzzle Parts---------")]
-    public List<int[][]> matrixList; //a generate list of 4 possible answer matricies
-    public int rValue = 10;
 
+    [Header("--------Puzzle Parts---------")]
     public int[] currVector;
     public bool vectChosen = false;
+    public List<int[][]> matrixList; //a generate list of 4 possible answer matricies
     public int[][] currMatrix;
     public bool matrixChosen = false;
     public int[] lastAnswer;
@@ -169,6 +184,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         //this.diffScalar.transform.localScale *= (float)Difficulty / 3.0f;
 
         //GenerateShipLocations();
+        shipMaster.SetActive(true);
         CreateMatrices();
         AltGenerateShipLocations();
         endPortal.SetActive(false);
@@ -189,8 +205,6 @@ public class GameControllerPuzzle02 : GameControllerRoot
             float[] pos = new float[2];
             int[][] matrix = new int[2][] { new int[2], new int[2] };
 
-            float thetaMax = Mathf.Deg2Rad * 120.0f;
-            float thetaMin = Mathf.Deg2Rad * 60.0f;
             float theta;
 
             Vector2 x1 = new Vector2(1, 0);
@@ -198,7 +212,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
             float s = Mathf.Cos(theta) * x1.x - Mathf.Sin(theta) * x1.y;
             float t = Mathf.Sin(theta) * x1.x + Mathf.Cos(theta) * x1.y;
-            int randScal = Random.Range(Mathf.RoundToInt((float)rValue * 0.66f), rValue);
+            int randScal = Random.Range(magRange.Min, magRange.Max);
             Vector2 k = new Vector2(s, t) * randScal;
             k.x = Mathf.RoundToInt(k.x);
             k.y = Mathf.RoundToInt(k.y);
@@ -206,7 +220,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
             x1 = k;
 
             //Rotating the second Vector
-            theta = Random.Range(thetaMin, thetaMax);
+            theta = Random.Range(Mathf.Deg2Rad * thetaRange.Min, Mathf.Deg2Rad * thetaRange.Max);
             if (Random.Range(0.0f, 1.0f) < 0.5f)
                 theta = (theta * -1);
 
@@ -219,8 +233,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
             float bestScore = 99;
             float bestScal = 0;
             float magV1 = x1.magnitude;
-            //We're only going to look at x2 that at least half the mag x1 but not larger than 1.5 the mag of x1 
-            for (int j = Mathf.RoundToInt(magV1 * 0.5f); j < Mathf.RoundToInt(magV1 * 1.5f); j++)
+            //Looking through possible vector candidates that are within our aspect ratio and scoring them by distance
+            for (float j = Mathf.RoundToInt(magV1 * aspectRange.Min); j < Mathf.RoundToInt(magV1 * aspectRange.Max); j+=0.01f)
             {
                 Vector2 tempRound = new Vector2(Mathf.Round(k.x * j), Mathf.Round(k.y * j));
                 float score = Mathf.Abs((tempRound - (k * j)).magnitude);
@@ -293,9 +307,10 @@ public class GameControllerPuzzle02 : GameControllerRoot
             if (vectChosen && matrixChosen && !mainCannon.animate)
             {
                 currTarget.CreateAttemptCSV(currMatrix, currVector);
-                
+                //VV02.ToggleVectorLine(true);
                 mainCannon.FireCannon(currAnswer, currAnswer == currTarget.shipParent.transform.position);
                 audioService.PlayFXAudio(Constants.audioP02CannonFire);
+                showVector = true;
                 ResetSelections();
                 //              FireCannon();
                 Debug.Log("cannon fired");
@@ -308,7 +323,21 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public void ToggleOverlay(bool val)
     {
         //placeholder for Puzzle2UI class to access the visual vector class
-        VV02.ToggleLattice(val);
+        switch (Difficulty)
+        {
+            case 1:
+                VV02.ToggleLattice(val);
+                VV02.ToggleVectorLine(val);
+                break;
+            case 2:
+                VV02.ToggleLattice(val);
+                VV02.ToggleVectorLine(val && showVector);
+                break;
+            case 3:
+                VV02.ToggleLattice(false);
+                VV02.ToggleVectorLine(val && showVector);
+                break;
+        }
     }
 
     public void ToggleTargetLines(bool val)
@@ -434,6 +463,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         mainCannon.mainBarrel.SetActive(true);
         mainCannon.SetCannonText(new int[3] { 0, 0, 0 });
         vectChosen = true;
+        showVector = false;
         P02W.SetVectorSelected(currVector);
         CalculateAnswer();
 
@@ -443,6 +473,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
             mainCannon.AnimateCannon();
             mainCannon.cannonFuzeFX.SetActive(true);
             //    mainCannon.ToggleTriggerBox(true);
+
             VV02.SetMasterVector(currAnswer);
         }
         else
@@ -463,9 +494,16 @@ public class GameControllerPuzzle02 : GameControllerRoot
         matrixChosen = true;
         mainCannon.SetCannonText(new int[3] { 0, 0, 0 });
         P02W.SetMatrixSelected(currMatrix);
-        VV02.CreateLattice(new Vector3(currMatrix[0][0], 0, currMatrix[0][1]), new Vector3(currMatrix[1][0], 0, currMatrix[1][1]));
+
+        Vector3 vector1 = new Vector3(currMatrix[0][0], 0, currMatrix[0][1]);
+        Vector3 vector2 = new Vector3(currMatrix[1][0], 0, currMatrix[1][1]);
+        VV02.CreateLattice(vector1, vector2);
+
+        showVector = false;
         P02W.showOverlay = true;
-        SwitchCamera();
+        if (Difficulty != 3)
+            SwitchCamera();
+
         CalculateAnswer();
 
         if (vectChosen)
@@ -502,7 +540,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         P02W.OnCameraSwitch(topViewOn);
         if (topViewOn)
         {
-            VV02.ToggleLattice(P02W.showOverlay);
+            ToggleOverlay(P02W.showOverlay);
 
             topCamera.gameObject.SetActive(true);
             mainCamera.GetComponent<Camera>().enabled = false;
@@ -529,7 +567,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
         }
         else
         {
-            VV02.ToggleLattice(false);
+
+            ToggleOverlay(false);
             topCamera.gameObject.SetActive(false);
             mainCamera.GetComponent<Camera>().enabled = true;
             topCamera.GetComponent<Camera>().enabled = false;
@@ -560,9 +599,9 @@ public class GameControllerPuzzle02 : GameControllerRoot
         currVector = new int[3] { 0, 0, 0 };
         P02W.SetVectorSelected(currVector);
 
-        matrixChosen = false;
-        currMatrix = new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 0 } };
-        P02W.SetMatrixSelected(currMatrix);
+        //matrixChosen = false;
+        //currMatrix = new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 0 } };
+        //P02W.SetMatrixSelected(currMatrix);
 
         lastAnswer = new int[3] { (int)currAnswer.x, 0, (int)currAnswer.z };
 
@@ -595,7 +634,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         //shipMaster.SetActive(false);
         P02W.SetCompleteNumber(numberOfShips - shipPuzzles.Count, numberOfShips);
-
+        shipMaster.SetActive(false);
     }
 
     private void GenerateShipLocations() 
