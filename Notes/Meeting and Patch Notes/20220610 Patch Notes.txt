@@ -26,6 +26,12 @@ Fixed the Lattice rotation problems
 	The lattice only uses the normalize while in animation, then corrects when near position
 Fixed the Main Cannon rotating only in the clockwise direction
 Fixed the bug with "No Cameras Rendering"
+TopDown Camera Controls:
+	when in topdown view the player can now zoom and pan the camera
+	camera controls are for both mouse and/or keyboard
+	to zoom: use the mousewheel or press U/O
+	to pan left/right: rightclick and drag or press J/L
+	to pan up/down: rightclick and drag or press I/K
 
 
 Difficulties changed

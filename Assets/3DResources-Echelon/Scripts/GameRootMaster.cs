@@ -12,7 +12,7 @@ public class GameRootMaster : MonoBehaviour
     public static ResourceService resourceService { get; private set; }
     public LoadingWindow loadingWindow;
 
-
+    public static bool isSession = false;
     public static bool isExpo = false;
     public static bool isClass = false;
     public static string expoName = "";

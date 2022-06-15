@@ -114,11 +114,19 @@ public class DualLogin : LoginSystem
             GameRootMaster.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);
             ClearFields();
 
-            if (query == queryType.bunny)
-                PlayBunny();
-            else if (query == queryType.echelon)
-                PlayEchelon();
-
+            if(GameRootMaster.player.users.admin)
+            {
+                popUpsWindow.awaitServerPop.panel.SetActive(false);
+                adminWindow.panel.SetActive(true);
+                dualLoginWindow.panel.SetActive(false);
+            }
+            else
+            {
+                if (query == queryType.bunny)
+                    PlayBunny();
+                else if (query == queryType.echelon)
+                    PlayEchelon();
+            }
         }
         //player password wrong
         else

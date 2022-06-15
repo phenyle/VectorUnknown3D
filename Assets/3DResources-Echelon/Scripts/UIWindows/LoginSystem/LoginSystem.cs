@@ -15,6 +15,7 @@ public class LoginSystem : MonoBehaviour
     public static NewAccountWindow newAccountWindow;
     public static JoinWindow joinWindow;
     public static PopUpWindow popUpsWindow;
+    public static AdminWindow adminWindow;
 
 
     protected static UnityEvent messageEvents;
@@ -57,6 +58,8 @@ public class LoginSystem : MonoBehaviour
             popUpsWindow = GetComponentInChildren<PopUpWindow>();
         if (joinWindow == null)
             joinWindow = GetComponentInChildren<JoinWindow>();
+        if (adminWindow == null)
+            adminWindow = GetComponentInChildren<AdminWindow>();
     }
 
     // Update is called once per frame
@@ -105,17 +108,7 @@ public class LoginSystem : MonoBehaviour
         {
             case queryType.echelon: //query type: Logging into Echelon Game
                                     //call to database for "username" to find login name
-                                    //                      panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.AwaitingPopUp(false);
-
-                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
-                break;
-
-            case queryType.bunny: //query type: Creating a new Account
-                                  //call to database for "first.last" to check for duplicates
-                                  //                     panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
+                                    //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
                 popUpsWindow.awaitServerPop.SetStatus("Finding Player");
                 popUpsWindow.awaitServerPop.AwaitingPopUp(true);
 
@@ -123,7 +116,19 @@ public class LoginSystem : MonoBehaviour
                 GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
                 break;
 
-            case queryType.creating: //query type: Joining Session
+            case queryType.bunny: //query type: Logging into Bunny Game
+                                  //call to database for "username" to find login name
+                                  //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
+                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
+                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
+
+                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
+                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
+                break;
+
+            case queryType.creating: //query type: Creating a new Account
+                                     //call to database for "first.last" to check for duplicates
+                                     //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
                 popUpsWindow.awaitServerPop.SetStatus("Creating Account");
                 loginEvents.AddListener(newAccountWindow.CreatingNewAccount);
                 SendToGoogle.callback.AddListener(newAccountWindow.CreatingIncrimentedAccount);                
@@ -131,9 +136,12 @@ public class LoginSystem : MonoBehaviour
                 break;
 
             case queryType.joining:
-                checkingGFSU = false;
-                checkingGFSU = false;
-                newAccountWindow.panel.SetActive(true);
+                popUpsWindow.awaitServerPop.SetStatus("Finding Session");
+                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
+
+                SendToGoogle.callback.AddListener(joinWindow.JoinSession);
+                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "sessionID", joinWindow.sessionName.text.ToLower(), false);
+
                 break;
         }
     }
@@ -142,7 +150,10 @@ public class LoginSystem : MonoBehaviour
     {
         if (query == queryType.joining)
         {
-
+            loginEvents.RemoveAllListeners();
+            messageEvents.RemoveAllListeners();
+            SendToGoogle.callback.RemoveAllListeners();
+            GameRootMaster.resourceService.AsynLoadScene(Constants.gameRootSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
         }
         else
         {
@@ -159,7 +170,14 @@ public class LoginSystem : MonoBehaviour
     {
         if (query == queryType.joining)
         {
-
+            //TODO
+            //customize the session join to goto a specific bunny level
+            Debug.LogWarning("Loading Bunny Menu");
+            loginEvents.RemoveAllListeners();
+            messageEvents.RemoveAllListeners();
+            SendToGoogle.callback.RemoveAllListeners();
+            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.bunRecords, "username", GameRootMaster.player.users.username);
+            SceneManager.LoadScene("menu_scene");
         }
         else
         {

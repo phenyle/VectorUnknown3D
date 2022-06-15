@@ -609,4 +609,21 @@ public class PlayerData : MonoBehaviour
         p4_3.username = new_name;
     }
 
+    public void SetSessionID(string session)
+    {
+        users.sessionID = session;
+        records.sessionID = session;
+        bunRecords.sessionID = session;
+        bunny.sessionID = session;
+        p1_1.sessionID = session;
+        p2_1.sessionID = session;
+        p2_2.sessionID = session;
+        p2_3.sessionID = session;
+        p3_1.sessionID = session;
+        p3_2.sessionID = session;
+        p3_3.sessionID = session;
+        p4_1.sessionID = session;
+        p4_2.sessionID = session;
+        p4_3.sessionID = session;
+    }
 }

@@ -58,6 +58,7 @@ public class PopUpWindow : LoginSystem
     public void Click_GenOkayBtn()
     {
         messageEvents.Invoke();
+        messageEvents.RemoveAllListeners();
         generalPopPanel.SetActive(false);        
     }
 }

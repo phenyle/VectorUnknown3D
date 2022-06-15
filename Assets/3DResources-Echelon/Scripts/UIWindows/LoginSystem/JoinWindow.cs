@@ -12,7 +12,7 @@ public class JoinWindow : LoginSystem
     [Header("Join Session")]
     public GameObject panel;
     public InputField sessionName;
-    public Button btn_Join;
+    public Button btn_Join, btn_Back;
 
 
     public void Start()
@@ -21,10 +21,7 @@ public class JoinWindow : LoginSystem
         panel.SetActive(false);
     }
 
-    //--------------------------------
-    // JOIN SESSION Functions
-    //--------------------------------
-    #region Join Session
+
     public void JS_ClickLoginBtn()
     {
         //GameRootMaster.audioService.PlayUIAudio(Constants.audioUIClickBtn);
@@ -32,24 +29,37 @@ public class JoinWindow : LoginSystem
         //       panel_awaitServer.gameObject.SetActive(true);
         //        awaitServePop.SetStatus("Checking Connection");
 
-        btn_Join.enabled = false; //disable button so player can't spam click login and overload database with login requests
-        query = queryType.joining;
+        messageEvents.AddListener(ResetFields);
+        //loginEvents.AddListener(TimedOut);
+        popUpsWindow.awaitServerPop.SetStatus("Checking Connection");
+        popUpsWindow.awaitServerPop.AwaitingPopUp(true);
+
         checkingGFSU = true;
-        SendToGoogle.callback.AddListener(JoinSession);
+        connectionTime = 0.0f;
+
+        btn_Join.enabled = false; //disable button so player can't spam click login and overload database with login requests
+        btn_Back.enabled = false;
+        query = queryType.joining;
+        SendToGoogle.callback.AddListener(ConnectionsCheck);
         GameRootMaster.GSFU.VerifyDatabaseConnection();
     }
 
-    private void JoinSession()
+    public void JoinSession()
     {
         //database responded and found session name
         //stop waiting for database create new session player
         checkingGFSU = false;
         connectionTime = 0;
+        popUpsWindow.awaitServerPop.SetStatus("Joining Session");
+
         Debug.Log("Session Found");
+        DateTime expireDate;
+        bool parse = DateTime.TryParse(GameRootMaster.player.users.expires, out expireDate);
 
         //Check that the session being joined has not expired
-        if (DateTime.Compare(DateTime.Now, DateTime.Parse(GameRootMaster.player.users.expires)) < 0)
+        if (DateTime.Compare(DateTime.Now, expireDate) < 0)
         {
+            messageEvents.RemoveAllListeners();
             Debug.Log("Join Session SUCCESFUL");
 
             //Since there is a delay in database response, it's possible
@@ -65,9 +75,10 @@ public class JoinWindow : LoginSystem
             //This will ensure every joining player has a unique session name no 
             //matter how many people join at the same time.
             string salt = GenerateSalt();
-            string hashID = ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString()), Encoding.UTF8.GetBytes(salt));
+            System.Random rand = new System.Random();
+            string randnum = rand.Next(1111, 9999).ToString();
+            string hashID = ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + randnum), Encoding.UTF8.GetBytes(salt));
 
-            tmp_player = new PlayerData();
 
             //if the loaded sessions is from an Expo, trigger this machine to
             //run in the Expo state using the session name
@@ -75,43 +86,69 @@ public class JoinWindow : LoginSystem
             {
                 GameRootMaster.isExpo = true;
                 GameRootMaster.expoName = sessionName.text;
-                tmp_player.users.isExpo = true;
             }
             if (GameRootMaster.player.users.isClass)
             {
                 GameRootMaster.isClass = true;
                 GameRootMaster.expoName = sessionName.text;
-                tmp_player.users.isClass = true;
-
             }
-
-            tmp_player.users.stageNum = GameRootMaster.player.users.stageNum;
-            tmp_player.users.difficultyNum = GameRootMaster.player.users.difficultyNum;
-            tmp_player.users.forceStage = GameRootMaster.player.users.forceStage;
 
             if (GameRootMaster.isExpo)
-            {
-                tmp_player.SetUserName(GameRoot3D.expoName + hashID);
-                tmp_player.users.isExpo = true;
-
-            }
+                GameRootMaster.player.SetUserName(GameRootMaster.expoName + hashID);
             else
-                tmp_player.SetUserName(sessionName.text + hashID);
+                GameRootMaster.player.SetUserName(sessionName.text + hashID);
 
-            tmp_player.users.last_login = System.DateTime.Now.ToString();
-            tmp_player.users.sessionID = sessionName.text;
-            GameRootMaster.player = tmp_player;
+            GameRootMaster.player.users.last_login = System.DateTime.Now.ToString();
+            GameRootMaster.player.SetSessionID(sessionName.text);
             GameRootMaster.GSFU.SaveNewPlayer();
 
             joinWindow.gameObject.SetActive(false);
             dualLoginWindow.gameObject.SetActive(true);
 
+            GameRootMaster.isSession = true;
 
             if (GameRootMaster.player.users.isBunny)
                 PlayBunny();
             else
                 PlayEchelon();
         }
+        else //session code is valid, but has expired
+        {
+            Debug.Log("LOGIN ERROR: session expired");
+
+            popUpsWindow.GeneralPopUp("LOGIN ERROR:\nThat session does not exist or has expired");
+            popUpsWindow.awaitServerPop.panel.SetActive(false);
+            checkingGFSU = false;
+            connectionTime = 0.0f;
+        }
+
+    }
+
+    public void ResetFields()
+    {
+        loginEvents.RemoveAllListeners();
+        messageEvents.RemoveAllListeners();
+
+        checkingGFSU = false;
+        connectionTime = 0.0f;
+
+        popUpsWindow.awaitServerPop.panel.SetActive(false);
+
+        btn_Join.enabled = true;
+        btn_Back.enabled = true;
+    }
+
+    public void TimedOut()
+    {
+        loginEvents.RemoveAllListeners();
+        messageEvents.RemoveAllListeners();
+        checkingGFSU = false;
+        connectionTime = 0.0f;
+
+        popUpsWindow.generalPopPanel.SetActive(false);
+        popUpsWindow.awaitServerPop.panel.SetActive(false);
+        btn_Join.enabled = true;
+        btn_Back.enabled = true;
     }
 
 
@@ -123,7 +160,5 @@ public class JoinWindow : LoginSystem
         dualLoginWindow.panel.SetActive(true);
         joinWindow.panel.SetActive(false);
     }
-    #endregion
-
 
 }

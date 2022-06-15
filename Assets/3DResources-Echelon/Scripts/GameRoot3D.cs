@@ -104,6 +104,8 @@ public class GameRoot3D : GameRootMaster
             DontDestroyOnLoad(this);
             InitGameRoot();
             GameMasterInit();
+            if (GameRootMaster.isSession)
+                JoinEchelonLevel();
         }
     }
 
@@ -377,9 +379,76 @@ public class GameRoot3D : GameRootMaster
         }
     }
 
-
     public static void AddScore(int score)
     {
         instance.score += score;
+    }
+
+    public void JoinEchelonLevel()
+    {
+        switch (GameRootMaster.player.users.stageNum)
+        {
+            case 0:
+                GameRootMaster.resourceService.AsynLoadScene(Constants.mainSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                break;
+            case 1:
+
+                break;
+            case 2:
+                switch (GameRootMaster.player.users.difficultyNum)
+                {
+                    case 1:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 2:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 3:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case 3:
+                switch (GameRootMaster.player.users.difficultyNum)
+                {
+                    case 1:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 2:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 3:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case 4:
+                switch (GameRootMaster.player.users.difficultyNum)
+                {
+                    case 1:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 2:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    case 3:
+                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            default:
+                GameRootMaster.resourceService.AsynLoadScene(Constants.mainSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
+                break;
+
+        }
     }
 }
