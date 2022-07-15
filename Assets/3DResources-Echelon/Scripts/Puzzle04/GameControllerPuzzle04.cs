@@ -192,26 +192,26 @@ public class GameControllerPuzzle04 : GameControllerRoot
         switch(Difficulty)
         {
             case 1:
-                if (DialogueManager.showP04_1[0])
+                if (DialogueManager.instance.showP04_1.Length != 0 && DialogueManager.instance.showP04_1[0])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 1, 0));
-                    DialogueManager.showP04_1[0] = false;
+                    DialogueManager.instance.showP04_1[0] = false;
                 }
 
                 break;
             case 2:
-                if (DialogueManager.showP04_2[0])
+                if (DialogueManager.instance.showP04_2.Length != 0 && DialogueManager.instance.showP04_2[0])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 2, 0));
-                    DialogueManager.showP04_2[0] = false;
+                    DialogueManager.instance.showP04_2[0] = false;
                 }
 
                 break;
             case 3:
-                if (DialogueManager.showP04_3[0])
+                if (DialogueManager.instance.showP04_3.Length != 0 && DialogueManager.instance.showP04_3[0])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 3, 0));
-                    DialogueManager.showP04_3[0] = false;
+                    DialogueManager.instance.showP04_3[0] = false;
                 }
 
                 break;
@@ -229,26 +229,26 @@ public class GameControllerPuzzle04 : GameControllerRoot
         switch (Difficulty)
         {
             case 1: //Level 1 Dialogs
-                if (DialogueManager.showP04_1[val])
+                if (DialogueManager.instance.showP04_1.Length >= val + 1 && DialogueManager.instance.showP04_1[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 1, val));
-                    DialogueManager.showP04_1[val] = false;
+                    DialogueManager.instance.showP04_1[val] = false;
                 }
 
                 break;
             case 2: //Level 2 Dialogs
-                if (DialogueManager.showP04_2[val])
+                if (DialogueManager.instance.showP04_2.Length >= val + 1 && DialogueManager.instance.showP04_2[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 2, val));
-                    DialogueManager.showP04_2[val] = false;
+                    DialogueManager.instance.showP04_2[val] = false;
                 }
 
                 break;
             case 3: //Level 3 Dialogs
-                if (DialogueManager.showP04_3[val])
+                if (DialogueManager.instance.showP04_3.Length >= val + 1 && DialogueManager.instance.showP04_3[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(4, 3, val));
-                    DialogueManager.showP04_3[val] = false;
+                    DialogueManager.instance.showP04_3[val] = false;
                 }
 
                 break;

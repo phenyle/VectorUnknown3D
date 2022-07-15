@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class DialogLibrary : MonoBehaviour
 {
-    public List<Conversation> intro;
-    public List<Conversation> main;
-    public List<Conversation> p01;
-    public List<Conversation> p02_1;
-    public List<Conversation> p02_2;
-    public List<Conversation> p02_3;
-    public List<Conversation> p03_1;
-    public List<Conversation> p03_2;
-    public List<Conversation> p03_3;
-    public List<Conversation> p04_1;
-    public List<Conversation> p04_2;
-    public List<Conversation> p04_3;
+    [SerializeField] private List<Conversation> intro;
+    [SerializeField] private List<Conversation> main;
+    [SerializeField] private List<Conversation> p01;
+    [SerializeField] private List<Conversation> p02_1;
+    [SerializeField] private List<Conversation> p02_2;
+    [SerializeField] private List<Conversation> p02_3;
+    [SerializeField] private List<Conversation> p03_1;
+    [SerializeField] private List<Conversation> p03_2;
+    [SerializeField] private List<Conversation> p03_3;
+    [SerializeField] private List<Conversation> p04_1;
+    [SerializeField] private List<Conversation> p04_2;
+    [SerializeField] private List<Conversation> p04_3;
 
     private List<List<Conversation>> mainDialogs;
     private List<List<Conversation>> p01Dialogs;
     private List<List<Conversation>> p02Dialogs;
     private List<List<Conversation>> p03Dialogs;
     private List<List<Conversation>> p04Dialogs;
-    public static List<List<List<Conversation>>> conversations;
+    public static List<List<List<Conversation>>> conversations { get; private set; }
 
     public void Start()
     {

@@ -539,26 +539,26 @@ public class GameControllerPuzzle03 : GameControllerRoot
         switch (Difficulty)
         {
             case 1: //Level 1 Dialogs
-                if (DialogueManager.showP03_1[val])
+                if (DialogueManager.instance.showP03_1.Length >= val + 1 && DialogueManager.instance.showP03_1[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 1, val));
-                    DialogueManager.showP03_1[val] = false;
+                    DialogueManager.instance.showP03_1[val] = false;
                 }
 
                 break;
             case 2: //Level 2 Dialogs
-                if (DialogueManager.showP03_2[val])
+                if (DialogueManager.instance.showP03_2.Length >= val + 1 && DialogueManager.instance.showP03_2[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 2, val));
-                    DialogueManager.showP03_2[val] = false;
+                    DialogueManager.instance.showP03_2[val] = false;
                 }
 
                 break;
             case 3: //Level 3 Dialogs
-                if (DialogueManager.showP03_3[val])
+                if (DialogueManager.instance.showP03_3.Length >= val + 1 && DialogueManager.instance.showP03_3[val])
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(3, 3, val));
-                    DialogueManager.showP03_3[val] = false;
+                    DialogueManager.instance.showP03_3[val] = false;
                 }
 
                 break;

@@ -56,7 +56,7 @@ public class mainCannonController : MonoBehaviour
 
             Vector3 cannonCurrForward = yawBase.forward;
             Vector3 angleToTarget = ((GCP02.currAnswer + new Vector3(0, yawBase.transform.position.y, 0)) - yawBase.transform.position).normalized;
-            if (GCP02.currAnswer.x != 0 && GCP02.currAnswer.z != 0)
+            if (GCP02.currAnswer.x != 0 || GCP02.currAnswer.z != 0)
                 if(Vector3.Angle(cannonCurrForward, angleToTarget) > 0)
                     yawBase.transform.Rotate(Vector3.up, Vector3.SignedAngle(cannonCurrForward, angleToTarget, Vector3.up) * rotateSpeed);
 
@@ -172,9 +172,15 @@ public class mainCannonController : MonoBehaviour
         SetCannonText(new int[3] { (int)target.x, 0, (int)target.z });
 
         if (willHit)
+        {
             GameRoot3D.moveEvents.AddListener(CannonBallHit);
+            if(GCP02.Difficulty == 1) GCP02.conversation(1);
+        }
         else
+        {
             GameRoot3D.moveEvents.AddListener(CannonBallMiss);
+            if (GCP02.Difficulty == 1) GCP02.conversation(2);
+        }
         tempBall.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.moveEvents);
         tempBall.GetComponent<ObjectGlide>().SetMoveSpeeds(0.6f, 0.0f, 0.0f);
         tempBall.GetComponent<ObjectGlide>().GlideOnly(temp, target, tempBall.transform.position);
@@ -216,6 +222,7 @@ public class mainCannonController : MonoBehaviour
         GCP02.GetCurrTarget().fires.SetActive(true);
 
         GCP02.SinkShip();
+
 
         canFire = true;
         Destroy(tempBall);

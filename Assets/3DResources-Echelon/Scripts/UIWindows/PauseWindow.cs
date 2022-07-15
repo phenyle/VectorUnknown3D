@@ -16,6 +16,7 @@ public class PauseWindow : WindowRoot
     [Header("---- Puzzle Controls ----")]
     public Transform puzzleControls;
     public Text puzzleText;
+    public GameObject[] advControls;
 
     [Header("---- Options ----")]
     public Transform panelOption;
@@ -208,9 +209,16 @@ public class PauseWindow : WindowRoot
         SetActive(puzzleControls, val);
     }
 
-    public void setPuzzleControlsText(string newControls)
+    public void showPuzzleControls(int stageNum)
     {
-        puzzleText.text = newControls;
+        SetActive(puzzleControls, true);
+        foreach (GameObject controls in advControls)
+            if(controls != null) 
+                controls.SetActive(false);
+        if (advControls[stageNum].gameObject != null)
+            advControls[stageNum].SetActive(true);
+        else
+            SetActive(puzzleControls, false);
     }
 
     public void setLoginInfo(string userName)

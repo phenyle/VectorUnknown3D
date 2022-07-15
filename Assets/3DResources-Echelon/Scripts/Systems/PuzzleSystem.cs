@@ -61,22 +61,26 @@ public class PuzzleSystem : SystemRoot
 
                 case Constants.puzzle02_1SceneName:
                     puzzle02Window.SetWindowState(true);
+                    pauseWindow.showPuzzleControls(2);
                     audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle02_2SceneName:
                     puzzle02Window.SetWindowState(true);
+                    pauseWindow.showPuzzleControls(2);
                     audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle02_3SceneName:
                     puzzle02Window.SetWindowState(true);
+                    pauseWindow.showPuzzleControls(2);
                     audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle03_1SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
+                    pauseWindow.showPuzzleControls(3);
                     puzzle03Window.bVal = true;
                     audioService.PlayBgMusic(4, true);
                     break;
@@ -84,6 +88,7 @@ public class PuzzleSystem : SystemRoot
                 case Constants.puzzle03_2SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
+                    pauseWindow.showPuzzleControls(3);
                     puzzle03Window.bVal = true;
                     audioService.PlayBgMusic(4, true);
                     break;
@@ -91,6 +96,7 @@ public class PuzzleSystem : SystemRoot
                 case Constants.puzzle03_3SceneName:
                     puzzle03Window.SetWindowState(true);
                     puzzle03Window.SetPanelChoice(0);
+                    pauseWindow.showPuzzleControls(3);
                     puzzle03Window.bVal = true;
                     audioService.PlayBgMusic(4, true);
                     break;
@@ -98,18 +104,21 @@ public class PuzzleSystem : SystemRoot
                 case Constants.puzzle04_1SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
+                    pauseWindow.showPuzzleControls(4);
                     audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle04_2SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
+                    pauseWindow.showPuzzleControls(4);
                     audioService.PlayBgMusic(3, true);
                     break;
 
                 case Constants.puzzle04_3SceneName:
                     puzzle04Window.SetWindowState(true);
                     pauseWindow.showPuzzleControls(true);
+                    pauseWindow.showPuzzleControls(4);
                     audioService.PlayBgMusic(3, true);
                     break;
 

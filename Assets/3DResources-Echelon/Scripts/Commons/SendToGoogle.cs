@@ -47,7 +47,7 @@ namespace GoogleSheetsForUnity
             string jsonPlayer = JsonUtility.ToJson(tmp_player.users);
 
             Debug.Log("<color=yellow>Creating the following player table: " + PlayerData.sheets.users.ToString() + "\n</color>" + jsonPlayer);
-
+            Debug.Log(jsonPlayer);
             Drive.CreateObject(jsonPlayer, PlayerData.sheets.users.ToString());
         }
 
@@ -107,7 +107,7 @@ namespace GoogleSheetsForUnity
                     break;
             }
             Debug.Log("<color=yellow>Sending following player table: " + sheetname.ToString() + "\n</color>" + jsonPlayer);
-
+            Debug.Log(jsonPlayer);
             // Look in the 'PlayerInfo' table, for an object of name as specified, and overwrite with the current obj data.
             Drive.UpdateObjects(sheetname.ToString(), columnName, searchName, jsonPlayer, create, true);
         }
@@ -171,7 +171,7 @@ namespace GoogleSheetsForUnity
                         break;
                 }
                 Debug.Log("<color=yellow>Sending following player table: " + sheetName.ToString() + "\n</color>" + jsonPlayer);
-
+                Debug.Log(jsonPlayer);
                 // Look in the 'PlayerInfo' table, for an object of name as specified, and overwrite with the current obj data.
                 Drive.UpdateObjects(sheetName.ToString(), "username", tmp_player.users.username, jsonPlayer, create, true);
             

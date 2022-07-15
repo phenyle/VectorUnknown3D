@@ -29,8 +29,10 @@ public class ScoreBoardUI : MonoBehaviour
     public Text s1_totalTime;
     public GameObject s1_Table;
 
-    //[Header("-------- STAGE 2 --------")]
-    //public GameObject s2_Panel;
+    [Header("-------- STAGE 2 --------")]
+    public GameObject s2_Panel;
+    public Text s2_totalTime;
+    public GameObject s2_Table;
 
 
     [Header("-------- STAGE 3 --------")]
@@ -73,6 +75,8 @@ public class ScoreBoardUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!inTrigger) return;
+
         if(inTrigger)
         {
             if (Input.GetKeyDown(KeyCode.E))
@@ -94,7 +98,7 @@ public class ScoreBoardUI : MonoBehaviour
         s1_Panel.SetActive(false);
 
         SetStage2Scores();
-        //s2_Panel.SetActive(false);
+        s2_Panel.SetActive(false);
 
         SetStage3Scores();
         s3_Panel.SetActive(false);
@@ -117,8 +121,6 @@ public class ScoreBoardUI : MonoBehaviour
         currRow = ov_Table.transform.Find("row1").gameObject;
         currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p1_totAttempts.ToString();
         currRow.transform.Find("col2").GetComponent<Image>().color = GameRoot3D.player.records.p1_time > 0 ? Color.white : Color.black;
-
-
 
         //stage2
         currRow = ov_Table.transform.Find("row2").gameObject;
@@ -159,6 +161,33 @@ public class ScoreBoardUI : MonoBehaviour
 
     private void SetStage2Scores()
     {
+        GameObject currRow;
+
+        s2_totalTime.text = ConvertTime(GameRoot3D.player.records.p2_totTime);
+
+        //level 1
+        currRow = s2_Table.transform.Find("row1").gameObject;
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_1_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_1_time > 0 ? ConvertTime(GameRoot3D.player.records.p2_1_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_1_time > 0 ? GameRoot3D.player.records.p2_1_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 9);
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p2_1_questions;
+
+        //level 2
+        currRow = s2_Table.transform.Find("row2").gameObject;
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_2_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_2_time > 0 ? ConvertTime(GameRoot3D.player.records.p2_2_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_2_time > 0 ? GameRoot3D.player.records.p2_2_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 8);
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p2_2_questions;
+
+        //level 3
+        currRow = s2_Table.transform.Find("row3").gameObject;
+        currRow.transform.Find("col1").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_3_attempts.ToString();
+        currRow.transform.Find("col2").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_3_time > 0 ? ConvertTime(GameRoot3D.player.records.p2_3_time) : "";
+        currRow.transform.Find("col3").Find("text").gameObject.GetComponent<Text>().text = GameRoot3D.player.records.p2_3_time > 0 ? GameRoot3D.player.records.p2_3_numMove.ToString() : "";
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<RectTransform>().sizeDelta = new Vector2(230, 40 * 5);
+        currRow.transform.Find("col4").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>().text = GameRoot3D.player.records.p2_3_questions;
 
     }
 
@@ -261,7 +290,7 @@ public class ScoreBoardUI : MonoBehaviour
         ov_Panel.SetActive(true);
 
         s1_Panel.SetActive(false);
-
+        s2_Panel.SetActive(false);
         s3_Panel.SetActive(false);
         s4_Panel.SetActive(false);
     }
@@ -273,6 +302,7 @@ public class ScoreBoardUI : MonoBehaviour
         s1_Panel.SetActive(true);
 
         ov_Panel.SetActive(false);
+        s2_Panel.SetActive(false);
         s3_Panel.SetActive(false);
         s4_Panel.SetActive(false);
     }
@@ -280,7 +310,7 @@ public class ScoreBoardUI : MonoBehaviour
     {
         GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
-        //       s2_Panel.SetActive(true);
+        s2_Panel.SetActive(true);
 
         ov_Panel.SetActive(false);
         s1_Panel.SetActive(false);
@@ -296,7 +326,7 @@ public class ScoreBoardUI : MonoBehaviour
 
         ov_Panel.SetActive(false);
         s1_Panel.SetActive(false);
-
+        s2_Panel.SetActive(false);
         s4_Panel.SetActive(false);
     }
 
@@ -308,7 +338,7 @@ public class ScoreBoardUI : MonoBehaviour
 
         ov_Panel.SetActive(false);
         s1_Panel.SetActive(false);
-
+        s2_Panel.SetActive(false);
         s3_Panel.SetActive(false);
     }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 using MyBox;
 
 public class GameControllerPuzzle02 : GameControllerRoot
@@ -52,6 +54,8 @@ public class GameControllerPuzzle02 : GameControllerRoot
     //   private List<PuzzleController02> airshipPuzzles;
     public float minDistApart = 10;
     private PuzzleController02 currTarget;
+    public GameObject fanFair;
+
 
     [Header("--------Cannon Parts---------")]
     public List<cannonController> cannons;
@@ -115,9 +119,6 @@ public class GameControllerPuzzle02 : GameControllerRoot
     //particle systems
     public GameObject cannonBlast;
 
-    //Dialogue systems
-    private static bool showP02_00 = true;
-
     //Boat selection feature
 
     private Vector3 previousPosition;
@@ -126,7 +127,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
     public Material currentCannonMaterial;
 
     //stage control
-    public int stageNumber;
+    public int levelNumber;
     private bool portalActive = false;
 
     //Database Records
@@ -148,8 +149,17 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         shipPuzzles = new List<PuzzleController02>();
         //       airshipPuzzles = new List<PuzzleController02>();
-        endPortal.SetActive(false);
 
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "04Puzzle02-1": levelNumber = 1; break;
+            case "04Puzzle02-2": levelNumber = 2; break;
+            case "04Puzzle02-3": levelNumber = 3; break;
+        }
+
+
+        endPortal.SetActive(false);
+        fanFair.SetActive(false);
     }
 
     public override void InitGameController(Puzzle02Window P02W)
@@ -174,12 +184,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         attemptData.numOfShips = numberOfShips;
         attemptData.numOfShots = 0;
 
-        //Show Dialogue once
-        if (showP02_00)
-        {
-            FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 1, 0));
-            showP02_00 = false;
-        }
+        conversation(0);
 
         //this.diffScalar.transform.localScale *= (float)Difficulty / 3.0f;
 
@@ -320,6 +325,76 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     }
 
+
+    private void conversationStart()
+    {
+        switch (Difficulty)
+        {
+            case 1:
+                if (DialogueManager.instance.showP02_1.Length != 0 && DialogueManager.instance.showP02_1[0])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 1, 0));
+                    DialogueManager.instance.showP02_1[0] = false;
+                }
+
+                break;
+            case 2:
+                if (DialogueManager.instance.showP02_2.Length != 0 && DialogueManager.instance.showP02_2[0])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 2, 0));
+                    DialogueManager.instance.showP02_2[0] = false;
+                }
+
+                break;
+            case 3:
+                if (DialogueManager.instance.showP02_3.Length != 0 && DialogueManager.instance.showP02_3[0])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 3, 0));
+                    DialogueManager.instance.showP02_3[0] = false;
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Selects the conversation dialog to pop up
+    /// Requires that the associated bool[] and conversation file be established
+    /// with the DialogManager.cs
+    /// </summary>
+    /// <param name="val"></param>
+    public void conversation(int val)
+    {
+        switch (Difficulty)
+        {
+            case 1: //Level 1 Dialogs
+                if (DialogueManager.instance.showP02_1.Length >= val + 1 && DialogueManager.instance.showP02_1[val])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 1, val));
+                    DialogueManager.instance.showP02_1[val] = false;
+                }
+
+                break;
+            case 2: //Level 2 Dialogs
+                if (DialogueManager.instance.showP02_2.Length >= val + 1 && DialogueManager.instance.showP02_2[val])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 2, val));
+                    DialogueManager.instance.showP02_2[val] = false;
+                }
+
+                break;
+            case 3: //Level 3 Dialogs
+                if (DialogueManager.instance.showP02_3.Length >= val + 1 && DialogueManager.instance.showP02_3[val])
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(resourceService.LoadConversation(2, 3, val));
+                    DialogueManager.instance.showP02_3[val] = false;
+                }
+
+                break;
+        }
+    }
+
+
     public void ToggleOverlay(bool val)
     {
         //placeholder for Puzzle2UI class to access the visual vector class
@@ -367,6 +442,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
         {
             mainCannon.ToggleTriggerBox(false);
             endPortal.SetActive(true);
+            fanFair.SetActive(true);
+            foreach (cannonController cannon in cannons)
+                cannon.gameObject.SetActive(false);
+            foreach (cannonballController ball in balls)
+                ball.gameObject.SetActive(false);
             // you win
         }
     }
@@ -923,7 +1003,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     public void RecordData()
     {
-        switch (stageNumber)
+        switch (levelNumber)
         {
             case 1:
                 if (GameRoot3D.player.records.p2_1_time == 0.0f)

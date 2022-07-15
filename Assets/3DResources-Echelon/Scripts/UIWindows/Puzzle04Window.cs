@@ -117,7 +117,7 @@ public class Puzzle04Window : WindowRoot
                                 "3 - Decrease Scalar 2\n" + 
                                 "4 - Increase Scalar 2";
 
-        pauseWindow.setPuzzleControlsText(controlsText);
+        //pauseWindow.setPuzzleControlsText(controlsText);
         //pauseWindow.resizePuzzleControls(600, 800);
 
 

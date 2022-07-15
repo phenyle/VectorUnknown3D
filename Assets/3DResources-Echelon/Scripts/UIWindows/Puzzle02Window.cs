@@ -14,6 +14,7 @@ public class Puzzle02Window : WindowRoot
     [HideInInspector]
     public bool showTargetLines = false;
 
+    public Transform panelTopViewUI;
 
     [Header("------ Progress Panel ---------")]
     public Transform panelProgress;
@@ -78,6 +79,7 @@ public class Puzzle02Window : WindowRoot
     {
         if (topView)
         {
+            panelTopViewUI.gameObject.SetActive(true);
             panelProgress.gameObject.SetActive(false);
             if(GCP02.Difficulty != 3)
                 togLattice.gameObject.SetActive(true);
@@ -87,6 +89,7 @@ public class Puzzle02Window : WindowRoot
         }
         else
         {
+            panelTopViewUI.gameObject.SetActive(false);
             panelProgress.gameObject.SetActive(true);
             togLattice.gameObject.SetActive(false);
             togLines.gameObject.SetActive(false);

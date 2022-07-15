@@ -20,6 +20,7 @@ public class ShipRepair : MonoBehaviour
     public GameObject rigging;
     public GameObject sailMisc1;
     public GameObject sailMisc2;
+    public GameObject windFX;
 
     [Header("Cannon/CannonBall Parts")]
     public GameObject portCannons;
@@ -86,6 +87,7 @@ public class ShipRepair : MonoBehaviour
         fxIter = 0;
         waitTime = 0;
 
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         shipCamera = GameObject.FindGameObjectWithTag("PuzzleCamera");
 
         pulseFX.SetActive(false);
@@ -219,8 +221,12 @@ public class ShipRepair : MonoBehaviour
         GCM.GetComponent<ObjectGlide>().SetEventSys(GameRoot3D.camEvents);
         GameRoot3D.camEvents.AddListener(camAtShip);
         float speed = ((this.player.transform.position - cameraPos.transform.position).magnitude / 1400.0f) * 6.0f;
+        GCM.GetComponent<ObjectGlide>().SetArrivedAtDistance(0.01f);
+        GCM.GetComponent<ObjectGlide>().SetObjectRotateSpeed(0.07f);
         GCM.GetComponent<ObjectGlide>().SetObjectMoveSpeed(speed);
         GCM.GetComponent<ObjectGlide>().GlideAndLookMovingTarget(shipCamera, cameraPos, targetPos, 30.0f, speed, 0.1f);
+        GCM.GetComponent<ObjectGlide>().SetCatchUpSpeedMod(0.001f);
+
     }
 
     public void camAtShip()
@@ -239,6 +245,10 @@ public class ShipRepair : MonoBehaviour
 
         shipCamera.GetComponent<Camera>().enabled = false;
         mainCamera.GetComponent<Camera>().enabled = true;
+
+        shipCamera.transform.localPosition = Vector3.zero;
+        shipCamera.transform.localRotation = Quaternion.identity;
+        shipCamera.transform.localScale = Vector3.one;
 
         fxComplete = true;
         animate = false;
@@ -438,12 +448,20 @@ public class ShipRepair : MonoBehaviour
             GameRoot3D.instance.puzzlesDone[4][3])
         {
             rigging.SetActive(true);
+            windFX.SetActive(true);
+            sail1.GetComponent<Animator>().SetBool("Complete", true);
+            sail2.GetComponent<Animator>().SetBool("Complete", true);
+            sail3.GetComponent<Animator>().SetBool("Complete", true);
             sailMisc1.SetActive(true);
             sailMisc2.SetActive(true);
         }
         else
         {
             rigging.SetActive(false);
+            windFX.SetActive(false);
+            sail1.GetComponent<Animator>().SetBool("Complete", false);
+            sail2.GetComponent<Animator>().SetBool("Complete", false);
+            sail3.GetComponent<Animator>().SetBool("Complete", false);
             sailMisc1.SetActive(false);
             sailMisc2.SetActive(false);
 

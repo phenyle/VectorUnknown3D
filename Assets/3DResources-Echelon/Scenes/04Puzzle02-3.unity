@@ -2030,6 +2030,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 499886509}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &499886512 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 902804454463220606, guid: f997b4da461b427448692385e302007f,
+    type: 3}
+  m_PrefabInstance: {fileID: 499886509}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &539354992
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,6 +2163,7 @@ MonoBehaviour:
     type: 3}
   numberOfShips: 5
   minDistApart: 15
+  fanFair: {fileID: 499886512}
   cannons:
   - {fileID: 2055864835}
   - {fileID: 1817155072}
@@ -2202,7 +2209,7 @@ MonoBehaviour:
   firedCannonYet: 0
   cannonBlast: {fileID: 4238951737952388257}
   currentCannonMaterial: {fileID: 0}
-  stageNumber: 1
+  levelNumber: 0
   tot_puzzleTime: 0
 --- !u!114 &570682963
 MonoBehaviour:
@@ -2590,7 +2597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: 0
-  puzzleComplete: 2
+  puzzleComplete: 4
 --- !u!1001 &682398090
 PrefabInstance:
   m_ObjectHideFlags: 0

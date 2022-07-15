@@ -10,12 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47500a8f005f364c989b60cb1f8fb81, type: 3}
-  m_Name: Puzzle02_00
+  m_Name: Puzzle02-1_01
   m_EditorClassIdentifier: 
   dialogues:
-  - character: {fileID: 11400000, guid: aa5ca46dd3ebae0429769c09e7af7719, type: 2}
+  - character: {fileID: 11400000, guid: 78c3c02647d397f47a17505a0ec457b6, type: 2}
     sentences:
-    - "Those are the pirates that stole all your cannons!.\r"
-    - use these cannons and take those pirates out by destroying their ships.
-    - "Choose a cannon. Then choose a cannon ball with a matrix that will act as
-      a transformation matrix to the cannon\u2019s matrix.\r"
+    - Arggh!........  Nice shot, though.

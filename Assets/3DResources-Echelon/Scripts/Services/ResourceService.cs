@@ -72,7 +72,10 @@ public class ResourceService : MonoBehaviour
 
     public Conversation LoadConversation(int stage, int level, int dialog)
     {
-        return DialogLibrary.conversations[stage][level][dialog];
+        if(DialogLibrary.conversations[stage][level][dialog] != null)
+            return DialogLibrary.conversations[stage][level][dialog];
+        else
+            return null;
     }
 
 }

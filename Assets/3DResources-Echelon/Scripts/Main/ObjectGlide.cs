@@ -286,7 +286,7 @@ public class ObjectGlide : MonoBehaviour
     private Vector3 CalcArcHeight()
     {
         float currDistanceXY = (new Vector2(glideObject.transform.position.x, glideObject.transform.position.z) - new Vector2(destinationPos.transform.position.x, destinationPos.transform.position.z)).magnitude;
-        float distTravelRemainPercent = (currDistanceXY / startDistanceXY);
+        float distTravelRemainPercent = Mathf.Sin((currDistanceXY / startDistanceXY) * Mathf.PI);
         arcTargetPos = new Vector3(0, arcHeight, 0) * distTravelRemainPercent;
 
         return arcTargetPos;

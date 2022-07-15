@@ -529,6 +529,16 @@ MonoBehaviour:
   animator: {fileID: 3696907514933541439}
   uiWindows: {fileID: 3858605964434472070}
   continueButton: {fileID: 5542940773163042311}
+  showP02_1: 0101
+  showP02_2: 01
+  showP02_3: 01
+  showP03_00: 1
+  showP03_1: 0101
+  showP03_2: 01
+  showP03_3: 01
+  showP04_1: 010101
+  showP04_2: 0101
+  showP04_3: 0101
 --- !u!114 &8176824116073978773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,8 +569,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f3cd6e3672466b41a39f7f0b162565b, type: 2}
   p02_1:
   - {fileID: 11400000, guid: 8cc8353b1d6aaac4b843b164a9b7ec12, type: 2}
-  p02_2: []
-  p02_3: []
+  - {fileID: 11400000, guid: 054698f6f14afc64fa9ed81adf572ff7, type: 2}
+  - {fileID: 11400000, guid: e255fa42f37810f49a1b33a38cd52200, type: 2}
+  p02_2:
+  - {fileID: 11400000, guid: 2fcefab26ddbbf147ad9e41bf11cbfa0, type: 2}
+  p02_3:
+  - {fileID: 11400000, guid: 3a2670296927f964cafc16aa1f1cc4c6, type: 2}
   p03_1:
   - {fileID: 11400000, guid: e5fa8801e7fcef24ca623c9f690d52c3, type: 2}
   - {fileID: 11400000, guid: f3e46a84927bb4a459d5c83d16b666fa, type: 2}
@@ -5353,6 +5367,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3858605964434472070}
     m_Modifications:
+    - target: {fileID: 651580634238317936, guid: 246a00068483acc4e8c04a17e9a6bdf3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.2000122
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180425680742115701, guid: 246a00068483acc4e8c04a17e9a6bdf3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.29999542
+      objectReference: {fileID: 0}
+    - target: {fileID: 4513616619300716780, guid: 246a00068483acc4e8c04a17e9a6bdf3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.2000122
+      objectReference: {fileID: 0}
     - target: {fileID: 4787783119908504127, guid: 246a00068483acc4e8c04a17e9a6bdf3,
         type: 3}
       propertyPath: m_Pivot.x
@@ -5457,6 +5486,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785306458709963475, guid: 246a00068483acc4e8c04a17e9a6bdf3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.100006
       objectReference: {fileID: 0}
     - target: {fileID: 7463542119068423264, guid: 246a00068483acc4e8c04a17e9a6bdf3,
         type: 3}
