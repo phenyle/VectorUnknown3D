@@ -155,7 +155,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
     private void Update()
     {
-        if (!DialogueManager.isInDialogue && !GameRoot3D.isPause && isInQuestion)
+        if (!DialogueManager.isInDialogue && !GameRoot3D.instance.isPause && isInQuestion)
         {
             puzzleData.obsTime += Time.deltaTime;
 
@@ -451,7 +451,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
     public void FinishSubLevel()
     {
         GameRoot3D.instance.LockPlayerAndCam(false);
-        GameRoot3D.isPuzzleLock = false;
+        GameRoot3D.instance.isPuzzleLock = false;
         P03W.TogglePanels(false);
         isTriggerQuestion = false;
 
@@ -577,7 +577,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
         CamGlideToPuzzle();
         isTriggerQuestion = true;
         
-        GameRoot3D.isPuzzleLock = true;
+        GameRoot3D.instance.isPuzzleLock = true;
         DialogueManager.isPuzzleLock = true;
         P03W.TogglePanels(true);
         GameRoot3D.instance.audioService.PlayUIAudio(Constants.audioP03TriggerQuestion);
@@ -597,7 +597,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
         mainCamera.transform.Find("Canvas").gameObject.SetActive(false);
 
         GameRoot3D.instance.LockPlayerAndCam(false);
-        GameRoot3D.isPuzzleLock = false;
+        GameRoot3D.instance.isPuzzleLock = false;
         DialogueManager.isPuzzleLock = false;
 
         P03W.TogglePanels(false);

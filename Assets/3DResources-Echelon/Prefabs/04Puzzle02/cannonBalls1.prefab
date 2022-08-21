@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  lockAxis: 0
+  lockAxis: 1
 --- !u!1 &4973064144837780958
 GameObject:
   m_ObjectHideFlags: 0

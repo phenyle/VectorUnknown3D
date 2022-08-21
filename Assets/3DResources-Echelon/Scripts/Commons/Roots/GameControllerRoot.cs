@@ -6,6 +6,14 @@ public class GameControllerRoot : MonoBehaviour
     protected ResourceService resourceService;
     protected AudioService audioService;
 
+    public CompleteSplash completeSplash { get; set; }
+    public GameControllerPuzzle01 GCP01 { get; set; }
+    public GameControllerPuzzle02 GCP02 { get; set; }
+    public GameControllerPuzzle03 GCP03 { get; set; }
+    public GameControllerPuzzle04 GCP04 { get; set; }
+
+
+
     public virtual void InitGameController()
     {
         resourceService = GameRootMaster.resourceService;
@@ -29,6 +37,14 @@ public class GameControllerRoot : MonoBehaviour
 
     public virtual void InitGameController(Puzzle04Window P04W)
     {
+    }
+
+    public virtual void SetSplash()
+    {
+        GCP01?.SetSplash();
+        GCP02?.SetSplash();
+        GCP03?.SetSplash();
+        GCP04?.SetSplash();
     }
 
     #region Common Tool Functions

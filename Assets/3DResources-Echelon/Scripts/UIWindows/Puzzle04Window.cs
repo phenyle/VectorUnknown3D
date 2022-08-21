@@ -33,6 +33,7 @@ public class Puzzle04Window : WindowRoot
 
     //UPPER RIGHT PIN WINDOWS------------
     [Header("Feedback Displays")]
+    public GameObject panelCommon;
     public Transform feedbackPanel;
     public GameObject goalDisplay;
     public GameObject finalDisplay;
@@ -124,8 +125,8 @@ public class Puzzle04Window : WindowRoot
         //LOWER RIGHT INIT--------------------------------------
         //scalar1 = GameObject.Find("Slider1").GetComponent<Slider>();
         //scalar2 = GameObject.Find("Slider2").GetComponent<Slider>();
-        scalar1.value = 1;
-        scalar2.value = 1;
+        scalar1.value = 0;
+        scalar2.value = 0;
         //Assign the Text objects to the UI Gameobjects
         //scalarText1 = GameObject.Find("ScalValue1").GetComponent<Text>();
         //scalarText2 = GameObject.Find("ScalValue2").GetComponent<Text>();
@@ -296,6 +297,11 @@ public class Puzzle04Window : WindowRoot
     public void setPuzzleController(Puzzle04Controller PC04)
     {
         this.PC04 = PC04;
+        scalar1.value = 0;
+        scalar2.value = 0;
+        scalarText1.text = scalar1.value.ToString();
+        scalarText2.text = scalar2.value.ToString();
+
     }
 
     public void setAnswer1(CardController card)

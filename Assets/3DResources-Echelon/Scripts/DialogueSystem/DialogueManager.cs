@@ -260,7 +260,7 @@ public class DialogueManager : MonoBehaviour
         yield return new WaitForSeconds(sec);
 
         //if not in a puzzle
-        if (!isPuzzleLock || !GameRoot3D.isPuzzleLock)
+        if (!isPuzzleLock || !GameRoot3D.instance.isPuzzleLock)
         {
             GameRoot3D.instance.LockPlayerAndCam(false);
             GameRoot3D.instance.ShowCursor(false);

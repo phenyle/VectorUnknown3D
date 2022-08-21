@@ -158,8 +158,10 @@ public class AnswerGenerator
         return cardVectors;
 
     }
-    public Puzzle04Controller.obsData PuzzleData(Puzzle04Controller.obsData puzzleData)
+    public Puzzle04Controller.obsData PuzzleData(Puzzle04Controller.obsData puzzleData, int maxScalar)
     {
+        int minMoves = IntegrityCheck(maxScalar);
+
         if (difficulty != 1)
         {
             puzzleData.e_Scal1 = escal1;
@@ -174,10 +176,57 @@ public class AnswerGenerator
             puzzleData.e_Scal2 = 1;
             puzzleData.e_Vect2 = minVector;
         }
+        puzzleData.minMoves = minMoves;
         puzzleData.answer = modVector;
 
         return puzzleData;
     }
+
+    /// <summary>
+    /// This may take awhile.
+    /// This function goes through every card combination at every scalar combination
+    /// looking for the smallest number of moves to solve.
+    /// This will also alter the expected scal/vectors given from the generator.
+    /// </summary>
+    /// <param name="maxScalar"></param>
+    private int IntegrityCheck(int maxScalar)
+    {
+        int minMoves = 99;
+        float prevDisplacement = 0.0f;
+        float currDisplacement = 0.0f;
+
+        for (int card1 = 0; card1 < cardVectors.Count; card1++)        {
+            for (int scal1 = -maxScalar; scal1 <= maxScalar; scal1++)            {
+                prevDisplacement = 0.0f;
+                for (int card2 = 0; card2 < cardVectors.Count; card2++)                {
+                    for (int scal2 = -maxScalar; scal2 <= maxScalar; scal2++)                    {
+                        Vector3 testVector = (scal1 * cardVectors[card1]) + (scal2 * cardVectors[card2]);
+                        //currDisplacement = (modVector - testVector).magnitude;
+                        //if (prevDisplacement == 0.0f)
+                        //    prevDisplacement = currDisplacement;
+                        //else if (currDisplacement > prevDisplacement)
+                        //    break;
+                        //else
+                        //    prevDisplacement = currDisplacement;
+                        
+                        if(testVector == modVector) {
+                            int testMoves = Mathf.Abs(scal1) + Mathf.Abs(scal2) + 2; //plus 2 for the moves of selecting 2 cards
+                            if (testMoves < minMoves)  {
+                                minMoves = testMoves;
+                                evect1 = cardVectors[card1];
+                                escal1 = scal1;
+                                evect2 = cardVectors[card2];
+                                escal2 = scal2;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return minMoves;
+    }
+
 
     public Vector3 FinalAnswer()
     {

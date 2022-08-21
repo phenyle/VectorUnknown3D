@@ -62,6 +62,9 @@ public class Puzzle04Controller : MonoBehaviour
     public UnityEvent answer1events { get; private set; }
     public UnityEvent answer2events { get; private set; }
 
+    public StarBar starBar;
+    public FaceObject scoreFace;
+
     [Header("---Conversation Select---")]
     [Range(0, 9)]
     [Tooltip("Sets the dialog number used.\n0 val means no dialog\n1-9 selects that specific dialog")]
@@ -71,7 +74,7 @@ public class Puzzle04Controller : MonoBehaviour
     //Answer Cards
     private Vector3 startingAnswer; //this is the starting vector after being slightly randomized (when applicable) used for answer card calculation
     private Vector3 finalAnswerVector; //this is the Final answer vector that is tailored to match what the pair of answer cards can reproduce
-    private List<Vector3> cardVectors;
+    public List<Vector3> cardVectors { get; private set; }
 
     //Player Answers
     public Vector3 playerAnswer { get; private set; }
@@ -81,7 +84,8 @@ public class Puzzle04Controller : MonoBehaviour
     private bool correct;
 
     //MISC
-    private int attempts = 0;
+    public int attempts { get; private set; }
+    public float score { get; private set; }
     private float attmpWaitTime = 0.0f;
     private bool newAttempt = false;
     
@@ -95,6 +99,7 @@ public class Puzzle04Controller : MonoBehaviour
     {
         public int obsID;
         public float obsTime;
+        public int minMoves;
         public Vector3 answer;
         public bool userUniqueSolution;
 
@@ -166,51 +171,37 @@ public class Puzzle04Controller : MonoBehaviour
         inPortal = false;
         releaseTrigger.SetPuzzleController(this);
 
-    }
-    void Start()
-    { 
+
         cardVectors = new List<Vector3>();
 
         answer1events = new UnityEvent();
         answer2events = new UnityEvent();
 
-        //If vector is dynamic, generate an additional vector to add
-        //to starting answer
-        //if (isDynamic)
-        //{
-        //    DynamicVector = DynamicGenerator();
-        //}
-        //else
-        //{
-        //    DynamicVector = new Vector3(0f, 0f, 0f);
-        //}
-
-        generator = new AnswerGenerator(GameControllerPuzzle04.instance.Difficulty, InitFinalVector, FinalDynamicRange, LimitAxis);
-
-        ////Final Answer is created after generating the cards       
-        //startingAnswer = InitFinalVector + DynamicVector;
-
 
         //Move camera target inbetween the starting position and the goal
         cameraTarget.transform.position += (goalPoint.transform.position - startPoint.transform.position) / 2;
+        scoreFace.transform.position = cameraTarget.transform.position;
+        scoreFace.SetTarget(mainCamera.transform);
+        scoreFace.gameObject.SetActive(false);
 
         correct = false;
 
+        attempts = 0;
         obstacleTime = 0.0f;
         puzzleData = new obsData();
         attemptsList = "";
-        //puzzleData.expected = new obsData.expectedData();
-        //puzzleData.input = new obsData.inputData();
         puzzleData.obsID = puzzleID;
 
-        //       intAnswerGenerator();
-        //AnswerGenerators();
- //       AnswerCards();
 
+
+
+    }
+    void Start()
+    {
+        generator = new AnswerGenerator(GameControllerPuzzle04.instance.Difficulty, InitFinalVector, FinalDynamicRange, LimitAxis);
         cardVectors = generator.AnswerCards(MaxCardScalar);
-        puzzleData = generator.PuzzleData(puzzleData);
+        puzzleData = generator.PuzzleData(puzzleData, MaxCardScalar);
         finalAnswerVector = generator.FinalAnswer();
-
 
     }
 
@@ -219,20 +210,21 @@ public class Puzzle04Controller : MonoBehaviour
     {
         if (inPortal)
         {
-            if (!DialogueManager.isInDialogue && !GameRoot3D.isPause)
+            if (!DialogueManager.isInDialogue && !GameRoot3D.instance.isPause)
                 obstacleTime += Time.deltaTime;
 
             isActive = true;
 
             if(newAttempt)
             {
-                attmpWaitTime += Time.deltaTime;
-                if (attmpWaitTime > 0.5f)
-                {
+                //attmpWaitTime += Time.deltaTime;
+                //if (attmpWaitTime > 0.5f)
+                //{
+                    attempts++;
                     attmpWaitTime = 0.0f;
                     newAttempt = false;
                     attemptsList += CreateAttemptCSV();
-                }
+                //}
             }
 
             if (Input.GetKeyDown(KeyCode.E))
@@ -278,17 +270,17 @@ public class Puzzle04Controller : MonoBehaviour
         if (GameControllerPuzzle04.instance.currPuzzle != null)
         {
             temp += attempts.ToString() + ", "; //attempt number
-            temp += obstacleTime.ToString("0.00") + ", "; //time attempted at
-            temp += GameControllerPuzzle04.instance.P04W.getScalar1Value().ToString() + ", "; //scalar value for vector 1
+            temp += "t:" + obstacleTime.ToString("0.00") + ", "; //time attempted at
+            temp += GameControllerPuzzle04.instance.P04W.getScalar1Value().ToString() + " * "; //scalar value for vector 1
             if (GameControllerPuzzle04.instance.P04W.card1 != null)
-                temp += GameControllerPuzzle04.instance.P04W.card1.cardVector.x.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card1.cardVector.y.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card1.cardVector.z.ToString() + ", "; // vector1 information
+                temp += "< " + GameControllerPuzzle04.instance.P04W.card1.cardVector.x.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card1.cardVector.y.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card1.cardVector.z.ToString() + " > , "; // vector1 information
             else
-                temp += "0,0,0";
-            temp += GameControllerPuzzle04.instance.P04W.getScalar2Value().ToString() + ", "; //scalar value for vector 2
+                temp += "< 0, 0, 0 >";
+            temp += GameControllerPuzzle04.instance.P04W.getScalar2Value().ToString() + " * "; //scalar value for vector 2
             if (GameControllerPuzzle04.instance.P04W.card2 != null)
-                temp += GameControllerPuzzle04.instance.P04W.card2.cardVector.x.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card2.cardVector.y.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card2.cardVector.z.ToString(); // vector 2 information
+                temp += "< " + GameControllerPuzzle04.instance.P04W.card2.cardVector.x.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card2.cardVector.y.ToString() + ", " + GameControllerPuzzle04.instance.P04W.card2.cardVector.z.ToString() + ">"; // vector 2 information
             else
-                temp += "0,0,0";
+                temp += "< 0, 0, 0 >";
             temp += "\n";
         }
         return temp;
@@ -296,8 +288,10 @@ public class Puzzle04Controller : MonoBehaviour
 
     private void EnterAttempts()
     {
-        attmpWaitTime = 0.0f;
-        newAttempt = true;
+        if (obstacleTime > 0.5f) { 
+            attmpWaitTime = 0.0f;
+            newAttempt = true;
+        }
     }
 
     public Vector3 CalculatePlayerAnswer()
@@ -331,6 +325,7 @@ public class Puzzle04Controller : MonoBehaviour
                     GameControllerPuzzle04.instance.P04W.SetComplete();
                 correct = true;
 
+
                 GameRoot3D.instance.LockCamera(false);
                 answer1events.RemoveAllListeners();
                 answer2events.RemoveAllListeners();
@@ -353,11 +348,15 @@ public class Puzzle04Controller : MonoBehaviour
                 else
                     puzzleData.userUniqueSolution = false;
 
+                score = (float)puzzleData.minMoves / attempts;
                 GameControllerPuzzle04.instance.totMoves += attempts;
                 GameControllerPuzzle04.instance.questionsList += "[" +
                                         finalAnswerVector.x.ToString() + ", " +
                                         finalAnswerVector.y.ToString() + ", " +
                                         finalAnswerVector.z.ToString() + "]\n";
+
+                starBar.SetScore(score);
+                scoreFace.gameObject.SetActive(true);
 
                 GameControllerPuzzle04.instance.SaveLocalPuzzleData(this);
 
@@ -392,7 +391,7 @@ public class Puzzle04Controller : MonoBehaviour
     //------------------------------------
     #region Tool Actions
     // PORTAL---------------
-    #region Portal
+        #region Portal
     public void OnPortalEnter()
     {
         prevCameraPosition = mainCamera.transform.position;
@@ -417,7 +416,7 @@ public class Puzzle04Controller : MonoBehaviour
 
 
 
-        GameRoot3D.isPuzzleLock = true;
+        GameRoot3D.instance.isPuzzleLock = true;
         GameRoot3D.instance.LockPlayer(true);
 
         visVectCamera.GetComponent<Camera>().enabled = true;
@@ -481,7 +480,7 @@ public class Puzzle04Controller : MonoBehaviour
         GameControllerPuzzle04.instance.SetPuzzlePause(true);
         GameControllerPuzzle04.instance.currPuzzle = null;
 
-        GameRoot3D.isPuzzleLock = true;
+        GameRoot3D.instance.isPuzzleLock = true;
 
         answer1events.RemoveAllListeners();
         answer2events.RemoveAllListeners();
@@ -536,7 +535,7 @@ public class Puzzle04Controller : MonoBehaviour
     #endregion
 
     //GAP TRIGGERS------------------
-    #region Gap Triggers
+        #region Gap Triggers
     public void ToggleAllTriggers(bool value)
     {
         gapTriggers.ToggleFallTriggers(value);
@@ -547,7 +546,7 @@ public class Puzzle04Controller : MonoBehaviour
     #endregion
 
     // VISUAL VECTOR----------------
-    #region Visual Vector
+        #region Visual Vector
     public void turnOnVisualVectors(bool all)
     {
         //if (all)
@@ -609,7 +608,7 @@ public class Puzzle04Controller : MonoBehaviour
     #endregion
 
     //CAMERA GLIDE/ROTATE------------------
-    #region Camera Glide/Rotate
+        #region Camera Glide/Rotate
     private void activateCamRotate()
     {
         GameControllerPuzzle04.instance.SetPuzzlePause(false);  

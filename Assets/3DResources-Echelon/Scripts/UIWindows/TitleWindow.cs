@@ -219,7 +219,7 @@ public class TitleWindow : WindowRoot
         //When the game is in the "Expo" state, clicking play automatically
         //enters the player in and just creates a new database entry according
         //to the expo name.
-        GameRoot3D.isTutortial = false;
+        GameRoot3D.instance.isTutortial = false;
 
         if (GameRoot3D.isExpo)
         {
@@ -234,7 +234,7 @@ public class TitleWindow : WindowRoot
 
     public void ClickTutorialBtn()
     {
-        GameRoot3D.isTutortial = true;
+        GameRoot3D.instance.isTutortial = true;
         audioService.PlayUIAudio(Constants.audioUIClickBtn);
         GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.tutorialSceneName);
     }

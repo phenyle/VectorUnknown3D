@@ -59,7 +59,7 @@ public class load_grid_numbers_canvas : MonoBehaviour {
 		text.gameObject.transform.localScale = new Vector3(1, -1, 1);
 		//load_number.transform.GetChild(0).GetComponent<Text>().fontSize = 16;
 		//      load_number.transform.GetChild(0).GetComponent< Text>().text = point.x != 0.0f ? point.x.ToString() : "  "+point.z.ToString();
-		load_number.GetComponent<FaceObject>().SetTarget(GameObject.FindGameObjectWithTag("MainCamera"));
+		load_number.GetComponent<FaceObject>().SetTarget(GameObject.FindGameObjectWithTag("MainCamera").transform);
 		load_number.GetComponent<FaceObject>().enabled = true;
 
 		load_number.transform.localPosition = point;

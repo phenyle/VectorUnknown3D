@@ -15,6 +15,6 @@ MonoBehaviour:
   dialogues:
   - character: {fileID: 11400000, guid: aa5ca46dd3ebae0429769c09e7af7719, type: 2}
     sentences:
-    - More cannon stealing theiving pirates!
+    - More cannon stealing thieving pirates!
     - You won't be able to preview where you shot ends up this time.  But you'll
       still have the lattice matrix to help you out!

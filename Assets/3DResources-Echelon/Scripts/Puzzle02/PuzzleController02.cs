@@ -24,9 +24,10 @@ public class PuzzleController02 : MonoBehaviour
     [Header("--------FX Parts--------")]
     public GameObject explosion;
     public GameObject fires;
+    public Animation anime;
+    public Animator anim;
 
     [Header("--------Settings--------")]
-
     private float minDistApart = 10;
     public int xMin = -75;
     public int xMax = 75;
@@ -35,6 +36,11 @@ public class PuzzleController02 : MonoBehaviour
     public int rValue = 10;
     private int attempt = 1;
     public int id;
+
+    [Header("--------Scoring--------")]
+    public StarBar starBar;
+    public FaceObject scoreFace;
+
 
     [HideInInspector]
     public List<int[][]> matrixList; //a generate list of 4 possible answer matricies
@@ -124,6 +130,7 @@ public class PuzzleController02 : MonoBehaviour
                                             new int[3]{ 2, 0, -3 },
                                             };
 
+    [Header("--------Debug--------")]
     public string debugAnswer = "";
     public string debugAnsVector = "";
     public string debugAnsMatrix = "";
@@ -136,6 +143,9 @@ public class PuzzleController02 : MonoBehaviour
     {
         public int obsID;
         public float obsTime;
+        public int Ideal;
+        public int steps;
+        public float score;
         public int[] answer;
         public bool userUniqueSolution;
 
@@ -163,8 +173,6 @@ public class PuzzleController02 : MonoBehaviour
         shipParent = this.gameObject;
         shipObject = shipParent.transform.Find("shipBody").gameObject;
         GCP02 = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerPuzzle02>();
-
-
         //ReScaleLevel(GCP02.Difficulty);
     }
 
@@ -181,13 +189,30 @@ public class PuzzleController02 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
+        anim.Play("IdleFloat");
+        anim.playbackTime = Random.Range(anim.recorderStartTime, anim.recorderStopTime);
+ //       anim.playbackTime = Random.Range(0.0f, anim
+        //anime = GetComponent<Animation>();
+        //anime.Play("Float");
+        //anime["Float"].time = Random.Range(0.0f, anime["Float"].length);
+
         shipPos = new int[3];
+        puzzleData = new obsData();
         puzzleData.obsTime = 0.0f;
+        puzzleData.Ideal = 3 + GCP02.Difficulty;
         attemptNum = 0;
         attemptsList = "";
         SetShipDirection();
     }
 
+    public void StopAnimation()
+    {
+        scoreFace.transform.position = new Vector3(scoreFace.transform.position.x, 2, scoreFace.transform.position.z);
+ //       animator.StopPlayback();
+        anime.Stop();
+        shipObject.gameObject.SetActive(false);
+    }
 
     public void ToggleTopText(bool val)
     {
@@ -227,6 +252,11 @@ public class PuzzleController02 : MonoBehaviour
 
     public void SetShipDirection()
     {
+        Vector3 temp = -shipParent.transform.position.normalized;
+
+        vectText.transform.position = shipParent.transform.position + temp * 4 + Vector3.up * 6;
+        vectText.transform.localScale = Vector3.one;
+
         shipObject.transform.Rotate(Vector3.up, Random.Range(0.0f, 360.0f));
     }
 
@@ -615,6 +645,24 @@ public class PuzzleController02 : MonoBehaviour
         vectText.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
         vectTextTop.text = shipParent.transform.position.x.ToString() + "\n" + shipParent.transform.position.z.ToString();
     }
+
+    public void CalculateScore(float maxTime)
+    {
+        float baseScore = 0.0f;
+        //if it was solved under the ideal steps, give a small bonus (20%) to base score
+        if (puzzleData.steps >= puzzleData.Ideal)
+            baseScore = (float)puzzleData.Ideal / (float)puzzleData.steps;
+        else
+            baseScore = 1.2f;
+
+        float timeScore = -(Mathf.Pow(puzzleData.obsTime, 2) / Mathf.Pow(maxTime, 2)) + 1;
+        if (timeScore > 1.0f) timeScore = 1.0f;
+        else if (timeScore < 0.0f) timeScore = 0.0f;
+
+        puzzleData.score = baseScore * timeScore;
+    }
+
+
 
     public string CreateAttemptCSV(int[][] a_matrix, int[] a_vect)
     {

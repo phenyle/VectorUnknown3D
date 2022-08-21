@@ -5457,6 +5457,7 @@ MonoBehaviour:
   Card2: {fileID: 2499306019150320369}
   Card3: {fileID: 3743388794940004047}
   Card4: {fileID: 9096754719901488517}
+  panelCommon: {fileID: 6152567675603310050}
   feedbackPanel: {fileID: 3465084714369807070}
   goalDisplay: {fileID: 9025203984632881099}
   finalDisplay: {fileID: 6492435219317174315}
@@ -7368,7 +7369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

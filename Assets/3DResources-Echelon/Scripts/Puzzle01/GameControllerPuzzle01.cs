@@ -124,7 +124,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
         if (!DialogueManager.isInDialogue)
         {
-            if (!GameRoot3D.isPause)
+            if (!GameRoot3D.instance.isPause)
                 puzzleTime += Time.deltaTime;
 
             // Z key to switch camera
@@ -177,7 +177,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     GameRoot3D.instance.ShowCursor(true);
 
                     //Resume cannot unlock the lock
-                    GameRoot3D.isPuzzleLock = true;
+                    GameRoot3D.instance.isPuzzleLock = true;
  
                     //Dialogue manager cannot unlock the lock;
                     DialogueManager.isPuzzleLock = true;
@@ -205,7 +205,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
                     GameRoot3D.instance.ShowCursor(false);
 
                     //Resume can unlock the lock
-                    GameRoot3D.isPuzzleLock = false;
+                    GameRoot3D.instance.isPuzzleLock = false;
 
                     //Dialogue manager can unlock the lock;
                     DialogueManager.isPuzzleLock = false;
@@ -356,7 +356,7 @@ public class GameControllerPuzzle01 : GameControllerRoot
         }
 
         //Resume can unlock the lock
-        GameRoot3D.isPuzzleLock = false;
+        GameRoot3D.instance.isPuzzleLock = false;
 
         //Dialogue manager can unlock the lock;
         DialogueManager.isPuzzleLock = false;

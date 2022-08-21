@@ -10,15 +10,16 @@ public class GameRoot3D : GameRootMaster
     public GameObject sceneCameraMain;
 
     public static GameRoot3D instance = null;
-    public static bool isPause = false;
-    public static bool isPuzzleLock = false;
-    public static bool isTutortial = false;
-    public static bool showCursor = true;
+    public bool isPause { get; set; }
+    public bool isPuzzleLock { get; set; }
+    public bool isTutortial { get; set; }
+    public bool showCursor { get; set; }
     
     [Header("Common API")]
  //   public LoadingWindow loadingWindow;
     public DynamicWindow dynamicWindow;
     public PauseWindow pauseWindow;
+    public GameControllerRoot GCR;
 
     //Services
    // [HideInInspector]
@@ -75,6 +76,10 @@ public class GameRoot3D : GameRootMaster
 
         camEvents = new UnityEvent();
         moveEvents = new UnityEvent();
+        instance.isPause = false;
+        instance.isPuzzleLock = false;
+        instance.isTutortial = false;
+        instance.showCursor = true;
 
 
         if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
@@ -107,6 +112,8 @@ public class GameRoot3D : GameRootMaster
             if (GameRootMaster.isSession)
                 JoinEchelonLevel();
         }
+        else
+            Destroy(this);
     }
 
     //On game shut down, save player info
@@ -127,7 +134,7 @@ public class GameRoot3D : GameRootMaster
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(!isPause 
+            if(!instance.isPause 
                 && SceneManager.GetActiveScene().name != Constants.gameRootSceneName
                 && SceneManager.GetActiveScene().name != Constants.menuSceneName)
             {
@@ -147,7 +154,7 @@ public class GameRoot3D : GameRootMaster
 
         }
 
-        if(!isPause)
+        if(!instance.isPause)
         {
             player.users.tot_time += Time.deltaTime;
         }
@@ -187,6 +194,7 @@ public class GameRoot3D : GameRootMaster
         puzzleSystem = GetComponent<PuzzleSystem>();
         puzzleSystem.InitSystem();
 
+        GCR = GetComponent<GameControllerRoot>();
     }
 
     public static void AddTips(string tips)
@@ -231,7 +239,7 @@ public class GameRoot3D : GameRootMaster
         {
             pauseWindow.setLoginInfo("error");
         }
-        isPause = true;
+        instance.isPause = true;
         audioService.PauseAllAudios();
         Debug.Log("Lock");
     }
@@ -244,7 +252,7 @@ public class GameRoot3D : GameRootMaster
         //Cursor.lockState = CursorLockMode.Confined;
         //Cursor.visible = false;
 
-        if (!DialogueManager.isInDialogue && !isPuzzleLock)
+        if (!DialogueManager.isInDialogue && !instance.isPuzzleLock)
         {
             LockPlayerAndCam(false);
             ShowCursor(false);
@@ -253,14 +261,14 @@ public class GameRoot3D : GameRootMaster
         else
             ShowCursor(true);
 
-        if(!isPuzzleLock)
+        if(!instance.isPuzzleLock)
             LockPlayerAndCam(false);
 
         Time.timeScale = 1;
         pauseWindow.panelOption.gameObject.SetActive(false);
         pauseWindow.panelPause.gameObject.SetActive(true);
         pauseWindow.SetWindowState(false);
-        isPause = false;
+        instance.isPause = false;
         pauseWindow.ResetPauseMenu();
         audioService.ResumeAllAudios();
 
@@ -293,26 +301,25 @@ public class GameRoot3D : GameRootMaster
 
     public void LockPlayerAndCam(bool state)
     {
-        if (true)
+
+        try
+        {
+            sceneCameraMain.GetComponent<CameraController>().isLock = state;
+        }
+        catch 
         {
             try
             {
-                sceneCameraMain.GetComponent<CameraController>().isLock = state;
-            }
-            catch 
-            {
-                try
-                {
-                    sceneCameraMain.GetComponent<Camera2DFollowMod>().isLock = state;
-                }
-                catch { }
-            }
-            try
-            {
-                scenePlayer.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
+                sceneCameraMain.GetComponent<Camera2DFollowMod>().isLock = state;
             }
             catch { }
         }
+        try
+        {
+            scenePlayer.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>().isLock = state;
+        }
+        catch { }
+
 
         //try
         //{
@@ -340,16 +347,16 @@ public class GameRoot3D : GameRootMaster
 
     public void ToggleCursor()
     {
-        if (isPuzzleLock || DialogueManager.isInDialogue)
+        if (instance.isPuzzleLock || DialogueManager.isInDialogue)
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
         else
         {
-            showCursor = !showCursor;
+            instance.showCursor = !instance.showCursor;
 
-            if(showCursor)
+            if(instance.showCursor)
             {
                 Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
@@ -365,9 +372,9 @@ public class GameRoot3D : GameRootMaster
 
     public void ShowCursor(bool state)
     {
-        showCursor = state;
+        instance.showCursor = state;
 
-        if (showCursor)
+        if (instance.showCursor)
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;

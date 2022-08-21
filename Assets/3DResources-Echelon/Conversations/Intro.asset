@@ -16,12 +16,12 @@ MonoBehaviour:
   - character: {fileID: 11400000, guid: aa5ca46dd3ebae0429769c09e7af7719, type: 2}
     sentences:
     - You have crashed your ship onto this Island.
-    - Unfortnately you out for a very long time and a band of pirates stole all the
-      parts to your ship.
+    - Unfortnately you were out for a very long time and a band of pirates stole
+      all the parts to your ship.
     - You can fix the hull by solving the first puzzle to the left using vector displacement.
     - All of your cannons were taken to the second puzzle at the skull cavern.  Use
       matrix multiplication to sink those theiving pirates.
     - A trio of pirates stole all your gold at puzzle three.  You can get it back
-      from them using vector spans
-    - Most imporantly all your sails are gone.  They blew away to the islands at
+      from them using vector spans.
+    - Most importantly all your sails are gone.  They blew away to the islands at
       puzzle 4.  Aim your grapple hook with vector math to cross the gaps.

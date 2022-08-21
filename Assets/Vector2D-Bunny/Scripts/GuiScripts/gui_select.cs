@@ -23,6 +23,27 @@ public class gui_select : MonoBehaviour {
 		DontDestroyOnLoad (transform.gameObject);
 	}
 
+    void Start()
+    {
+        if (GameRootMaster.isSession)
+        {
+            GameConstants.difficulty = GameRootMaster.player.users.difficultyNum;
+            GameRootMaster.player.bunny.level = GameRootMaster.player.users.difficultyNum;
+
+            switch (GameRootMaster.player.users.stageNum)
+            {
+                case 1: level_one(); break;
+                case 2: level_two(); break;
+                case 3: level_five(); break;
+                case 4: level_six(); break;
+                case 5: level_seven(); break;
+                case 6: level_eight(); break;
+                case 7: level_nine(); break;
+                default: GameRootMaster.isSession = false; break;
+            }
+        }
+    }
+
 	public void load_game(){
 		SceneManager.LoadScene ("VectorGame");
 	}

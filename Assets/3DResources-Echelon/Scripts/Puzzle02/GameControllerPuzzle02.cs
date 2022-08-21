@@ -101,6 +101,12 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     private Vector3 startPosition;
 
+    [Header("---Scoring---")]
+    public int maxTime = 90;
+    private List<PuzzleController02.obsData> data;
+    private List<FaceObject> starBars;
+    private float averageScore;
+
     //camera stuff
 
 
@@ -150,13 +156,16 @@ public class GameControllerPuzzle02 : GameControllerRoot
         shipPuzzles = new List<PuzzleController02>();
         //       airshipPuzzles = new List<PuzzleController02>();
 
+        data = new List<PuzzleController02.obsData>();
+        starBars = new List<FaceObject>();
+
         switch (SceneManager.GetActiveScene().name)
         {
             case "04Puzzle02-1": levelNumber = 1; break;
             case "04Puzzle02-2": levelNumber = 2; break;
             case "04Puzzle02-3": levelNumber = 3; break;
         }
-
+        GameRoot3D.instance.GCR.GCP02 = this;
 
         endPortal.SetActive(false);
         fanFair.SetActive(false);
@@ -264,7 +273,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     void Update()
     {
-        if (!DialogueManager.isInDialogue && !GameRoot3D.isPause)
+        if (!DialogueManager.isInDialogue && !GameRoot3D.instance.isPause)
         {
             attemptData.tot_Time += Time.deltaTime;
             if (currTarget != null)
@@ -282,7 +291,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
 
 
-        if (!DialogueManager.isInDialogue && !GameRoot3D.isPause)
+        if (!DialogueManager.isInDialogue && !GameRoot3D.instance.isPause)
             tot_puzzleTime += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -426,12 +435,28 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
     public void SinkShip()
     {
+  //      currTarget.animator.Play("ShipSink")
+  //      currTarget.anime.Play("ShipSink");
+        currTarget.anim.SetTrigger("Sink");
+
         currTarget.ToggleFrontText(false);
+        currTarget.CalculateScore(maxTime);
+        data.Add(currTarget.puzzleData);
+        starBars.Add(currTarget.scoreFace);
+
+
+        currTarget.vectText.gameObject.SetActive(false);
+        currTarget.vectTextTop.gameObject.SetActive(false);
+        currTarget.scoreFace.SetTarget(player.transform);
+        currTarget.scoreFace.gameObject.SetActive(true);
+        currTarget.starBar.SetSize(6f, 1.0f);
+        currTarget.starBar.SetScore(currTarget.puzzleData.score);
 
         SaveLocalPuzzleData(currTarget);
-
+        
         shipPuzzles.Remove(currTarget);
         P02W.SetCompleteNumber(numberOfShips - shipPuzzles.Count, numberOfShips);
+
         if (shipPuzzles.Count > 0)
         {
             int random = Random.Range(0, shipPuzzles.Count);
@@ -490,7 +515,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         target.ToggleFrontText(true);
         target.vectText.GetComponent<RubberizeAnim>().ToggleActivate(true);
         target.vectTextTop.GetComponent<RubberizeAnim>().ToggleActivate(true);
-        target.vectText.GetComponent<FaceObject>().SetTarget(player);
+        target.vectText.GetComponent<FaceObject>().SetTarget(player.transform);
         target.vectText.GetComponent<FaceObject>().enabled = true;
         //set cannon ansVectors and balls ansMatricies
         for (int i = 0; i < 4; i++)
@@ -559,12 +584,11 @@ public class GameControllerPuzzle02 : GameControllerRoot
         else
             currTarget.CreateAttemptCSV(new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 0 } }, currVector);
 
+        currTarget.puzzleData.steps++;
         //TODO
         //connect this to the cannonRotate class
         //connect this to the WindowUI
         //stretch connect this to the VisualVector
-
-
     }
 
     public void SelectCannonBalls(cannonballController ball)
@@ -598,6 +622,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
         else
             currTarget.CreateAttemptCSV(currMatrix, new int[2] { 0, 0 });
 
+        currTarget.puzzleData.steps++;
         //TODO
         //connect this to the cannonRotate class
         //connect this to the WindowUI
@@ -639,6 +664,13 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 ship.shipLine.gameObject.SetActive(P02W.showTargetLines);
             }
             currTarget.shipLine.material = currTarget.lineMatActive;
+
+            foreach (FaceObject bar in starBars)
+            {
+                bar.GetComponentInChildren<StarBar>().SetSize(11f,3f);
+                bar.LockRotationAxis(FaceObject.LockAxis.Y);
+                bar.SetTarget(topCamera.transform);
+            }
             //           currTarget.vectTextTop.GetComponent<RubberizeAnim>().active = true;
 
             //ADD Feature for Turning on the Line Renderers
@@ -666,6 +698,12 @@ public class GameControllerPuzzle02 : GameControllerRoot
             }
             currTarget.vectText.gameObject.SetActive(true);
 
+            foreach (FaceObject bar in starBars)
+            {
+                bar.GetComponentInChildren<StarBar>().SetSize(6f, 1.0f);
+                bar.LockRotationAxis(FaceObject.LockAxis.None);
+                bar.SetTarget(player.transform);
+            }
 
             //ADD Feature for Turning off the Line Renderers
 
@@ -809,6 +847,48 @@ public class GameControllerPuzzle02 : GameControllerRoot
         return currTarget;
     }
 
+    public override void SetSplash()
+    {
+        foreach(PuzzleController02.obsData obs in data)
+        {
+            averageScore += obs.score;
+        }
+        averageScore /= data.Count;
+
+        base.SetSplash();
+
+            P02W.panelProgress.gameObject.SetActive(false);
+
+        switch (Difficulty)
+        {
+            case 1:
+                GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                    GameRoot3D.player.records.p2_1_time,
+                    tot_puzzleTime,
+                    GameRoot3D.player.records.p2_1_score,
+                    averageScore);
+                break;
+
+            case 2:
+                GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                    GameRoot3D.player.records.p2_2_time,
+                    tot_puzzleTime,
+                    GameRoot3D.player.records.p2_2_score,
+                    averageScore);
+                break;
+
+            case 3:
+                GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                    GameRoot3D.player.records.p2_3_time,
+                    tot_puzzleTime,
+                    GameRoot3D.player.records.p2_3_score,
+                    averageScore);
+                break;
+
+        }
+    }
+
+
     public void SaveLocalPuzzleData(PuzzleController02 puzzle)
     {
         puzzle.puzzleData.i_matrix = currMatrix;
@@ -826,56 +906,85 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 switch (puzzle.puzzleData.obsID)
                 {
                     case 1:
+                        GameRoot3D.player.p2_1.obs1_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs1_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs1_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p2_1.obs2_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs2_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs2_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p2_1.obs3_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs3_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs3_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p2_1.obs4_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs4_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs4_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p2_1.obs5_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs5_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs5_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
+                        GameRoot3D.player.p2_1.obs6_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs6_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs6_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs6 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
+                        GameRoot3D.player.p2_1.obs7_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs7_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs7_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs7 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
+                        GameRoot3D.player.p2_1.obs8_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs8_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs8_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs8 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs8_attempts = puzzle.attemptsList;
                         break;
                     case 9:
+                        GameRoot3D.player.p2_1.obs9_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs9_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs9_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs9 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs9_attempts = puzzle.attemptsList;
                         break;
                     case 10:
+                        GameRoot3D.player.p2_1.obs10_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_1.obs10_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_1.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_1.obs10_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_1.obs10 = puzzle.puzzleData;
                         GameRoot3D.player.p2_1.obs10_attempts = puzzle.attemptsList;
-                        break;
-
+                        break;                       
                 }
                 break;
 
@@ -883,56 +992,85 @@ public class GameControllerPuzzle02 : GameControllerRoot
             case 2:
                 GameRoot3D.player.records.p2_2_numMove += puzzle.attemptNum;
 
-
                 switch (puzzle.puzzleData.obsID)
                 {
                     case 1:
+                        GameRoot3D.player.p2_2.obs1_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs1_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs1_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p2_2.obs2_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs2_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs2_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p2_2.obs3_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs3_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs3_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p2_2.obs4_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs4_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs4_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p2_2.obs5_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs5_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs5_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
+                        GameRoot3D.player.p2_2.obs6_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs6_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs6_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs6 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
+                        GameRoot3D.player.p2_2.obs7_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs7_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs7_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs7 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
+                        GameRoot3D.player.p2_2.obs8_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs8_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs8_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs8 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs8_attempts = puzzle.attemptsList;
                         break;
                     case 9:
+                        GameRoot3D.player.p2_2.obs9_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs9_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs9_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs9 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs9_attempts = puzzle.attemptsList;
                         break;
                     case 10:
+                        GameRoot3D.player.p2_2.obs10_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_2.obs10_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_2.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_2.obs10_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_2.obs10 = puzzle.puzzleData;
                         GameRoot3D.player.p2_2.obs10_attempts = puzzle.attemptsList;
                         break;
@@ -946,52 +1084,82 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 switch (puzzle.puzzleData.obsID)
                 {
                     case 1:
+                        GameRoot3D.player.p2_3.obs1_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs1_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs1_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs1_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p2_3.obs2_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs2_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs2_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs2_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p2_3.obs3_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs3_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs3_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs3_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p2_3.obs4_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs4_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs4_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs4_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p2_3.obs5_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs5_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs5_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs5_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
+                        GameRoot3D.player.p2_3.obs6_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs6_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs6_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs6_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs6 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
+                        GameRoot3D.player.p2_3.obs7_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs7_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs7_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs7_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs7 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
+                        GameRoot3D.player.p2_3.obs8_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs8_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs8_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs8_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs8 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs8_attempts = puzzle.attemptsList;
                         break;
                     case 9:
+                        GameRoot3D.player.p2_3.obs9_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs9_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs9_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs9_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs9 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs9_attempts = puzzle.attemptsList;
                         break;
                     case 10:
+                        GameRoot3D.player.p2_3.obs10_Ideal = puzzle.puzzleData.Ideal;
+                        GameRoot3D.player.p2_3.obs10_steps = puzzle.puzzleData.steps;
                         GameRoot3D.player.p2_3.obs10_time = puzzle.puzzleData.obsTime;
+                        GameRoot3D.player.p2_3.obs10_score = puzzle.puzzleData.score;
                         GameRoot3D.player.p2_3.obs10 = puzzle.puzzleData;
                         GameRoot3D.player.p2_3.obs10_attempts = puzzle.attemptsList;
                         break;
@@ -1006,18 +1174,29 @@ public class GameControllerPuzzle02 : GameControllerRoot
         switch (levelNumber)
         {
             case 1:
+                foreach (PuzzleController02.obsData temp in data)
+                {
+                    GameRoot3D.player.p2_1.tot_Ideal += temp.Ideal;
+                    GameRoot3D.player.p2_1.tot_steps += temp.steps;
+                    GameRoot3D.player.p2_1.avg_score += temp.score;
+                }
+                GameRoot3D.player.p2_1.tot_score = GameRoot3D.player.p2_1.tot_Ideal / GameRoot3D.player.p2_1.tot_steps;
+                GameRoot3D.player.p2_1.avg_score /= data.Count;
+
                 if (GameRoot3D.player.records.p2_1_time == 0.0f)
-                {
-
                     GameRoot3D.player.records.p2_1_time = tot_puzzleTime;
-                    //GameRoot.player.records.p2_1_numMove = totMoves;
-                    //GameRoot.player.records.p2_1_questions = questionsList;
-                }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p2_1_time)
-                {
-
                     GameRoot3D.player.records.p2_1_time = tot_puzzleTime;
-                }
+
+                if (GameRoot3D.player.records.p2_1_score == 0.0f)
+                    GameRoot3D.player.records.p2_1_score = GameRoot3D.player.p2_1.avg_score;
+                else if (GameRoot3D.player.p2_1.avg_score < GameRoot3D.player.records.p2_1_score)
+                    GameRoot3D.player.records.p2_1_score = GameRoot3D.player.p2_1.avg_score;
+
+                if (GameRoot3D.player.records.p2_1_numMove == 0.0f)
+                    GameRoot3D.player.records.p2_1_numMove = GameRoot3D.player.p2_1.tot_steps;
+                else if (GameRoot3D.player.p2_1.tot_steps < GameRoot3D.player.records.p2_1_numMove)
+                    GameRoot3D.player.records.p2_1_numMove = GameRoot3D.player.p2_1.tot_steps;
 
                 GameRoot3D.player.p2_1.attemptDate = System.DateTime.Now.ToString();
                 GameRoot3D.player.records.p2_1_attempts++;
@@ -1030,16 +1209,29 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 break;
 
             case 2:
+                foreach (PuzzleController02.obsData temp in data)
+                {
+                    GameRoot3D.player.p2_2.tot_Ideal += temp.Ideal;
+                    GameRoot3D.player.p2_2.tot_steps += temp.steps;
+                    GameRoot3D.player.p2_2.avg_score += temp.score;
+                }
+                GameRoot3D.player.p2_2.tot_score = GameRoot3D.player.p2_2.tot_Ideal / GameRoot3D.player.p2_2.tot_steps;
+                GameRoot3D.player.p2_2.avg_score /= data.Count;
+
                 if (GameRoot3D.player.records.p2_2_time == 0.0f)
-                {
-
                     GameRoot3D.player.records.p2_2_time = tot_puzzleTime;
-                }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p2_2_time)
-                {
-
                     GameRoot3D.player.records.p2_2_time = tot_puzzleTime;
-                }
+
+                if (GameRoot3D.player.records.p2_2_score == 0.0f)
+                    GameRoot3D.player.records.p2_2_score = GameRoot3D.player.p2_2.avg_score;
+                else if (GameRoot3D.player.p2_2.avg_score < GameRoot3D.player.records.p2_2_score)
+                    GameRoot3D.player.records.p2_2_score = GameRoot3D.player.p2_2.avg_score;
+
+                if (GameRoot3D.player.records.p2_2_numMove == 0.0f)
+                    GameRoot3D.player.records.p2_2_numMove = GameRoot3D.player.p2_2.tot_steps;
+                else if (GameRoot3D.player.p2_2.tot_steps < GameRoot3D.player.records.p2_2_numMove)
+                    GameRoot3D.player.records.p2_2_numMove = GameRoot3D.player.p2_2.tot_steps;
 
                 GameRoot3D.player.p2_2.attemptDate = System.DateTime.Now.ToString();
                 GameRoot3D.player.records.p2_2_attempts++;
@@ -1052,16 +1244,29 @@ public class GameControllerPuzzle02 : GameControllerRoot
                 break;
 
             case 3:
+                foreach (PuzzleController02.obsData temp in data)
+                {
+                    GameRoot3D.player.p2_3.tot_Ideal += temp.Ideal;
+                    GameRoot3D.player.p2_3.tot_steps += temp.steps;
+                    GameRoot3D.player.p2_3.avg_score += temp.score;
+                }
+                GameRoot3D.player.p2_3.tot_score = GameRoot3D.player.p2_3.tot_Ideal / GameRoot3D.player.p2_3.tot_steps;
+                GameRoot3D.player.p2_3.avg_score /= data.Count;
+
                 if (GameRoot3D.player.records.p2_3_time == 0.0f)
-                {
-
                     GameRoot3D.player.records.p2_3_time = tot_puzzleTime;
-                }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p2_3_time)
-                {
-
                     GameRoot3D.player.records.p2_3_time = tot_puzzleTime;
-                }
+
+                if (GameRoot3D.player.records.p2_3_score == 0.0f)
+                    GameRoot3D.player.records.p2_3_score = GameRoot3D.player.p2_3.avg_score;
+                else if (GameRoot3D.player.p2_3.avg_score < GameRoot3D.player.records.p2_3_score)
+                    GameRoot3D.player.records.p2_3_score = GameRoot3D.player.p2_3.avg_score;
+
+                if (GameRoot3D.player.records.p2_3_numMove == 0.0f)
+                    GameRoot3D.player.records.p2_3_numMove = GameRoot3D.player.p2_3.tot_steps;
+                else if (GameRoot3D.player.p2_3.tot_steps < GameRoot3D.player.records.p2_3_numMove)
+                    GameRoot3D.player.records.p2_3_numMove = GameRoot3D.player.p2_3.tot_steps;
 
                 GameRoot3D.player.p2_3.attemptDate = System.DateTime.Now.ToString();
                 GameRoot3D.player.records.p2_3_attempts++;

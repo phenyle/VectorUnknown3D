@@ -454,7 +454,7 @@ public class LoginWindow : LoginSystem
         //When the game is in the "Expo" state, clicking play automatically
         //enters the player in and just creates a new database entry according
         //to the expo name.
-        GameRoot3D.isTutortial = false;
+        GameRoot3D.instance.isTutortial = false;
 
         if (GameRoot3D.isExpo)
         {

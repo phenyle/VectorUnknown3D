@@ -123,6 +123,7 @@ public class PauseWindow : WindowRoot
         {
             case 0: //Return to Hub
                 audioService.PlayUIAudio(Constants.audioUIClickBtn);
+                GameRoot3D.instance.isPuzzleLock = false;
                 GameRoot3D.instance.Resume();
                 ResetPauseMenu();
 
@@ -137,7 +138,7 @@ public class PauseWindow : WindowRoot
                 audioService.PlayUIAudio(Constants.audioUIClickBtn);
                 GameObject.Find("DialogueManager").GetComponent<DialogueManager>().EndDialogue();
                 //Resume can unlock the lock
-                GameRoot3D.isPuzzleLock = false;
+                GameRoot3D.instance.isPuzzleLock = false;
 
                 GameRoot3D.player.users.last_login = System.DateTime.Now.ToString();
                 GameRoot3D.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);

@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public bool isEnterExit = false;
     [HideInInspector]
     public string sceneName;
+    private EnterExit portal;
 
     private void Update()
     {
@@ -14,9 +15,15 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
+                portal.PuzzleExitActions();
                 GameRoot3D.ShowTips("", false, false);
                 GameRoot3D.instance.puzzleSystem.EnterPuzzle(sceneName);
             }
         }
+    }
+
+    public void SetEnterExit(EnterExit exit)
+    {
+        portal = exit;
     }
 }

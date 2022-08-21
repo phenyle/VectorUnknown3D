@@ -19,7 +19,7 @@ MonoBehaviour:
     - Roll the ball into the highlighted goal by choosing a span that tilts the environment
       in the right way.
     - You are given a variable within the vectors to modify.
-    - You are able to swap the fixed vector, and therefore change the vector ,you
+    - You are able to swap the fixed vector, and therefore change the vector, you
       are modifying through the use of the Swap Vectors button.
     - Look at the mini diagram in the lower left corner to see how your choice affects
       vectors.

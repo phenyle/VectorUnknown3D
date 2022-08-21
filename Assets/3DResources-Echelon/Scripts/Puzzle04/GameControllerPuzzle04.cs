@@ -38,6 +38,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
 
     [Header("Misc Components")]
+    public EnterExit exitPortal;
     public GameObject puzzleWindow;
     public bool inPuzzle = false;
 
@@ -58,16 +59,26 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
     public string questionsList;
     public int totMoves;
+    public int overallIdeal = 0;
+    public int overallSteps = 0;
+    public float overallScore = 0.0f;
+    public float averageScore = 0.0f;
 
     public void Awake()
     {
-        instance = this;
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this);
+        
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     public void Start()
     {
+        GameRoot3D.instance.GCR.GCP04 = this;
+
         P04W = puzzleWindow.GetComponent<Puzzle04Window>();
 
         GameRoot3D.instance.FindPlayerAndCamera();
@@ -172,7 +183,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
         if (!DialogueManager.isInDialogue)
         {
-            if (!GameRoot3D.isPause && !pausePuzzTime)
+            if (!GameRoot3D.instance.isPause && !pausePuzzTime)
             {
                 tot_puzzleTime += Time.deltaTime;
                 int minutes = (int)tot_puzzleTime / 60;
@@ -288,6 +299,43 @@ public class GameControllerPuzzle04 : GameControllerRoot
         return audio04;
     }
 
+    public override void SetSplash()
+    {
+        base.SetSplash();
+        if(instance != null)
+        {
+            instance.SetPuzzlePause(true);
+            instance.P04W.panelCommon.SetActive(false);
+
+            switch (Difficulty)
+            {
+                case 1:
+                    GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                        GameRoot3D.player.records.p4_1_time,
+                        tot_puzzleTime,
+                        GameRoot3D.player.records.p4_1_totScore,
+                        averageScore);
+                    break;
+
+                case 2:
+                    GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                        GameRoot3D.player.records.p4_2_time,
+                        tot_puzzleTime,
+                        GameRoot3D.player.records.p4_2_totScore,
+                        averageScore);
+                    break;
+
+                case 3:
+                    GameRoot3D.instance.GCR?.completeSplash?.SetSplash(
+                        GameRoot3D.player.records.p4_3_time,
+                        tot_puzzleTime,
+                        GameRoot3D.player.records.p4_3_totScore,
+                        averageScore);
+                    break;
+            }
+        }
+    }
+
 
     /// <summary>
     /// Everytime a player correctly answers a puzzle, that puzzle data struct
@@ -304,56 +352,182 @@ public class GameControllerPuzzle04 : GameControllerRoot
         int index;
 
         index = puzzleDatas.IndexOf(puzzle);
+        overallIdeal += puzzle.puzzleData.minMoves;
+        overallSteps += puzzle.attempts;
+        overallScore = (float)overallIdeal / (float)overallSteps;
+        averageScore += puzzle.score;
 
         switch (Difficulty)
         {
             case 1:
+                GameRoot3D.player.p4_1.tot_Ideal = overallIdeal;
+                GameRoot3D.player.p4_1.tot_steps = overallSteps;
+                GameRoot3D.player.p4_1.tot_score = overallScore;
+
                 switch (puzzle.puzzleID)
                 {
                     case 1:
+                        GameRoot3D.player.p4_1.obs1_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs1_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs1_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs1_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs1_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs1_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs1_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs1_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs1_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs1_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p4_1.obs2_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs2_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs2_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs2_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs2_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs2_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs2_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs2_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs2_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs2_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p4_1.obs3_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs3_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs3_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs3_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs3_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs3_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs3_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs3_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs3_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs3_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p4_1.obs4_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs4_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs4_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs4_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs4_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs4_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs4_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs4_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs4_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs4_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p4_1.obs5_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs5_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs5_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs5_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs5_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs5_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs5_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs5_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs5_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs5_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
+                        GameRoot3D.player.p4_1.obs6_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs6_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs6_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs6_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs6_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs6_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs6_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs6_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs6_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs6_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs6 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
+                        GameRoot3D.player.p4_1.obs7_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs7_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs7_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs7_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs7_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs7_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs7_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs7_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs7_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs7_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs7 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
+                        GameRoot3D.player.p4_1.obs8_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs8_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs8_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs8_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs8_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs8_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs8_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs8_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs8_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs8_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs8 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs8_attempts = puzzle.attemptsList;
                         break;
                     case 9:
+                        GameRoot3D.player.p4_1.obs9_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_1.obs9_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_1.obs9_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_1.obs9_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_1.obs9_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_1.obs9_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_1.obs9_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_1.obs9_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_1.obs9_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_1.obs9_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_1.obs9 = puzzle.puzzleData;
                         GameRoot3D.player.p4_1.obs9_attempts = puzzle.attemptsList;
+                        averageScore /= 9.0f;
                         break;
 
                 }
@@ -361,79 +535,260 @@ public class GameControllerPuzzle04 : GameControllerRoot
 
 
             case 2:
+                GameRoot3D.player.p4_2.tot_Ideal = overallIdeal;
+                GameRoot3D.player.p4_2.tot_steps = overallSteps;
+                GameRoot3D.player.p4_2.tot_score = overallScore;
+
                 switch (puzzle.puzzleID)
                 {
                     case 1:
+                        GameRoot3D.player.p4_2.obs1_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs1_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs1_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs1_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs1_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs1_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs1_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs1_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs1_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs1_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p4_2.obs2_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs2_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs2_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs2_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs2_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs2_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs2_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs2_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs2_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs2_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p4_2.obs3_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs3_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs3_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs3_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs3_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs3_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs3_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs3_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs3_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs3_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p4_2.obs4_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs4_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs4_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs4_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs4_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs4_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs4_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs4_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs4_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs4_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p4_2.obs5_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs5_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs5_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs5_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs5_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs5_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs5_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs5_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs5_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs5_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs5_attempts = puzzle.attemptsList;
                         break;
                     case 6:
+                        GameRoot3D.player.p4_2.obs6_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs6_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs6_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs6_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs6_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs6_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs6_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs6_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs6_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs6_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs6 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs6_attempts = puzzle.attemptsList;
                         break;
                     case 7:
+                        GameRoot3D.player.p4_2.obs7_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs7_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs7_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs7_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs7_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs7_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs7_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs7_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs7_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs7_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs7 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs7_attempts = puzzle.attemptsList;
                         break;
                     case 8:
+                        GameRoot3D.player.p4_2.obs8_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_2.obs8_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_2.obs8_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_2.obs8_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_2.obs8_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_2.obs8_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_2.obs8_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_2.obs8_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_2.obs8_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_2.obs8_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_2.obs8 = puzzle.puzzleData;
                         GameRoot3D.player.p4_2.obs8_attempts = puzzle.attemptsList;
+                        averageScore /= 8.0f;
+
                         break;
                 }
                 break;
 
 
             case 3:
+                GameRoot3D.player.p4_3.tot_Ideal = overallIdeal;
+                GameRoot3D.player.p4_3.tot_steps = overallSteps;
+                GameRoot3D.player.p4_3.tot_score = overallScore;
+
                 switch (puzzle.puzzleID)
                 {
                     case 1:
+                        GameRoot3D.player.p4_3.obs1_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_3.obs1_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_3.obs1_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_3.obs1_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_3.obs1_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_3.obs1_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_3.obs1_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_3.obs1_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_3.obs1_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_3.obs1_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_3.obs1 = puzzle.puzzleData;
                         GameRoot3D.player.p4_3.obs1_attempts = puzzle.attemptsList;
                         break;
                     case 2:
+                        GameRoot3D.player.p4_3.obs2_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_3.obs2_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_3.obs2_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_3.obs2_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_3.obs2_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_3.obs2_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_3.obs2_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_3.obs2_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_3.obs2_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_3.obs2_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_3.obs2 = puzzle.puzzleData;
                         GameRoot3D.player.p4_3.obs2_attempts = puzzle.attemptsList;
                         break;
                     case 3:
+                        GameRoot3D.player.p4_3.obs3_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_3.obs3_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_3.obs3_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_3.obs3_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_3.obs3_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_3.obs3_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_3.obs3_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_3.obs3_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_3.obs3_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_3.obs3_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_3.obs3 = puzzle.puzzleData;
                         GameRoot3D.player.p4_3.obs3_attempts = puzzle.attemptsList;
                         break;
                     case 4:
+                        GameRoot3D.player.p4_3.obs4_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_3.obs4_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_3.obs4_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_3.obs4_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_3.obs4_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_3.obs4_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_3.obs4_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_3.obs4_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_3.obs4_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_3.obs4_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_3.obs4 = puzzle.puzzleData;
                         GameRoot3D.player.p4_3.obs4_attempts = puzzle.attemptsList;
                         break;
                     case 5:
+                        GameRoot3D.player.p4_3.obs5_ans = puzzle.puzzleData.answer.ToString();
+                        GameRoot3D.player.p4_3.obs5_a = puzzle.puzzleData.e_Vect1.ToString();
+                        GameRoot3D.player.p4_3.obs5_b = puzzle.puzzleData.e_Vect2.ToString();
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect1);
+                        puzzle.cardVectors.Remove(puzzle.puzzleData.e_Vect2);
+                        GameRoot3D.player.p4_3.obs5_c = puzzle.cardVectors[0].ToString();
+                        puzzle.cardVectors.RemoveAt(0);
+                        GameRoot3D.player.p4_3.obs5_d = puzzle.cardVectors[0].ToString();
+                        GameRoot3D.player.p4_3.obs5_x = puzzle.puzzleData.e_Scal1;
+                        GameRoot3D.player.p4_3.obs5_y = puzzle.puzzleData.e_Scal2;
+                        GameRoot3D.player.p4_3.obs5_Ideal = puzzle.puzzleData.minMoves;
+                        GameRoot3D.player.p4_3.obs5_steps = puzzle.attempts;
+
                         GameRoot3D.player.p4_3.obs5_time = puzzle.puzzleData.obsTime;
                         GameRoot3D.player.p4_3.obs5 = puzzle.puzzleData;
                         GameRoot3D.player.p4_3.obs5_attempts = puzzle.attemptsList;
+                        averageScore /= 5.0f;
+
                         break;
                 }
                 break;
@@ -448,20 +803,29 @@ public class GameControllerPuzzle04 : GameControllerRoot
             case 1:
                 if (GameRoot3D.player.records.p4_1_time == 0.0f)
                 {
-
-//                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_1_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_1_numMove = totMoves;
                     GameRoot3D.player.records.p4_1_questions = questionsList;
                 }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p4_1_time)
                 {
-
-//                    GameRoot.player.users.p4_1clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_1_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_1_numMove = totMoves;
                     GameRoot3D.player.records.p4_1_questions = questionsList;
                 }
+
+                if(GameRoot3D.player.records.p4_1_numMove == 0.0f)
+                    GameRoot3D.player.records.p4_1_numMove = totMoves;
+                else if(totMoves < GameRoot3D.player.records.p4_1_numMove)
+                    GameRoot3D.player.records.p4_1_numMove = totMoves;
+
+                if (GameRoot3D.player.records.p4_1_totScore == 0.0f)
+                    GameRoot3D.player.records.p4_1_totScore = overallScore;
+                else if (overallScore > GameRoot3D.player.records.p4_1_totScore)
+                    GameRoot3D.player.records.p4_1_totScore = overallScore;
+
+                if (GameRoot3D.player.records.p4_1_avgScore == 0.0f)
+                    GameRoot3D.player.records.p4_1_avgScore = averageScore;
+                else if (averageScore > GameRoot3D.player.records.p4_1_avgScore)
+                    GameRoot3D.player.records.p4_1_avgScore = averageScore;
 
                 GameRoot3D.player.p4_1.attemptDate = System.DateTime.Now.ToString();
 
@@ -478,20 +842,29 @@ public class GameControllerPuzzle04 : GameControllerRoot
             case 2:
                 if (GameRoot3D.player.records.p4_2_time == 0.0f)
                 {
-
-  //                  GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_2_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_2_numMove = totMoves;
                     GameRoot3D.player.records.p4_2_questions = questionsList;
                 }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p4_2_time)
                 {
-
- //                   GameRoot.player.users.p4_2clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_2_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_2_numMove = totMoves;
                     GameRoot3D.player.records.p4_2_questions = questionsList;
                 }
+
+                if (GameRoot3D.player.records.p4_2_numMove == 0.0f)
+                    GameRoot3D.player.records.p4_2_numMove = totMoves;
+                else if (totMoves < GameRoot3D.player.records.p4_2_numMove)
+                    GameRoot3D.player.records.p4_2_numMove = totMoves;
+
+                if (GameRoot3D.player.records.p4_2_totScore == 0.0f)
+                    GameRoot3D.player.records.p4_2_totScore = overallScore;
+                else if (overallScore > GameRoot3D.player.records.p4_2_totScore)
+                    GameRoot3D.player.records.p4_2_totScore = overallScore;
+
+                if (GameRoot3D.player.records.p4_2_avgScore == 0.0f)
+                    GameRoot3D.player.records.p4_2_avgScore = averageScore;
+                else if (averageScore > GameRoot3D.player.records.p4_2_avgScore)
+                    GameRoot3D.player.records.p4_2_avgScore = averageScore;
 
                 GameRoot3D.player.p4_2.attemptDate = System.DateTime.Now.ToString();
 
@@ -508,20 +881,29 @@ public class GameControllerPuzzle04 : GameControllerRoot
             case 3:
                 if (GameRoot3D.player.records.p4_3_time == 0.0f)
                 {
-
- //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_3_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_3_numMove = totMoves;
                     GameRoot3D.player.records.p4_3_questions = questionsList;
                 }
                 else if (tot_puzzleTime < GameRoot3D.player.records.p4_3_time)
                 {
-
- //                   GameRoot.player.users.p4_3clear_time = tot_puzzleTime;
                     GameRoot3D.player.records.p4_3_time = tot_puzzleTime;
-                    GameRoot3D.player.records.p4_3_numMove = totMoves;
                     GameRoot3D.player.records.p4_3_questions = questionsList;
                 }
+
+                if (GameRoot3D.player.records.p4_3_numMove == 0.0f)
+                    GameRoot3D.player.records.p4_3_numMove = totMoves;
+                else if (totMoves < GameRoot3D.player.records.p4_3_numMove)
+                    GameRoot3D.player.records.p4_3_numMove = totMoves;
+
+                if (GameRoot3D.player.records.p4_3_totScore == 0.0f)
+                    GameRoot3D.player.records.p4_3_totScore = overallScore;
+                else if (overallScore > GameRoot3D.player.records.p4_3_totScore)
+                    GameRoot3D.player.records.p4_3_totScore = overallScore;
+
+                if (GameRoot3D.player.records.p4_3_avgScore == 0.0f)
+                    GameRoot3D.player.records.p4_3_avgScore = averageScore;
+                else if (averageScore > GameRoot3D.player.records.p4_3_avgScore)
+                    GameRoot3D.player.records.p4_3_avgScore = averageScore;
 
                 GameRoot3D.player.p4_3.attemptDate = System.DateTime.Now.ToString();
 
@@ -545,6 +927,7 @@ public class GameControllerPuzzle04 : GameControllerRoot
         GameRoot3D.player.records.p4_totTime += tot_puzzleTime;
         GameRoot3D.player.records.sessionID = GameRoot3D.player.users.sessionID;
     }
+
 
     public void SetPuzzlePause(bool val)
     {

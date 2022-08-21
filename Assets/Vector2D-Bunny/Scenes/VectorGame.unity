@@ -11220,9 +11220,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1140161324}
-  m_LocalRotation: {x: 0.98030156, y: -0, z: -0.19750683, w: 0}
+  m_LocalRotation: {x: 0, y: 0.19750679, z: 0, w: 0.98030156}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: -0.2, z: 0.2}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 1427937321}
   m_Father: {fileID: 771287827}
@@ -11254,8 +11254,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: +x
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f629c6e43dba4bf38cb74d8860150664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11356,7 +11356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c0046ced8da584fbb6e23807306fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1101795506}
+  target: {fileID: 1101795511}
   lockAxis: 0
 --- !u!222 &1140161328
 CanvasRenderer:
@@ -11542,7 +11542,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.24000001, y: 0.7613313}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.05001831, y: -0.5}
+  m_AnchoredPosition: {x: -0.049987793, y: -0.5}
   m_SizeDelta: {x: 0.099975586, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1146960485
@@ -12617,9 +12617,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248618184}
-  m_LocalRotation: {x: 0.98030156, y: -0, z: 0.19750683, w: 0}
+  m_LocalRotation: {x: 0, y: -0.19750687, z: 0, w: 0.98030156}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: -0.2, z: 0.2}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 2020887950}
   m_Father: {fileID: 771287827}
@@ -12651,8 +12651,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: -x
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f629c6e43dba4bf38cb74d8860150664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12753,7 +12753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c0046ced8da584fbb6e23807306fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1101795506}
+  target: {fileID: 1101795511}
   lockAxis: 0
 --- !u!222 &1248618188
 CanvasRenderer:
@@ -14966,7 +14966,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 2.609
+  m_padding: 0
   m_canvasRenderer: {fileID: 1427937323}
   m_TextComponent: {fileID: 1140161326}
   m_materialReferenceIndex: 1
@@ -19387,9 +19387,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1810967458}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: -0.00000004371139, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -20.996214}
-  m_LocalScale: {x: 0.2, y: -0.2, z: 0.2}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 1944524865}
   m_Father: {fileID: 771287827}
@@ -19421,8 +19421,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: -y
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f629c6e43dba4bf38cb74d8860150664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -19523,7 +19523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c0046ced8da584fbb6e23807306fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1101795506}
+  target: {fileID: 1101795511}
   lockAxis: 0
 --- !u!222 &1810967462
 CanvasRenderer:
@@ -19595,7 +19595,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 2.609
+  m_padding: 0
   m_canvasRenderer: {fileID: 1816098738}
   m_TextComponent: {fileID: 1871021828}
   m_materialReferenceIndex: 1
@@ -20174,9 +20174,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871021826}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: -0.00000004371139, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 21.003506}
-  m_LocalScale: {x: 0.2, y: -0.2, z: 0.2}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 1816098736}
   m_Father: {fileID: 771287827}
@@ -20208,8 +20208,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: +y
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f629c6e43dba4bf38cb74d8860150664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20310,7 +20310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c0046ced8da584fbb6e23807306fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1101795506}
+  target: {fileID: 1101795511}
   lockAxis: 0
 --- !u!222 &1871021830
 CanvasRenderer:
@@ -21037,7 +21037,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 2.609
+  m_padding: 0
   m_canvasRenderer: {fileID: 1944524867}
   m_TextComponent: {fileID: 1810967460}
   m_materialReferenceIndex: 1
@@ -21855,7 +21855,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 2.609
+  m_padding: 0
   m_canvasRenderer: {fileID: 2020887952}
   m_TextComponent: {fileID: 1248618186}
   m_materialReferenceIndex: 1

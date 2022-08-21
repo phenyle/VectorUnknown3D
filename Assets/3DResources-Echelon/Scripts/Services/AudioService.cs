@@ -30,7 +30,7 @@ public class AudioService : MonoBehaviour
             audioBg.clip = audioClip;
             audioBg.loop = isLoop;
             audioBg.Play();
-            if (GameRoot3D.isPause)
+            if (GameRoot3D.instance.isPause)
                 audioBg.volume = bgVolume * 0.5f * 0.2f;
             else
                 audioBg.volume = bgVolume * 0.5f;
@@ -50,7 +50,7 @@ public class AudioService : MonoBehaviour
         {
             gulls.Stop();
         }
-        if (GameRoot3D.isPause)
+        if (GameRoot3D.instance.isPause)
             gulls.volume = bgVolume * 0.3f * 0.2f;
         else
             gulls.volume = bgVolume * 0.3f;
@@ -71,7 +71,7 @@ public class AudioService : MonoBehaviour
         {
             ocean.Stop();
         }
-        if (GameRoot3D.isPause)
+        if (GameRoot3D.instance.isPause)
             ocean.volume = bgVolume * 0.2f;
         else
             ocean.volume = bgVolume;
@@ -89,7 +89,7 @@ public class AudioService : MonoBehaviour
             audioBg.clip = audioClip;
             audioBg.loop = isLoop;
             audioBg.Play();
-            if(GameRoot3D.isPause)
+            if(GameRoot3D.instance.isPause)
                 audioBg.volume = bgVolume * 0.5f * 0.2f;
             else
                 audioBg.volume = bgVolume * 0.5f;
@@ -109,7 +109,7 @@ public class AudioService : MonoBehaviour
         {
             gulls.Stop();
         }
-        if(GameRoot3D.isPause)
+        if(GameRoot3D.instance.isPause)
                 gulls.volume = bgVolume * 0.3f * 0.2f;
             else
                 gulls.volume = bgVolume * 0.3f;
@@ -130,7 +130,7 @@ public class AudioService : MonoBehaviour
         {
             ocean.Stop();
         }
-        if(GameRoot3D.isPause)
+        if(GameRoot3D.instance.isPause)
                 ocean.volume = bgVolume * 0.2f;
             else
                 ocean.volume = bgVolume;
@@ -174,7 +174,7 @@ public class AudioService : MonoBehaviour
     public void SetBgVolume(float volume)
     {
         bgVolume = volume;
-        if(GameRoot3D.isPause)
+        if(GameRoot3D.instance.isPause)
         {
             audioBg.volume = bgVolume * 0.5f * 0.2f;
             if(SceneManager.GetActiveScene().name == Constants.mainSceneName ||

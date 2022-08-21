@@ -112,6 +112,7 @@ public class AdminWindow : LoginSystem
         }
         else
         {
+            btn_PlayCreate.interactable = false;
             if (query == queryType.echelon)
                 PlayEchelon();
             else if (query == queryType.bunny)
@@ -173,6 +174,7 @@ public class AdminWindow : LoginSystem
             input_SessionID.interactable = true;
             tgl_expire.interactable = true;
             tf_game = true;
+            ChangeRules();
         }
         else
         {
@@ -217,6 +219,8 @@ public class AdminWindow : LoginSystem
         {
             pnl_rules.gameObject.SetActive(true);
             tf_rules = true;
+
+            ChangeRules();
         }
         else
         {
@@ -225,6 +229,37 @@ public class AdminWindow : LoginSystem
         }
         CheckValidSession();
     }
+
+    private void ChangeRules()
+    {
+        if (tgl_2D.isOn)
+        {
+            drop_restrictStage.ClearOptions();
+            drop_restrictStage.AddOptions(new List<TMP_Dropdown.OptionData> {
+                    new TMP_Dropdown.OptionData("none"),
+                    new TMP_Dropdown.OptionData("Level 1"),
+                    new TMP_Dropdown.OptionData("Level 2"),
+                    new TMP_Dropdown.OptionData("Level 3"),
+                    new TMP_Dropdown.OptionData("Level 4"),
+                    new TMP_Dropdown.OptionData("Level 5"),
+                    new TMP_Dropdown.OptionData("Level 6"),
+                    new TMP_Dropdown.OptionData("Level 7")
+            });
+
+        }
+        else
+        {
+            drop_restrictStage.ClearOptions();
+            drop_restrictStage.AddOptions(new List<TMP_Dropdown.OptionData> {
+                    new TMP_Dropdown.OptionData("none"),
+                    new TMP_Dropdown.OptionData("Stage 1 : Easy Displace"),
+                    new TMP_Dropdown.OptionData("Stage 2 : Matrix Mult"),
+                    new TMP_Dropdown.OptionData("Stage 3 : Vector Spans"),
+                    new TMP_Dropdown.OptionData("Stage 4 : Displacement") 
+            });
+        }
+    }
+
 
     public void OnStageSelect()
     {
@@ -240,6 +275,8 @@ public class AdminWindow : LoginSystem
         }
         CheckValidSession();
     }
+ 
+    
     /// <summary>
     /// This is ugly as sin.  This is some YandereSim levels of nested Ifs and I feel bad.
     /// but this is just a hot fix to get this running by tomorrow.  Needs fixes later

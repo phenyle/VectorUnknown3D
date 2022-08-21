@@ -62,7 +62,7 @@ public class VV_Axis : VisVectController
     {
         Xlabel.transform.position = start;
         Xlabel.SetActive(true);
-        Xlabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera);
+        Xlabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera.transform);
         Xlabel.GetComponent<FaceObject>().enabled = true;
 
         if (answer.x > 0)
@@ -94,7 +94,7 @@ public class VV_Axis : VisVectController
     {
         Ylabel.transform.position = start;
         Ylabel.SetActive(true);
-        Ylabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera);
+        Ylabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera.transform);
         Ylabel.GetComponent<FaceObject>().enabled = true;
 
         if (answer.y > 0)
@@ -126,7 +126,7 @@ public class VV_Axis : VisVectController
     {
         Zlabel.transform.position = start;
         Zlabel.SetActive(true);
-        Zlabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera);
+        Zlabel.GetComponent<FaceObject>().SetTarget(GameControllerPuzzle04.instance.currPuzzle.puzzleCamera.transform);
         Zlabel.GetComponent<FaceObject>().enabled = true;
 
         if (answer.z > 0)

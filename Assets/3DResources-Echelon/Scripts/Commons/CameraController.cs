@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot3D.isPuzzleLock) && postPuzzleLock == false)
+            if ((DialogueManager.isInDialogue || DialogueManager.isPuzzleLock || GameRoot3D.instance.isPuzzleLock) && postPuzzleLock == false)
                 toggleMouse();
     }
 
@@ -82,7 +82,7 @@ public class CameraController : MonoBehaviour
 
     private void toggleMouse()
     {
-        if ((!DialogueManager.isInDialogue || !DialogueManager.isPuzzleLock || !GameRoot3D.isPuzzleLock) && postPuzzleLock == true)
+        if ((!DialogueManager.isInDialogue || !DialogueManager.isPuzzleLock || !GameRoot3D.instance.isPuzzleLock) && postPuzzleLock == true)
             isLock = !isLock;
 
         if (isLock)
