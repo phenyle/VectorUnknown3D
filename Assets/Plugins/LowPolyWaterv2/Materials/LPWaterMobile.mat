@@ -2,15 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LPWaterMobile
   m_Shader: {fileID: 4800000, guid: 8165be4dd0b12774d80426d906df9c38, type: 3}
-  m_ShaderKeywords: WATER_REFLECTIVE _DISTORT_ON _EMISSION _SHADING_FLAT _WAVES_OFF
-    _ZWRITE_ON
+  m_ValidKeywords:
+  - WATER_REFLECTIVE
+  - _DISTORT_ON
+  - _WAVES_OFF
+  m_InvalidKeywords:
+  - _EMISSION
+  - _SHADING_FLAT
+  - _ZWRITE_ON
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -41,6 +47,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _Absorption: 10
     - _BumpScale: 35
@@ -97,3 +104,4 @@ Material:
     - _SpecColor: {r: 0.6764706, g: 0.6359274, b: 0.2785467, a: 1}
     - _Sun: {r: 0.57096916, g: 0.72254014, b: -0.38978216, a: 0}
     - _SunColor: {r: 0.7219785, g: 0.6668299, b: 0.764151, a: 1}
+  m_BuildTextureStacks: []
