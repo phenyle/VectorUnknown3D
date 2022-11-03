@@ -1,0 +1,57 @@
+Update Log Since Last:
+----------------------
+Refactoring PlayerData:
+- Code across levels slightly refactored
+- Need to centralize data into GameRoot for transfer to database
+Things Learned about GSFU and Drive:
+- When retrieving from database, if the item doesn't exist Drive doesn't respond
+- Essentially it's impossible to tell the difference between "no internet connection" and "not found"
+- To combat this, a Debug sheet in database was added
+- Before attempting to create/login/join, the game bounces a response off the database "debug" sheet
+- After verifying connection between game and database it flips to the attempted login type
+Changes with User Accounts:
+- User accounts have updated incrimenting
+- If a person making an account is unique in first.last, then their username is just first.last
+- The next person to create an account with that same first.last will be assigned first.last1
+- Then first.last2, and so on
+- Still no password recovery atm.  Need to add further datacollection to associate to account first
+Admin Accounts:
+- The major overhaul of this update is the Admin accounts
+- After an account is created in-game the traditional way, the account can be flagged as Admin in the database
+- When logging into the game, the game checks if the logging user is flagged admin
+- If they are, they are not dropped right into the game, instead they given a new Admin Panel
+- Admins can create Sessions for specific events, and set when that sessions expires
+- Further planning to add controls so admins can modify the session to lock to certain puzzles, etc
+Sessions:
+- The next major change is the Sessions join
+- Sessions are one time play user accounts
+- There are two types of sessions: Classroom and Expo/Demo
+- Classroom sessions allow anyone from any machine to join under that session if they have the session name
+- Classroom does not require a password to login, only the session name
+- Expo turns that specific machine to change how clicking the "Play" button works
+- Once an admin has activated "Expo" the play button will not take people to a login screen
+- Instead, everytime "Play" is clicked, a new game is started under the session name of the Expo
+- Expo requires nothing from the person playing, and is exited upon restarting the game(closing)
+- That said, you can join multiple machines into Expo/Demo by having them "Join Session" using the Expo session name
+PuzzleData Tracking
+- First swing at puzzle data tracking.  
+
+Carry Over Things to Do:
+------------------------
+p4-3 Z-axis change
+Password Recovery
+UI/Visual Vector Uniformity
+2D and 3D game database merger
+Adjust Player Speed (player moves too slow walking, and at light speed sprinting)
+
+Create Account data (more than just education)
+Login Times - Short Times
+Creating account popup (show that it's working)
+Admin Unflagging?
+Mouse Locking to Game?
+Level Progress Tracking
+Ship Repair
+Level 3 Camera Mod
+Level 2 Controls
+Puzzle 4 Indexing
+Volume Game State Locking on Clicking Login/Join/Create

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d47500a8f005f364c989b60cb1f8fb81, type: 3}
+  m_Name: Puzzle04-1_01
+  m_EditorClassIdentifier: 
+  dialogues:
+  - character: {fileID: 11400000, guid: aa5ca46dd3ebae0429769c09e7af7719, type: 2}
+    sentences:
+    - Solve the puzzle by dragging the cards on the left to the slots on the bottom
+      right.
+    - Adjust the scalars by dragging the sliders below the answer cards or use the
+      keyboard.
+    - For the keyboard press 1 or 2 to adjust scalar one.  Press 3 or 4 to adjust
+      scalar two.
+    - Find a combination of vectors and scalars that equal the goal on the top right.

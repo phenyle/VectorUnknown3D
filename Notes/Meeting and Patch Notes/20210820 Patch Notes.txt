@@ -1,0 +1,59 @@
+DONE:
+Puzzle 3 Rework:
+- Fixed the audio crash bug on the higher difficulties of puzzle 3
+- All 3 difficulties are now operational for playing
+- Each new difficulty has a new starting dialog
+- Added new Database items and functionality for user tracking
+-----CAVEAT:
+	You may need to create a new account to save to the new database sheets
+	I suspect it's due to old accounts not having these new sheets when they were created
+	Looking into a fix, but this may just be a limitation of GoogleSheetsForUnity.
+- Question portal is now brighter and has more pizzaz to make it more noticable
+- New UI element showing how many moves the player has submited in getting to the goal and the time spent
+- New user tracking includes the time spent on the puzzle, the number of moves used to solve it and the starting rotation
+- in addition it also tracks each move as they make it.  That information is saved in a separate cell in a CSV format
+HubWorld Changes:
+- Moved the location of Puzzle3 building and portal closer, running across the empty island is boring
+- Changed the scenery around Puzzle 4 portal
+----- Puzzle 4's portal was just in the middle of nowhere and looked very boring and plain
+----- The new surrounding shallow island sand bank better reflects the puzzle level of hopping island to island.
+- Changed the look of broken ship hull
+----- the broken ship hull now looks more noticablly different from the repaired version
+----- broken ship now has grass growing out of it and vines
+----- the color has also been changed to make the fixed version appear more vibrant
+- When finishing a puzzle for the first time, the camera now moves to the ship in a pleasent little up/down arc
+- The camera locations for looking at the repairs have been tweaked to better see what's going on.
+- New assets added on the ship for solving difficulties of Puzzle3
+- Finishing all 3 difficulties of Puzzle3 adds some sparkles around the treasure
+- Finishing all 3 difficulties of Puzzle4 adds extra ship rigging and sails
+Added new functionality to the LevelSelectUI:
+- LevelSelectUI now shows the best completion time for completed levels
+- Added support for Puzzle03 multilevels
+Database Changes:
+- New attempts/move data tracking
+---- Both puzzle 3 and puzzle 4 now track what the player is doing as they solve for the answers
+---- This data is saved in a cell in a CSV format
+---- Each new line in the cell is a different attempt or move made
+---- For puzzle3 the format follows: Number of Move, Time, span1X, span1Y, span1Z, span2X, span2Y, span2Z
+---- Note for puzzle3, I'm not recording the 3rd vector point as it is assumed and always [0,0,0]
+---- For puzzle4 the format follows: Number of Attempt, Time, scal1, vect1X, vect1Y, vect1Z, scal2, vect2X, vect2Y, vect2Z
+Dialog Changes:
+- Starting dialog for new players now briefly tells the player what happened, where the ship parts are and what the puzzles are
+- Minor tweaks to misc dialogs to better fit the theme of the rebuilding the ship
+- Changed puzzle3 "story" from being about saving civilians to being about getting back your ship gold.
+- Added new dialog to puzzle3 level 1 to inform the player that they can rotate the camera
+
+
+
+STILL NEED TO DO:
+Puzzle2 UI overhaul
+Bulletin/Progress Report Board
+Create a grammar and format for how data is saved to the database for easier parsing
+
+
+
+KNOWN BUGS:
+Solving Puzzle03 without ever rotating the camera causes the camera to hang instead of returning to player
+LevelSelectUI is ghosting scores from different levels on stage2
+Puzzle4 causes problems on the extremely rare chance 2 answer cards have the same vector values (the game treats both cards as the same card)
+Player selecting "Tutorial" from the title screen, then pressing "Hub" in the pause menu allows the player to circumvent logging in or joining a session (probably just going to hide that button in tutorial).

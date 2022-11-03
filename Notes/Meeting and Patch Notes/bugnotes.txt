@@ -1,0 +1,11 @@
+Puzzle 4 gets a 0 final answer bug
+Puzzle 4 vectors over terrain
+Smaller answer card numbers
+
+list of predetermined answer vectors?  vector pairs?
+
+
+What card did they use?  And When?
+
+How many time have they dragged a card over?
+How many times have they slid the scalar?

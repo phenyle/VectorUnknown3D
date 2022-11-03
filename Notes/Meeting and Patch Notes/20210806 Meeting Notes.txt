@@ -1,0 +1,21 @@
+Put a "Back to Hub" button in EscMenu
+Change EscMenu "Menu" Button to Exit Game
+Portal Locations / Icons
+Level2 UI change
+--Move CurrentValues UI to bottom right corner
+--Create new UI element in top right Corner with Current Target/Goal
+
+
+Dialog Changes
+--Check all dialog queues
+
+Mouse Sensitivity / Settings Slider
+
+Puzzle2 Cleanup
+
+Puzze3 Cleanup
+--Menu Fixes (overhaul?)
+--Break 3 puzzle items into 3 levels
+--Camera Controls and rotate
+
+Mouse Controls after Ship Rebuild BUG

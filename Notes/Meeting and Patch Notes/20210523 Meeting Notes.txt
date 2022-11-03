@@ -1,0 +1,54 @@
+Update Log since last:
+- Google account for VectorUnknown (give user/pass)
+- GoogleSheets challenges:
+--- Provided GSFU doc not complete, or outdated (missing
+--- Unity Asset Store, free types:
+------ GoogleSheets-to-Unity, outdated docs, OAuth problems
+------ MetaSheets, easy to use, but no WebGL support
+--- GSFU paid asset, but works
+--- GFSU has required back libraries and scripts
+--- Drive Sheet created, App Script implemented
+--- Connector scriptable linked, example scripts work
+--- SendtoGoogle.cs interface for project (links player object to tables)
+--- Tested on PC, saves data, retrieving not so easy (no "return" types)
+--- Lots of time spent on how to retieve data, solved
+- New Login System:
+--- Play now takes user to Login Screen
+--- Login has create account
+--- Username is First.Last
+--- Password is hashed/salted with PBKDF2 algorithm
+- Started to coallesce stage data under some uniform gameobject
+-Needs:
+--- cleaner functions, simplified functions to make it easier on next team
+--- Unify stages in format for database
+--- Login sanitation (no special chars, etc)
+--- Password requirements popup
+--- Username unique problems:
+------ GSFU finds last entry on table if there are duplicates
+------ Recommend username alternatives (school.id, etc)
+
+
+CHANGE IDEAS:
+Guest play, no login, no tracking (for demo/interview showing) === DONE 20210606
+Z-axis change
+Save Best time ==== DONE 20210606
+Username generation (First.Last#)  ==== DONE20210525
+Password Recovery (email)
+Password entry privacy ==== DONE 20210525
+Broswer Advisory ==== DONE 20210525
+Group Level Play (session play ID with mulitple users)  === DONE 20210606
+Last login time tracker  === DONE 20210605
+
+Admin Login and Game Settings  === DONE 20210606
+ - Expo Guest play
+ - Classroom Passcode play
+
+4 Types of Login:
+- General/Personal, Login/Pass
+- Expo (Admin Setup) with login replaced with expo name and incriment.  No password
+- Classroom (Admin Setup), no login, password replaced with session passcode
+- Guest login, no login, no password (quick play) 
+
+2D game and 3D uniform in GSFU (shared logins, one spreadsheet for both games)
+
+UI and Visual Vector colors uniform
