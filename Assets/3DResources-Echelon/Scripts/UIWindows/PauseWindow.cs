@@ -150,7 +150,7 @@ public class PauseWindow : WindowRoot
                 DialogueManager.isPuzzleLock = false;
                 GameRoot3D.instance.InitUI();
                 GameRoot3D.instance.menuSystem.EnterMenu();
-                GameRoot3D.instance.Resume();
+                GameRoot3D.instance.Resume(false); // keep the cursor free for the main menu
                 break;
         }
     }
