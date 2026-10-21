@@ -505,7 +505,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- Find the Ship Wreak on the Island
+  m_Text: '- Find the Ship Wreck on the Island
 
 
 '
@@ -1742,7 +1742,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- Input the number next to the Ship Wreak in the bottom left of the screen'
+  m_Text: '- Input the number next to the Ship Wreck in the bottom left of the screen'
 --- !u!222 &1879330882
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5720,6 +5720,11 @@ PrefabInstance:
       propertyPath: Tab
       value: 
       objectReference: {fileID: 1734281953}
+    - target: {fileID: 8635763102511809352, guid: eee79c634ca777149b1a3a7cba30dd5e,
+        type: 3}
+      propertyPath: findShipWreck
+      value: 
+      objectReference: {fileID: 344392846}
     - target: {fileID: 8635763102511809352, guid: eee79c634ca777149b1a3a7cba30dd5e,
         type: 3}
       propertyPath: LShift
