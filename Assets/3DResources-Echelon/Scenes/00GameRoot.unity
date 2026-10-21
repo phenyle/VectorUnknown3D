@@ -1742,7 +1742,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- Input the number next to the Ship Wreck in the bottom left of the screen'
+  m_Text: '- Input the number next to the Ship Wreck in the bottom right of your Screen (press Tab to get the mouse cursor back)'
 --- !u!222 &1879330882
 CanvasRenderer:
   m_ObjectHideFlags: 0
