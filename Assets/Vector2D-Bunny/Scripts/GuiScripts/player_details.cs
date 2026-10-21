@@ -14,16 +14,20 @@ public class player_details : MonoBehaviour {
         UFO_PuzzleManager manager = puzzle_manager.GetComponent<UFO_PuzzleManager>();
 		player_position.text = details [0];
 		goal_position.text = details [1];
+        // attemptLabel is optional: this runs every frame, and in WebGL builds without
+        // full exception support a null reference here crashes the whole game
         if (manager.puzzle_info.game_mode == 0 || manager.puzzle_info.game_mode == 1)
         {
             attempts.text = details[2];
-            attemptLabel.text = "Attempts";
+            if (attemptLabel != null)
+                attemptLabel.text = "Attempts";
         }
         else
         {
             GameObject[] goals = GameObject.FindGameObjectsWithTag("Goal");
             attempts.text = "" + (goals.Length);
-            attemptLabel.text = "Goals Remaining";
+            if (attemptLabel != null)
+                attemptLabel.text = "Goals Remaining";
         }
 
     }

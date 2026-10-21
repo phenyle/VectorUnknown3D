@@ -29,27 +29,14 @@ public class puzzle_info : MonoBehaviour {
             manager.set_tutorial();
         }
 
-        if (GetDisplayUpcomingPath() == 1)
-        {
-            future.enabled = true;
-            futureMinMap.enabled = true;
-        }
-        else
-        {
-            future.enabled = false;
-            futureMinMap.enabled = false;
-        }
+        future.enabled = GetDisplayUpcomingPath() == 1;
+        past.enabled = GetDisplayPastPaths() == 1;
 
-        if (GetDisplayPastPaths() == 1)
-        {
-            past.enabled = true;
-            pastMinMap.enabled = true;
-        }
-        else
-        {
-            past.enabled = false;
-            pastMinMap.enabled = false;
-        }
+        // minimap arrows are optional; not every scene has them
+        if (futureMinMap != null)
+            futureMinMap.enabled = future.enabled;
+        if (pastMinMap != null)
+            pastMinMap.enabled = past.enabled;
     }
 
     GameObject[] FindGameObjectsWithName(string nameIt)
