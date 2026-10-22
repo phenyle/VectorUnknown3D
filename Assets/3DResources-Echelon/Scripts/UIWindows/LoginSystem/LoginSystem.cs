@@ -35,6 +35,9 @@ public class LoginSystem : MonoBehaviour
 
         tmp_player = new PlayerData();
 
+        // reaching the login screen (first load, or Quit from a game menu) ends any earlier login
+        GameServer.Logout();
+
         if(dualLoginWindow == null)
             dualLoginWindow = GetComponentInChildren<DualLogin>();
         if (newAccountWindow == null)
