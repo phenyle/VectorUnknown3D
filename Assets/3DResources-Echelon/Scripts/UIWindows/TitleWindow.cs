@@ -342,37 +342,28 @@ public class TitleWindow : WindowRoot
             {
                 PlayerData session = new PlayerData();
                 session.SetUserName(admin_sessionName.text);
+                session.users.sessionID = admin_sessionName.text.Trim().ToLower();
                 session.users.isClass = true;
 
-                if (admin_toggleExpire.isOn)
-                {
-                    DateTime expireDay = new DateTime(DateTime.Now.Year + admin_dropYear.value, admin_dropMonth.value + 1, admin_dropDay.value + 1, 23, 59, 59);
-
-                    session.users.expires = expireDay.ToString();
-                }
-                else
-                    session.users.expires = new DateTime(DateTime.Now.Year + 100, 1, 1).ToString();
+                DateTime expireDay = admin_toggleExpire.isOn
+                    ? new DateTime(DateTime.Now.Year + admin_dropYear.value, admin_dropMonth.value + 1, admin_dropDay.value + 1, 23, 59, 59)
+                    : new DateTime(DateTime.Now.Year + 100, 1, 1);
+                session.users.expires = expireDay.ToString();
 
                 session.users.stageNum = admin_StageSelect.value;
                 session.users.difficultyNum = admin_DifficultySelect.value + 1;
                 session.users.forceStage = admin_forceStage.isOn;
 
-                GameRoot3D.player = session;
-                GameRoot3D.isExpo = false;
-                GameRoot3D.isClass = true;
+                GameRoot3D.GSFU.CreateSession(session.users, expireDay, () =>
+                {
+                    GameRoot3D.player = session;
+                    GameRoot3D.isExpo = false;
+                    GameRoot3D.isClass = true;
 
-
- //               DateTime.Compare(DateTime.Now, DateTime.Parse(GameRoot.player.users.last_login));
-
-                //TODO set Admin Specific play sessions rules
-                //----
-                //----
-
-                GameRoot3D.GSFU.SaveNewPlayer();
-
-                SetActive(panelAdmin, false);
-                SetActive(panelMain, true);
-                PlayGame();
+                    SetActive(panelAdmin, false);
+                    SetActive(panelMain, true);
+                    PlayGame();
+                }, ShowAdminError);
             }
         }
 
@@ -390,38 +381,30 @@ public class TitleWindow : WindowRoot
             }
             else
             {
-                GameRoot3D.expoName = admin_sessionName.text;
-                GameRoot3D.isExpo = true;
-
                 PlayerData session = new PlayerData();
                 session.SetUserName(admin_sessionName.text);
+                session.users.sessionID = admin_sessionName.text.Trim().ToLower();
                 session.users.isExpo = true;
 
-                if (admin_toggleExpire.isOn)
-                {
-                    DateTime expireDay = new DateTime(DateTime.Now.Year + admin_dropYear.value, admin_dropMonth.value + 1, admin_dropDay.value + 1, 23, 59, 59);
-
-                    session.users.expires = expireDay.ToString();
-                }
-                else
-                    session.users.expires = new DateTime(DateTime.Now.Year + 100, 1, 1).ToString();
+                DateTime expireDay = admin_toggleExpire.isOn
+                    ? new DateTime(DateTime.Now.Year + admin_dropYear.value, admin_dropMonth.value + 1, admin_dropDay.value + 1, 23, 59, 59)
+                    : new DateTime(DateTime.Now.Year + 100, 1, 1);
+                session.users.expires = expireDay.ToString();
 
                 session.users.stageNum = admin_StageSelect.value;
                 session.users.difficultyNum = admin_DifficultySelect.value + 1;
                 session.users.forceStage = admin_forceStage.isOn;
 
-                GameRoot3D.player = session;
+                GameRoot3D.GSFU.CreateSession(session.users, expireDay, () =>
+                {
+                    GameRoot3D.expoName = session.users.sessionID;
+                    GameRoot3D.isExpo = true;
+                    GameRoot3D.player = session;
 
-
-                //TODO set Admin Specific play sessions rules
-                //----
-                //----
-
-                GameRoot3D.GSFU.SaveNewPlayer();
-
-                SetActive(panelAdmin, false);
-                SetActive(panelMain, true);
-                PlayGame();
+                    SetActive(panelAdmin, false);
+                    SetActive(panelMain, true);
+                    PlayGame();
+                }, ShowAdminError);
             }
 
         }
@@ -434,6 +417,12 @@ public class TitleWindow : WindowRoot
             SetActive(panelMain, true);
             PlayGame();
         }
+    }
+
+    private void ShowAdminError(string message)
+    {
+        errorText.text = message;
+        SetActive(panelError, true);
     }
 
     public void SessionNoneToggle()

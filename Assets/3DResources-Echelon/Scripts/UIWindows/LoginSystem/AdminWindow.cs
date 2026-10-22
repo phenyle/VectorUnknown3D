@@ -64,51 +64,35 @@ public class AdminWindow : LoginSystem
         if (tgl_create.isOn)
         {
             btn_PlayCreate.interactable = false;
-            PlayerData temp = new PlayerData();
-            temp.SetUserName(input_SessionID.text.ToLower());
-            temp.users.sessionID = input_SessionID.text.ToLower();
+            PlayerData.tbl_Users rules = new PlayerData.tbl_Users();
+            rules.sessionID = input_SessionID.text.Trim().ToLower();
 
-            temp.users.isClass = tgl_class.isOn;
-            temp.users.isExpo = tgl_Expo.isOn;
+            rules.isClass = tgl_class.isOn;
+            rules.isExpo = tgl_Expo.isOn;
+            rules.isBunny = tgl_2D.isOn;
 
+            DateTime expire;
             if (tgl_expire.isOn)
-            {
-                DateTime expire = new DateTime(int.Parse(drop_expireYear.options[drop_expireYear.value].text), drop_expireMonth.value + 1, drop_expireDay.value + 1);
-                temp.users.expires = expire.ToString();
-            }
+                expire = new DateTime(int.Parse(drop_expireYear.options[drop_expireYear.value].text), drop_expireMonth.value + 1, drop_expireDay.value + 1, 23, 59, 59);
             else
-            {
-                DateTime expire = new DateTime(int.Parse(drop_expireYear.options[drop_expireYear.value].text) + 100, drop_expireMonth.value + 1, drop_expireDay.value + 1);
-                temp.users.expires = expire.ToString();
-            }
+                expire = new DateTime(int.Parse(drop_expireYear.options[drop_expireYear.value].text) + 100, drop_expireMonth.value + 1, drop_expireDay.value + 1);
+            rules.expires = expire.ToString();
 
             if (drop_restrictStage.value != 0)
             {
-                temp.users.forceStage = true;
-                temp.users.stageNum = drop_restrictStage.value;
-                temp.users.difficultyNum = drop_restrictDiff.value + 1;
+                rules.forceStage = true;
+                rules.stageNum = drop_restrictStage.value;
+                rules.difficultyNum = drop_restrictDiff.value + 1;
             }
             else
             {
-                temp.users.forceStage = false;
-                temp.users.stageNum = 0;
-                temp.users.difficultyNum = 0;
+                rules.forceStage = false;
+                rules.stageNum = 0;
+                rules.difficultyNum = 0;
             }
 
-            if (tgl_3D.isOn)
-            {
-                temp.users.isBunny = false;
-                GameRootMaster.player = temp;
-                GameRootMaster.GSFU.SaveNewPlayer();
-                PlayEchelon();
-            }
-            if (tgl_2D.isOn)
-            {
-                temp.users.isBunny = true;
-                GameRootMaster.player = temp;
-                GameRootMaster.GSFU.SaveNewPlayer();
-                PlayBunny();
-            }
+            ShowWaiting("Creating Session", rules.isBunny);
+            GameRootMaster.GSFU.CreateSession(rules, expire, () => SessionCreated(rules), error => ShowMessage(error, ErrorLogin));
         }
         else
         {
@@ -118,6 +102,29 @@ public class AdminWindow : LoginSystem
             else if (query == queryType.bunny)
                 PlayBunny();
         }
+    }
+
+    // The admin then plays on their own account under the new session's rules; students join the
+    // session (as new players) with Join Session.
+    private void SessionCreated(PlayerData.tbl_Users rules)
+    {
+        PlayerData.tbl_Users me = GameRootMaster.player.users;
+        me.isClass = rules.isClass;
+        me.isExpo = rules.isExpo;
+        me.isBunny = rules.isBunny;
+        me.expires = rules.expires;
+        me.forceStage = rules.forceStage;
+        me.stageNum = rules.stageNum;
+        me.difficultyNum = rules.difficultyNum;
+        GameRootMaster.player.users = me;
+
+        ShowMessage("Session \"" + rules.sessionID + "\" is ready.\nPlayers join it with Join Session.", () =>
+        {
+            if (rules.isBunny)
+                PlayBunny();
+            else
+                PlayEchelon();
+        });
     }
 
     private void ErrorLogin()

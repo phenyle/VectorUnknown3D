@@ -140,9 +140,9 @@ public class PauseWindow : WindowRoot
                 //Resume can unlock the lock
                 GameRoot3D.instance.isPuzzleLock = false;
 
-                GameRoot3D.player.users.last_login = System.DateTime.Now.ToString();
+                // save play time and settings, then sign out (the request is sent with the current login)
                 GameRoot3D.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.player = new PlayerData();
+                GameRoot3D.GSFU.Logout();
 
                 ResetPauseMenu();
 

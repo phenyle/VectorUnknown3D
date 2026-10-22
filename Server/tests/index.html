@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Vector Unknown game server tests</title>
+<body>Running...</body>
+<script src="mocks.js"></script>
+<script src="tests.js"></script>
+<script>
+  // Load Code.gs as a classic script so its functions are globals, then run the tests.
+  fetch('../AppsScript/Code.gs').then(r => r.text()).then(code => {
+    const s = document.createElement('script');
+    s.textContent = code;
+    document.head.appendChild(s);
+    runTests();
+  });
+</script>

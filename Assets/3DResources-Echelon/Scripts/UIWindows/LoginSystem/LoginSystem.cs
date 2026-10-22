@@ -1,12 +1,11 @@
-﻿using System;
-using System.Security.Cryptography;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-using GoogleSheetsForUnity;
-using System.Text;
 using UnityEngine.SceneManagement;
-using MyBox;
 
+/// <summary>
+/// Shared state and helpers for the login screen windows (log in, new account, join session,
+/// admin). All account checks happen on the game server; see GameServer and SendToGoogle.
+/// </summary>
 public class LoginSystem : MonoBehaviour
 {
 
@@ -17,24 +16,10 @@ public class LoginSystem : MonoBehaviour
     public static PopUpWindow popUpsWindow;
     public static AdminWindow adminWindow;
 
-
-    protected static UnityEvent messageEvents;
+    protected static UnityEvent messageEvents;   // run when the player clicks OK on a message
     protected static UnityEvent loginEvents;
 
     protected static PlayerData tmp_player;
-
-    protected static bool checkingGFSU = false;
-    [ReadOnly]
-    public static float connectionTime = 0.0f;
-    private static float connectionAttmpTimeout = 15.0f;
-
-    protected static bool loadingPlayer = false;
-    protected static bool newAcctCheck = false;
-    protected static bool creatingAcct = false;
-    protected static bool joiningSession = false;
-    protected static bool bunnyGame = false;
-
-
 
     public void Awake()
     {
@@ -62,34 +47,6 @@ public class LoginSystem : MonoBehaviour
             adminWindow = GetComponentInChildren<AdminWindow>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(checkingGFSU)
-        {
-            connectionTime += Time.deltaTime;
-            if (connectionTime > connectionAttmpTimeout)
-            {
-                //When creating an account it looks for duplicate names
-                //but when it does this, if it cant find name in the database it just
-                //doesn't return, which means it won't call GFSU.callback.
-                //Essentially, if after our first connection check (to debug) is good
-                //but our second connection check (to the username) is bad, then what
-                //we need to do is invoke account creation.
-                if (query == queryType.creating)
-                    loginEvents.Invoke();
-                else
-                {
-                    //Connection time out                    
-                    popUpsWindow.GeneralPopUp("ERROR:\nConnection Timed Out");
-                    popUpsWindow.awaitServerPop.panel.SetActive(false);
-                    checkingGFSU = false;
-                    connectionTime = 0.0f;
-                }
-            }
-        }
-    }
-
     protected enum queryType
     {
         echelon,
@@ -99,114 +56,42 @@ public class LoginSystem : MonoBehaviour
     }
 
     protected static queryType query { get; set; }
-    protected void ConnectionsCheck()
+
+    protected static void ShowWaiting(string status, bool bunny)
     {
-        connectionTime = 0.0f;
-        SendToGoogle.callback.RemoveAllListeners();
+        popUpsWindow.awaitServerPop.SetStatus(status);
+        popUpsWindow.awaitServerPop.AwaitingPopUp(bunny);
+    }
 
-        switch (query)
-        {
-            case queryType.echelon: //query type: Logging into Echelon Game
-                                    //call to database for "username" to find login name
-                                    //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
+    protected static void HideWaiting()
+    {
+        popUpsWindow.awaitServerPop.panel.SetActive(false);
+    }
 
-                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
-                break;
-
-            case queryType.bunny: //query type: Logging into Bunny Game
-                                  //call to database for "username" to find login name
-                                  //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.SetStatus("Finding Player");
-                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
-
-                SendToGoogle.callback.AddListener(dualLoginWindow.LoginToGame);
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", dualLoginWindow.username.text, false);
-                break;
-
-            case queryType.creating: //query type: Creating a new Account
-                                     //call to database for "first.last" to check for duplicates
-                                     //panel_awaitServer.gameObject.GetComponent<AwaitingServerPopup>().SetStatus("Creating Account");
-                popUpsWindow.awaitServerPop.SetStatus("Creating Account");
-                loginEvents.AddListener(newAccountWindow.CreatingNewAccount);
-                SendToGoogle.callback.AddListener(newAccountWindow.CreatingIncrimentedAccount);                
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "first_last", newAccountWindow.na_first.text.ToLower() + "." + newAccountWindow.na_last.text.ToLower(), false);              
-                break;
-
-            case queryType.joining:
-                popUpsWindow.awaitServerPop.SetStatus("Finding Session");
-                popUpsWindow.awaitServerPop.AwaitingPopUp(true);
-
-                SendToGoogle.callback.AddListener(joinWindow.JoinSession);
-                GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "sessionID", joinWindow.sessionName.text.ToLower(), false);
-
-                break;
-        }
+    /// <summary>Shows a message box; onOkay runs when the player clicks OK.</summary>
+    protected static void ShowMessage(string text, UnityAction onOkay)
+    {
+        HideWaiting();
+        messageEvents.RemoveAllListeners();
+        if (onOkay != null)
+            messageEvents.AddListener(onOkay);
+        popUpsWindow.GeneralPopUp(text);
     }
 
     protected void PlayEchelon()
     {
-        if (query == queryType.joining)
-        {
-            loginEvents.RemoveAllListeners();
-            messageEvents.RemoveAllListeners();
-            SendToGoogle.callback.RemoveAllListeners();
-            GameRootMaster.resourceService.AsynLoadScene(Constants.gameRootSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-        }
-        else
-        {
-            loginEvents.RemoveAllListeners();
-            messageEvents.RemoveAllListeners();
-            SendToGoogle.callback.RemoveAllListeners();
-            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", GameRootMaster.player.users.username);
-            GameRootMaster.resourceService.AsynLoadScene(Constants.gameRootSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start() );
-        }
-
+        loginEvents.RemoveAllListeners();
+        messageEvents.RemoveAllListeners();
+        // load the player's saved progress before the game starts using it
+        GameRootMaster.GSFU.LoadPlayerTable(PlayerData.sheets.records, () =>
+            GameRootMaster.resourceService.AsynLoadScene(Constants.gameRootSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start()));
     }
 
     protected void PlayBunny()
     {
-        if (query == queryType.joining)
-        {
-            //TODO
-            //customize the session join to goto a specific bunny level
-            Debug.LogWarning("Loading Bunny Menu");
-            loginEvents.RemoveAllListeners();
-            messageEvents.RemoveAllListeners();
-            SendToGoogle.callback.RemoveAllListeners();
-            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.bunRecords, "username", GameRootMaster.player.users.username);
-            SceneManager.LoadScene("menu_scene");
-        }
-        else
-        {
-            Debug.LogWarning("Loading Bunny Menu");
-            loginEvents.RemoveAllListeners();
-            messageEvents.RemoveAllListeners();
-            SendToGoogle.callback.RemoveAllListeners();
-            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.bunRecords, "username", GameRootMaster.player.users.username);
-            SceneManager.LoadScene("menu_scene");
-        }
-
-    }
-
-    protected static string ComputeHash(byte[] bytesToHash, byte[] salt)
-    {
-        var byteResult = new Rfc2898DeriveBytes(bytesToHash, salt, 10000);
-        return Convert.ToBase64String(byteResult.GetBytes(24));
-    }
-
-    protected static string GenerateSalt()
-    {
-        var bytes = new byte[128 / 8];
-        var rng = new RNGCryptoServiceProvider();
-        rng.GetBytes(bytes);
-        return Convert.ToBase64String(bytes);
-    }
-
-    protected void GotoJoinSession()
-    {
-        
+        Debug.LogWarning("Loading Bunny Menu");
+        loginEvents.RemoveAllListeners();
+        messageEvents.RemoveAllListeners();
+        GameRootMaster.GSFU.LoadPlayerTable(PlayerData.sheets.bunRecords, () => SceneManager.LoadScene("menu_scene"));
     }
 }

@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using GoogleSheetsForUnity;
 
 public class NewAccountWindow : LoginSystem
 {
@@ -21,6 +16,7 @@ public class NewAccountWindow : LoginSystem
     public Button backButton;
 
     private bool na_otherSel = false;
+    private string newUsername = "";
 
     // Start is called before the first frame update
     void Start()
@@ -30,98 +26,25 @@ public class NewAccountWindow : LoginSystem
         panel.SetActive(false);
     }
 
-    public void LookForUsername()
+    /// <summary>
+    /// The server builds the player ID from the first 3 letters of the first and last names (plus a
+    /// number if that ID is taken), hashes the password and stores neither name. The ID is shown to
+    /// the player, who logs in with it.
+    /// </summary>
+    private void CreateAccount()
     {
+        string school = na_otherSel ? na_otherSchool.text : na_schools.captionText.text;
 
+        ToggleInteractable(false);
+        ShowWaiting("Creating Account", false);
+        GameRootMaster.GSFU.CreateAccount(na_first.text, na_last.text, na_pass1.text, school, na_education.captionText.text,
+            AccountCreated, error => ShowMessage(error, ClickOkayGeneral));
     }
 
-    /// <summary>
-    /// This is the function called by the LoginSystem when the GFSU doesn't return and
-    /// essentially times out.  LoginEvents calls this if the system times out, but the
-    /// query was set for creating a new account
-    /// </summary>
-    public void CreatingNewAccount()
+    private void AccountCreated(string username)
     {
-        GameRootMaster.GSFU.retrieved = false;
-        checkingGFSU = false;
-        connectionTime = 0;
-        loginEvents.RemoveAllListeners();
-        SendToGoogle.callback.RemoveAllListeners();
-
-        tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
-
-        tmp_player.users.ID_num = 0;
-        tmp_player.SetUserName(tmp_player.users.first_last);
-
-        tmp_player.users.education = na_education.captionText.text;
-        tmp_player.users.tot_time = 0.0f;
-
-        string salt = GenerateSalt();
-        string hashedpass = ComputeHash(Encoding.UTF8.GetBytes(na_pass1.text), Encoding.UTF8.GetBytes(salt));
-        tmp_player.users.hash = "\'" + hashedpass;
-        tmp_player.users.salt = "\'" + salt;
-
-        if (na_otherSel)
-            tmp_player.users.school = na_otherSchool.text;
-        else
-            tmp_player.users.school = na_schools.captionText.text;
-
-        messageEvents.AddListener(ClickUserNameOkay);
-
-        popUpsWindow.GeneralPopUp("<b>Your Username is:</b>\n" +
-                            "<size=28>" + tmp_player.users.username + "</size>");
-
-        tmp_player.users.last_login = System.DateTime.Now.ToString();
-
-        GameRootMaster.player = tmp_player;
-        GameRootMaster.GSFU.SaveNewPlayer();
-
-    }
-
-    /// <summary>
-    /// This is the function called by the GFSU when it finds and returns a name already
-    /// in the database.  This account creation creates an incremented account ID number
-    /// </summary>
-    public void CreatingIncrimentedAccount()
-    {
-        GameRootMaster.GSFU.retrieved = false;
-        creatingAcct = false;
-        checkingGFSU = false;
-        connectionTime = 0;
-        loginEvents.RemoveAllListeners();
-        SendToGoogle.callback.RemoveAllListeners();
-
-        tmp_player.users.first_last = na_first.text.ToLower() + "." + na_last.text.ToLower();
-
-        //Take the last duplicate name ID num
-        tmp_player.users.ID_num = GameRootMaster.player.users.ID_num;
-        //Increase this new users ID by one
-        tmp_player.users.ID_num++;
-        tmp_player.SetUserName(tmp_player.users.first_last + tmp_player.users.ID_num.ToString());
-
-        tmp_player.users.education = na_education.captionText.text;
-        tmp_player.users.tot_time = 0.0f;
-
-        string salt = GenerateSalt();
-        string hashedpass = ComputeHash(Encoding.UTF8.GetBytes(na_pass1.text), Encoding.UTF8.GetBytes(salt));
-        tmp_player.users.hash = "\'" + hashedpass;
-        tmp_player.users.salt = "\'" + salt;
-
-        if (na_otherSel)
-            tmp_player.users.school = na_otherSchool.text;
-        else
-            tmp_player.users.school = na_schools.captionText.text;
-
-        messageEvents.AddListener(ClickUserNameOkay);
-
-        popUpsWindow.GeneralPopUp("<b>Your Username is:</b>\n" +
-                            "<size=28>" + tmp_player.users.username + "</size>");
-
-
-        tmp_player.users.last_login = System.DateTime.Now.ToString();
-
-        GameRootMaster.player = tmp_player;
-        GameRootMaster.GSFU.SaveNewPlayer();        
+        newUsername = username;
+        ShowMessage("<b>Your Player ID is:</b>\n<size=28>" + username + "</size>\nWrite it down: you need it to log in.", ClickUserNameOkay);
     }
 
 
@@ -133,7 +56,7 @@ public class NewAccountWindow : LoginSystem
     {
         //GameRootMaster.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
-        if (na_first.text.Length == 0 && na_last.text.Length == 0)
+        if (na_first.text.Trim().Length == 0 || na_last.text.Trim().Length == 0)
         {
             popUpsWindow.GeneralPopUp("You must enter in both a First and Last name.");
             ToggleInteractable(false);
@@ -172,17 +95,7 @@ public class NewAccountWindow : LoginSystem
                     }
                     else
                     {
-                        messageEvents.AddListener(TimedOut);
-                        popUpsWindow.AwaitPopUp(false);
-                        popUpsWindow.awaitServerPop.SetStatus("Checking Connection");
-
-                        checkingGFSU = true;
-                        connectionTime = 0.0f;
-                        ToggleInteractable(false);
-
-                        query = queryType.creating;
-                        SendToGoogle.callback.AddListener(ConnectionsCheck);
-                        GameRootMaster.GSFU.VerifyDatabaseConnection();
+                        CreateAccount();
                     }
                 }
             }
@@ -191,7 +104,7 @@ public class NewAccountWindow : LoginSystem
 
     public void NA_ClickBackBtn()
     {
-        //GameRootMaster.audioService.PlayUIAudio(Constants.audioUIClickBtn);       
+        //GameRootMaster.audioService.PlayUIAudio(Constants.audioUIClickBtn);
 
         ClearNewAcctFields();
 
@@ -257,13 +170,14 @@ public class NewAccountWindow : LoginSystem
         popUpsWindow.generalPopPanel.SetActive(false);
     }
 
+    // Back to the login panel with the new ID and password filled in
     public void ClickUserNameOkay()
     {
         messageEvents.RemoveAllListeners();
         ToggleInteractable(true);
         newAccountWindow.panel.SetActive(false);
         dualLoginWindow.panel.SetActive(true);
-        dualLoginWindow.username.text = tmp_player.users.username;
+        dualLoginWindow.username.text = newUsername;
         dualLoginWindow.password.text = na_pass1.text;
         ClearNewAcctFields();
     }
@@ -271,8 +185,6 @@ public class NewAccountWindow : LoginSystem
     public void TimedOut()
     {
         messageEvents.RemoveAllListeners();
-        connectionTime = 0.0f;
-        checkingGFSU = false;
         popUpsWindow.generalPopPanel.SetActive(false);
         popUpsWindow.awaitServerPop.panel.SetActive(false);
         ToggleInteractable(true);

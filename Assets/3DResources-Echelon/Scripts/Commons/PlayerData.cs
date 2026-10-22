@@ -55,12 +55,10 @@ public class PlayerData : MonoBehaviour
     [System.Serializable]
     public struct tbl_Users
     {
+        // Passwords and real names are never stored here or in the sheet: the game server checks
+        // passwords itself and builds the player ID from the name (see Server/AppsScript/Code.gs).
         public string username;
-        public string hash;
-        public string salt;
-        public string first_last;
         public string sessionID;
-        public int ID_num;
         public string education;
         public string school;
         public string last_login;
@@ -858,7 +856,6 @@ public class PlayerData : MonoBehaviour
         users.username = "default";
         users.isExpo = false;
         users.isBunny = false;
-        users.ID_num = -1;
         users.last_login = System.DateTime.Now.ToString();
         users.admin = false;
         users.mouseSense = 2.0f;

@@ -12578,7 +12578,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Username
+  m_Text: Player ID
 --- !u!1 &7957680595732270006
 GameObject:
   m_ObjectHideFlags: 0
@@ -15397,7 +15397,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: First.Last
+  m_Text: e.g. jansmi
 --- !u!1 &7957680596381919762
 GameObject:
   m_ObjectHideFlags: 0

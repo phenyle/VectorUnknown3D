@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using GoogleSheetsForUnity;
-using System.Text;
 
 
 public class DualLogin : LoginSystem
@@ -30,36 +26,39 @@ public class DualLogin : LoginSystem
 
     public void Click_BunnyGame()
     {
-        messageEvents.AddListener(TimedOut);
-        popUpsWindow.awaitServerPop.SetStatus("Checking Connection");
-        popUpsWindow.awaitServerPop.AwaitingPopUp(true);
-
-        checkingGFSU = true;
-        connectionTime = 0.0f;
-        ToggleInteractable(false);
-        query = queryType.bunny;
-        SendToGoogle.callback.AddListener(ConnectionsCheck);
-        GameRootMaster.GSFU.VerifyDatabaseConnection();
+        LogIn(queryType.bunny);
     }
 
     public void Click_EchelonSeas()
     {
-        messageEvents.AddListener(TimedOut);
-        popUpsWindow.awaitServerPop.SetStatus("Checking Connection");
-        popUpsWindow.awaitServerPop.AwaitingPopUp(false);
+        LogIn(queryType.echelon);
+    }
 
-        checkingGFSU = true;
-        connectionTime = 0.0f;
+    // The server checks the password; on success it returns the player's data and a session token.
+    private void LogIn(queryType game)
+    {
+        string id = username.text.Trim().ToLower();
+        if (id.Length == 0 || password.text.Length == 0)
+        {
+            ToggleInteractable(false);
+            ShowMessage("Enter your player ID and password.", TimedOut);
+            return;
+        }
+
+        query = game;
         ToggleInteractable(false);
-        query = queryType.echelon;
-        SendToGoogle.callback.AddListener(ConnectionsCheck);
-        GameRootMaster.GSFU.VerifyDatabaseConnection();
+        ShowWaiting("Logging In", game == queryType.bunny);
+        GameRootMaster.GSFU.Login(id, password.text, LoginToGame, error =>
+        {
+            ClearFields();
+            ShowMessage("LOGIN ERROR:\n" + error, TimedOut);
+        });
     }
 
     public void Click_JoinSession()
     {
         ClearFields();
-        //We're not adding the query type yet.  
+        //We're not adding the query type yet.
         //We'll add it from the JoinSession script
         query = queryType.joining;
         joinWindow.panel.SetActive(true);
@@ -69,7 +68,7 @@ public class DualLogin : LoginSystem
     public void Click_CreateAccount()
     {
         ClearFields();
-        //We're not adding the query type yet.  
+        //We're not adding the query type yet.
         //We'll add it from the NewAccount script
         newAccountWindow.panel.SetActive(true);
         dualLoginWindow.panel.SetActive(false);
@@ -89,64 +88,28 @@ public class DualLogin : LoginSystem
 
     public void LoginToGame()
     {
-
-        GameRootMaster.GSFU.retrieved = false; //reset retrieved flag
-        loadingPlayer = false;
-        checkingGFSU = false;
-        connectionTime = 0.0f;
+        Debug.Log("LOGIN SUCCESFUL");
         dualLoginWindow.ToggleInteractable(true);
+        ClearFields();
 
-
-        string salt = GameRootMaster.player.users.salt;
-        string passattempt = ComputeHash(Encoding.UTF8.GetBytes(password.text), Encoding.UTF8.GetBytes(salt));
-
-        //Check for user/pass match
-        if (passattempt.CompareTo(GameRoot3D.player.users.hash) == 0)
+        if(GameRootMaster.player.users.admin)
         {
-            Debug.Log("LOGIN SUCCESFUL");
-
-            //load in other player settings
-
-            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.users, "username", username.text.ToLower(), false);
-            GameRootMaster.GSFU.RetrievePlayerData(PlayerData.sheets.records, "username", username.text.ToLower(), false);
-
-            tmp_player.users.last_login = System.DateTime.Now.ToString();
-            GameRootMaster.GSFU.UpdatePlayerTable(false, PlayerData.sheets.users, GameRoot3D.player.users.username);
-            ClearFields();
-
-            if(GameRootMaster.player.users.admin)
-            {
-                popUpsWindow.awaitServerPop.panel.SetActive(false);
-                adminWindow.panel.SetActive(true);
-                dualLoginWindow.panel.SetActive(false);
-            }
-            else
-            {
-                if (query == queryType.bunny)
-                    PlayBunny();
-                else if (query == queryType.echelon)
-                    PlayEchelon();
-            }
+            HideWaiting();
+            adminWindow.panel.SetActive(true);
+            dualLoginWindow.panel.SetActive(false);
         }
-        //player password wrong
         else
         {
-            Debug.Log("LOGIN ERROR: wrong user/pass");
-            ClearFields();
-
-            popUpsWindow.GeneralPopUp("LOGIN ERROR:\nWrong username/password");
-            popUpsWindow.awaitServerPop.panel.SetActive(false);
-            checkingGFSU = false;
-            connectionTime = 0.0f;
+            if (query == queryType.bunny)
+                PlayBunny();
+            else if (query == queryType.echelon)
+                PlayEchelon();
         }
-
     }
 
     public void TimedOut()
     {
         messageEvents.RemoveAllListeners();
-        checkingGFSU = false;
-        connectionTime = 0.0f;
         popUpsWindow.generalPopPanel.SetActive(false);
         popUpsWindow.awaitServerPop.panel.SetActive(false);
         ToggleInteractable(true);
