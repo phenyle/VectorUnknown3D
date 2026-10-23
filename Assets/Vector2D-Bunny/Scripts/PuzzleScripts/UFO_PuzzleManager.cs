@@ -541,6 +541,14 @@ public class UFO_PuzzleManager : MonoBehaviour
             SceneManager.LoadScene("menu_scene");
             return;
         }
+        // the level's settings (LevelData) are gone once a puzzle ends; reloading without them gives an empty puzzle
+        if (GameObject.Find("LevelData") == null)
+        {
+            restartSeed = null;
+            GameConstants.menu_level_select = true;
+            SceneManager.LoadScene("menu_scene");
+            return;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
     }
@@ -993,6 +1001,7 @@ public class UFO_PuzzleManager : MonoBehaviour
             }
             else if (
               Solution == endPositionVector2 &&
+              (puzzle_info.game_mode != 1 || number_of_keys <= 0) && // the lock only counts once every key is collected
               (puzzle_info.attempt_count <= 0 || number_of_attempts <= puzzle_info.attempt_count))
             {// The player enters a win state
              //Debug.Log( "Win State");
