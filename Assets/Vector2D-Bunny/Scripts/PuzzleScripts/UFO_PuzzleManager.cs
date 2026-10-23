@@ -28,6 +28,8 @@ public class UFO_PuzzleManager : MonoBehaviour
     public bool tutorial;
 
     public System.Random rnd = new System.Random(Guid.NewGuid().GetHashCode());
+    private int puzzleSeed;          // seed the current puzzle was generated from
+    private static int? restartSeed; // set by RestartLevel so the reloaded scene builds the same puzzle
     public GameObject InfoController;
     public GameObject choice_panel;
 
@@ -67,6 +69,11 @@ public class UFO_PuzzleManager : MonoBehaviour
 
     public void NextPuzzle()
     {
+        // every puzzle gets its own seed; all of its random choices come from rnd, so the seed replays it
+        puzzleSeed = restartSeed ?? rnd.Next();
+        restartSeed = null;
+        rnd = new System.Random(puzzleSeed);
+
         solutionFormat = "";
         solutionDisplaySet = false;
         if (puzzle_info.tutorial == false)
@@ -439,34 +446,26 @@ public class UFO_PuzzleManager : MonoBehaviour
 
     public void setBasketInvisible(GameObject goal)
     {
-        goal.GetComponent<LineRenderer>().enabled = false;
-        Transform basketTransform = goal.transform.GetChild(0);
-        for(int i = 0; i < basketTransform.childCount; i++)
-        {
-            Transform meshGroup = basketTransform.GetChild(i);
-            for(int j = 0; j < meshGroup.childCount; j++)
-            {
-                Transform meshTransform = meshGroup.GetChild(j);
-                MeshRenderer renderer = meshTransform.gameObject.GetComponent<MeshRenderer>();
-                renderer.enabled = false;
-            }
-        }
+        setBasketRenderers(goal, false);
     }
 
     public void setBasketVisible(GameObject goal)
     {
-        goal.GetComponent<LineRenderer>().enabled = true;
-        Transform basketTransform = goal.transform.GetChild(0);
-        for (int i = 0; i < basketTransform.childCount; i++)
-        {
-            Transform meshGroup = basketTransform.GetChild(i);
-            for (int j = 0; j < meshGroup.childCount; j++)
-            {
-                Transform meshTransform = meshGroup.GetChild(j);
-                MeshRenderer renderer = meshTransform.gameObject.GetComponent<MeshRenderer>();
-                renderer.enabled = true;
-            }
-        }
+        setBasketRenderers(goal, true);
+    }
+
+    // The basket is the goal's first child (carrot_kibble). Toggle every renderer under it rather than
+    // assuming a group/mesh layout: the re-imported model has nodes without a MeshRenderer, which threw
+    // here and left levels 6 and 7 with empty vector cards.
+    private void setBasketRenderers(GameObject goal, bool visible)
+    {
+        LineRenderer line = goal.GetComponent<LineRenderer>();
+        if (line != null)
+            line.enabled = visible;
+        if (goal.transform.childCount == 0)
+            return;
+        foreach (Renderer renderer in goal.transform.GetChild(0).GetComponentsInChildren<Renderer>(true))
+            renderer.enabled = visible;
     }
 
     public void set_tutorial()
@@ -522,6 +521,14 @@ public class UFO_PuzzleManager : MonoBehaviour
 
     }
 
+    // Restart button: reload the level with the same puzzle (same vectors and goals).
+    public void RestartLevel()
+    {
+        if (!levelFinished)
+            restartSeed = puzzleSeed;
+        ResetScene();
+    }
+
     public void ResetScene()//Completely reset scene. Used in place of reset game method, which gave errors when players reset after collecting keys. This should fix that issue. 
     {
         GameRootMaster.player.bunny.steps = "";
@@ -544,7 +551,7 @@ public class UFO_PuzzleManager : MonoBehaviour
         for (int i = 0; i < arr.Length; i++)
         {
             Vector2 temp = arr[i];
-            int r_index = UnityEngine.Random.Range(0, arr.Length);
+            int r_index = rnd.Next(0, arr.Length); // rnd, not UnityEngine.Random, so a restart replays the same order
             arr[i] = arr[r_index];
             arr[r_index] = temp;
         }
