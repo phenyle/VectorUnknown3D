@@ -161,7 +161,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[0] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle01>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p1_1, GameRoot3D.player.p1_1.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
 
                 break;
@@ -179,7 +178,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[1] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_1, GameRoot3D.player.p2_1.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -197,7 +195,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[1] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_2, GameRoot3D.player.p2_2.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -215,7 +212,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[1] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle02>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p2_3, GameRoot3D.player.p2_3.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -232,7 +228,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[2] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_1, GameRoot3D.player.p3_1.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -249,7 +244,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[2] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_2, GameRoot3D.player.p3_2.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -266,7 +260,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[2] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle03>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p3_3, GameRoot3D.player.p3_3.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -283,7 +276,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[3] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_1, GameRoot3D.player.p4_1.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -301,7 +293,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[3] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_2, GameRoot3D.player.p4_2.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 
@@ -319,7 +310,6 @@ public class EnterExit : MonoBehaviour
                 GameRoot3D.instance.puzzleCompleted[3] = true;
                 GameObject.Find("GameController").GetComponent<GameControllerPuzzle04>().RecordData();
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.users, GameRoot3D.player.users.username);
-                GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.p4_3, GameRoot3D.player.p4_3.usernameAttempt);
                 GameRoot3D.GSFU.UpdatePlayerTable(true, PlayerData.sheets.records, GameRoot3D.player.users.username);
                 break;
 

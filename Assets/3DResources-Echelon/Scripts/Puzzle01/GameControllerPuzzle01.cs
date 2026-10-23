@@ -79,6 +79,12 @@ public class GameControllerPuzzle01 : GameControllerRoot
 
         //Init Components
         SetActive(endportal, false);
+
+        // teachers' attempt record: one question per displacement P(k-1) -> P(k)
+        string problem = "Write each displacement as s·⟨x, y, z⟩:";
+        for (int k = 1; k < DBP01.pointVectors.Count; k++)
+            problem += " P" + (k - 1) + "→P" + k + " = " + AttemptLog.Vec(DBP01.pointVectors[k] - DBP01.pointVectors[k - 1]) + ";";
+        attempt = new AttemptLog("3D", "P1", 1, 0, problem, DBP01.pointVectors.Count - 1, () => puzzleTime);
      }
 
     private void Update()
@@ -289,6 +295,12 @@ public class GameControllerPuzzle01 : GameControllerRoot
     {
         bool check = DBP01.Calculation(questionNum, scalar, x, y, z);
 
+        Vector3 target = DBP01.pointVectors[questionNum] - DBP01.pointVectors[questionNum - 1];
+        Vector3 input = new Vector3(x, y, z);
+        attempt.AddMove("Q" + questionNum + ": " + AttemptLog.Num(scalar) + "·" + AttemptLog.Vec(input) + " = " +
+                        AttemptLog.Vec(scalar * input) + " (target " + AttemptLog.Vec(target) + ")",
+                        MathMistakes.Classify(target, input, scalar, Vector3.zero, 0));
+
         moves++;
         AnswerAttempt(scalar, x, y, z);
 
@@ -433,6 +445,8 @@ public class GameControllerPuzzle01 : GameControllerRoot
         GameRoot3D.player.p1_1.usernameAttempt = GameRoot3D.player.p1_1.username + GameRoot3D.player.p1_1.attemptNum.ToString();
 
         GameRoot3D.player.records.p1_totTime += puzzleTime;
+
+        attempt.Finish(AttemptLog.Completed);
     }
 
 }

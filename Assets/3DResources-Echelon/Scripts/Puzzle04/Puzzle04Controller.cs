@@ -82,6 +82,7 @@ public class Puzzle04Controller : MonoBehaviour
     private bool ans1Entered; //condition flag that a card is slotted in position1 in the UI
     private bool ans2Entered; //condition flag that a card is slotted in position2 in the UI
     private bool correct;
+    public bool IsSolved { get { return correct; } }
 
     //MISC
     public int attempts { get; private set; }
@@ -314,6 +315,19 @@ public class Puzzle04Controller : MonoBehaviour
         return playerAnswer;
     }
 
+    // the gap is crossed: one move in the teachers' attempt record
+    private void RecordSolved()
+    {
+        AttemptLog log = GameControllerPuzzle04.instance.Attempt;
+        if (log == null)
+            return;
+        Puzzle04Window w = GameControllerPuzzle04.instance.P04W;
+        log.AddMove("Target " + AttemptLog.Vec(finalAnswerVector) + " = " +
+                    AttemptLog.Combination(w.getScalar1Value(), w.card1.cardVector, w.getScalar2Value(), w.card2.cardVector, false) +
+                    " after " + attempts + " card/slider changes (fewest possible " + puzzleData.minMoves + ")",
+                    MathMistakes.Correct);
+    }
+
     public bool checkFinalAnswer()
     {
         if (GameControllerPuzzle04.instance.P04W.card1 != null && GameControllerPuzzle04.instance.P04W.card2 != null)
@@ -322,7 +336,10 @@ public class Puzzle04Controller : MonoBehaviour
             {
                 //on first time answering correctly
                 if (!correct)
+                {
                     GameControllerPuzzle04.instance.P04W.SetComplete();
+                    RecordSolved();
+                }
                 correct = true;
 
 

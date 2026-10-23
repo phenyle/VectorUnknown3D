@@ -22,7 +22,10 @@ public class puzzle_info : MonoBehaviour {
 		manager.set_models ( game_mode);
 
         if( this.tutorial == false)
+        {
             manager.debug_new_puzzle();
+            manager.BeginAttempt();
+        }
         if (this.tutorial == true)
         {
             this.game_mode = 0;

@@ -125,7 +125,7 @@ public class scorekeeper : MonoBehaviour
         
     }
 
-    public void generate_score()
+    public int generate_score() // -> stars (1-3)
     {
         toggle();
         score_unit score = new score_unit((int) game_time);
@@ -160,5 +160,6 @@ public class scorekeeper : MonoBehaviour
 
         PlayerPrefs.DeleteKey("score");
         PlayerPrefs.SetString("score", score.ToString());
+        return score._stars;
     }
 }

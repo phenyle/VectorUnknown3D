@@ -208,6 +208,34 @@ public class GameControllerPuzzle02 : GameControllerRoot
         currTarget = shipPuzzles[random];
         PickTarget(currTarget);
 
+        // teachers' attempt record: one shot per ship
+        string ships = "";
+        foreach (PuzzleController02 ship in shipPuzzles)
+            ships += (ships.Length > 0 ? ", " : "") + AttemptLog.Vec(ShipTarget(ship));
+        attempt = new AttemptLog("3D", "P2", levelNumber > 0 ? levelNumber : Difficulty, 0,
+                                 "Hit " + shipPuzzles.Count + " ships at " + ships +
+                                 " by choosing a basis {b1, b2} (cannonball) and coordinates (a, b) (cannon) with a·b1 + b·b2 = ship",
+                                 shipPuzzles.Count, () => tot_puzzleTime);
+    }
+
+    private static Vector2 ShipTarget(PuzzleController02 ship)
+    {
+        Vector3 p = ship.shipParent.transform.position;
+        return new Vector2(Mathf.Round(p.x), Mathf.Round(p.z));
+    }
+
+    // a shot a·b1 + b·b2 at the current target, for the attempt record
+    private void RecordShot()
+    {
+        Vector2 target = ShipTarget(currTarget);
+        Vector2 b1 = new Vector2(currMatrix[0][0], currMatrix[0][1]);
+        Vector2 b2 = new Vector2(currMatrix[1][0], currMatrix[1][1]);
+        Vector3[] intended = null;
+        if (currTarget.ansMatrix != null)
+            intended = new Vector3[] { new Vector2(currTarget.ansMatrix[0][0], currTarget.ansMatrix[0][1]),
+                                       new Vector2(currTarget.ansMatrix[1][0], currTarget.ansMatrix[1][1]) };
+        attempt.AddMove("Ship " + AttemptLog.Vec(target) + ": " + AttemptLog.Combination(currVector[0], b1, currVector[1], b2, true),
+                        MathMistakes.Classify(target, b1, currVector[0], b2, currVector[1], intended));
     }
 
     private void CreateMatrices()
@@ -321,6 +349,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
             if (vectChosen && matrixChosen && !mainCannon.animate)
             {
                 currTarget.CreateAttemptCSV(currMatrix, currVector);
+                RecordShot();
                 //VV02.ToggleVectorLine(true);
                 mainCannon.FireCannon(currAnswer, currAnswer == currTarget.shipParent.transform.position);
                 audioService.PlayFXAudio(Constants.audioP02CannonFire);
@@ -1284,5 +1313,7 @@ public class GameControllerPuzzle02 : GameControllerRoot
 
         GameRoot3D.player.records.p2_totAttempts = GameRoot3D.player.records.p2_1_attempts + GameRoot3D.player.records.p2_2_attempts + GameRoot3D.player.records.p2_3_attempts;
         GameRoot3D.player.records.p2_totTime += tot_puzzleTime;
+
+        attempt.Finish(AttemptLog.Completed);
     }
 }

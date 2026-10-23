@@ -150,7 +150,10 @@ public class GameControllerPuzzle03 : GameControllerRoot
         puzzleData.startingRotation = startRandRotate;
         puzzleData.numOfMoves = 0;
 
-
+        // teachers' attempt record; a tilt can't be judged right or wrong on its own, only the ball reaching the exit
+        attempt = new AttemptLog("3D", "P3", Difficulty, 0,
+                                 "Tilt the platform to the plane spanned by two vectors (b in {-1, 0, 1}) so the ball rolls to the exit",
+                                 0, () => puzzleData.obsTime);
     }
 
     private void Update()
@@ -392,6 +395,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
     {
         string temp = "";
         puzzleData.numOfMoves++;
+        attempt.AddMove("span{" + AttemptLog.Vec(span1) + ", " + AttemptLog.Vec(span2) + "}", "");
 
         temp += puzzleData.numOfMoves.ToString() + ", ";
         temp += puzzleData.obsTime.ToString("0.00") + ", ";
@@ -764,5 +768,7 @@ public class GameControllerPuzzle03 : GameControllerRoot
 
         GameRoot3D.player.records.p3_totAttempts = GameRoot3D.player.records.p3_1_attempts + GameRoot3D.player.records.p3_2_attempts + GameRoot3D.player.records.p3_3_attempts;
         GameRoot3D.player.records.p3_totTime += puzzleData.obsTime;
+
+        attempt.Finish(AttemptLog.Completed);
     }
 }

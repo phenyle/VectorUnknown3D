@@ -30,6 +30,11 @@ public class UFO_PuzzleManager : MonoBehaviour
     public System.Random rnd = new System.Random(Guid.NewGuid().GetHashCode());
     private int puzzleSeed;          // seed the current puzzle was generated from
     private static int? restartSeed; // set by RestartLevel so the reloaded scene builds the same puzzle
+
+    // the teachers' record of this play ("attempts" tab); see AttemptLog
+    private AttemptLog attempt;
+    private Vector3[] intendedVectors, intendedTerms; // the generated solution x·a + y·b
+    private int[] intendedScalars;
     public GameObject InfoController;
     public GameObject choice_panel;
 
@@ -526,7 +531,143 @@ public class UFO_PuzzleManager : MonoBehaviour
     {
         if (!levelFinished)
             restartSeed = puzzleSeed;
+        if (attempt != null)
+            attempt.Finish(AttemptLog.Restarted, float.NaN, PlayerAt());
         ResetScene();
+    }
+
+    void OnDestroy()
+    {
+        // leaving the level any other way (menu, back, closing the level) without finishing it
+        if (attempt != null)
+            attempt.Finish(AttemptLog.Abandoned, float.NaN, PlayerAt());
+    }
+
+    /* Teachers' attempt record */
+
+    // Called once the level's puzzle is ready (puzzle_info.Start). The tutorial isn't recorded.
+    public void BeginAttempt()
+    {
+        if (puzzle_info.tutorial)
+            return;
+
+        int mode = puzzle_info.game_mode;
+        string cards = AttemptLog.Vec(Choices[0]) + ", " + AttemptLog.Vec(Choices[1]) + ", " +
+                       AttemptLog.Vec(Choices[2]) + ", " + AttemptLog.Vec(Choices[3]);
+        string problem;
+        int ideal;
+        if (mode == 0 || mode == 1)
+        {
+            problem = "Reach " + AttemptLog.Vec(Solution) + " from ⟨0, 0⟩ with cards " + cards;
+            ideal = 1;
+            if (mode == 1)
+            {
+                string keys = "";
+                for (int i = 0; i < key_sack.transform.childCount; i++)
+                {
+                    Vector3 k = key_sack.transform.GetChild(i).position;
+                    keys += (i > 0 ? ", " : "") + AttemptLog.Vec(new Vector2(k.x, k.z));
+                }
+                problem += ", collecting the key(s) at " + keys + " first";
+                ideal += key_sack.transform.childCount;
+            }
+            if (intendedScalars != null)
+                problem += " (one solution: " + AttemptLog.Combination(intendedScalars[0], intendedVectors[0],
+                                                                       intendedScalars[1], intendedVectors[1], true) + ")";
+        }
+        else
+        {
+            bool offOrigin = mode == 3 || mode == 5;
+            bool hidden = mode == 4 || mode == 5;
+            string line = offOrigin ? AttemptLog.Vec(offsetVec) + " + t·" + AttemptLog.Vec(solutionVec)
+                                    : "t·" + AttemptLog.Vec(solutionVec);
+            ideal = GoalPositions != null ? GoalPositions.Length : number_of_goals;
+            problem = "Land on the " + ideal + (hidden ? " hidden" : "") + " baskets on the line " + line + " with cards " + cards;
+        }
+
+        attempt = new AttemptLog("2D", "L" + GameRootMaster.player.bunny.stage, 0, GameConstants.difficulty,
+                                 problem, ideal, scorekeeper.GetGameTime);
+    }
+
+    private void FinishAttempt(string outcome, int stars = 0)
+    {
+        if (attempt != null)
+            attempt.Finish(outcome, stars > 0 ? stars : float.NaN, PlayerAt());
+    }
+
+    // Called by formula_controller when the player presses GO with c1·v1 + c2·v2.
+    public void RecordMove(int c1, Vector2 v1, int c2, Vector2 v2)
+    {
+        if (attempt == null)
+            return;
+        Vector2 start = PlayerPosition();
+        Vector2 move = c1 * v1 + c2 * v2;
+        Vector2 end = start + move;
+        string text = AttemptLog.Combination(c1, v1, c2, v2, true) + ", from " + AttemptLog.Vec(start) + " to " + AttemptLog.Vec(end);
+
+        string mistake;
+        int mode = puzzle_info.game_mode;
+        if (mode == 0 || mode == 1)
+        {
+            if (mode == 1 && IsKeyAt(end))
+                mistake = MathMistakes.Correct;   // a key on the way to the lock
+            else
+            {
+                bool fromOrigin = start == Vector2.zero;
+                mistake = MathMistakes.Classify(Solution - start, v1, c1, v2, c2,
+                                                fromOrigin ? intendedVectors : null, fromOrigin ? intendedTerms : null);
+            }
+        }
+        else
+        {
+            if (IsBasketAt(end))
+                mistake = MathMistakes.Correct;
+            else if (IsOnLine(end))
+                mistake = MathMistakes.Scalar;    // on the line, but not a basket's multiple
+            else if (IsBasketAt(start - move) || IsOnLine(start - move))
+                mistake = MathMistakes.Sign;
+            else
+                mistake = MathMistakes.Other;
+        }
+        attempt.AddMove(text, mistake);
+    }
+
+    private Vector2 PlayerPosition()
+    {
+        return new Vector2(Mathf.Round(Player.transform.position.x), Mathf.Round(Player.transform.position.z));
+    }
+
+    private string PlayerAt()
+    {
+        return Player != null ? AttemptLog.Vec(PlayerPosition()) : "";
+    }
+
+    private bool IsKeyAt(Vector2 p)
+    {
+        for (int i = 0; i < key_sack.transform.childCount; i++)
+        {
+            Vector3 k = key_sack.transform.GetChild(i).position;
+            if (Mathf.Abs(k.x - p.x) < 0.5f && Mathf.Abs(k.z - p.y) < 0.5f)
+                return true;
+        }
+        return false;
+    }
+
+    private bool IsBasketAt(Vector2 p)
+    {
+        if (GoalPositions == null)
+            return false;
+        foreach (Vector3 g in GoalPositions)
+            if (g != Vector3.zero && Mathf.Abs(g.x / GameConstants.GridSpacing - p.x) < 0.5f && Mathf.Abs(g.z / GameConstants.GridSpacing - p.y) < 0.5f)
+                return true;
+        return false;
+    }
+
+    private bool IsOnLine(Vector2 p)
+    {
+        Vector2 off = (puzzle_info.game_mode == 3 || puzzle_info.game_mode == 5) ? offsetVec : Vector2.zero;
+        Vector2 d = p - off;
+        return solutionVec != Vector2.zero && Mathf.Abs(d.x * solutionVec.y - d.y * solutionVec.x) < 1e-3f;
     }
 
     public void ResetScene()//Completely reset scene. Used in place of reset game method, which gave errors when players reset after collecting keys. This should fix that issue. 
@@ -635,6 +776,10 @@ public class UFO_PuzzleManager : MonoBehaviour
         GameRootMaster.player.bunny.j = FindScalar(Choices[1], Choices[3]).ToString();
 
         GameRootMaster.player.bunny.idealSteps = FindIdeal(Mul, Choices);
+
+        intendedVectors = new Vector3[] { Choices[0], Choices[1] };
+        intendedTerms = new Vector3[] { Mul[0] * Choices[0], Mul[1] * Choices[1] };
+        intendedScalars = new int[] { Mul[0], Mul[1] };
 
         return test_vec;
     }
@@ -1013,7 +1158,7 @@ public class UFO_PuzzleManager : MonoBehaviour
                 {
                     if (puzzle_info.tutorial == false)
                     {
-                        scorekeep.generate_score();
+                        FinishAttempt(AttemptLog.Completed, scorekeep.generate_score());
                         InfoController.GetComponent<GUI_InfoController>().ShowSuccessOverlay();
                         Psychometrics.sendData();
                     }
@@ -1029,7 +1174,7 @@ public class UFO_PuzzleManager : MonoBehaviour
 
                 if (puzzle_info.game_mode == 1 && number_of_keys <= 0)
                 {
-                    scorekeep.generate_score();
+                    FinishAttempt(AttemptLog.Completed, scorekeep.generate_score());
                     InfoController.GetComponent<GUI_InfoController>().ShowSuccessOverlay();
                     Psychometrics.sendData();
                 }
@@ -1043,6 +1188,7 @@ public class UFO_PuzzleManager : MonoBehaviour
                 GameObject level_data = GameObject.Find("LevelData");
                 Destroy(level_data);
                 Psychometrics.report("M");
+                FinishAttempt(AttemptLog.Failed);
 
                 Psychometrics.sendData();
             }
@@ -1058,7 +1204,7 @@ public class UFO_PuzzleManager : MonoBehaviour
                 GameObject level_data = GameObject.Find("LevelData");
                 Destroy(level_data);
                 Psychometrics.report("H");
-                scorekeep.generate_score();
+                FinishAttempt(AttemptLog.Completed, scorekeep.generate_score());
                 InfoController.GetComponent<GUI_InfoController>().ShowSuccessOverlay();
                 levelFinished = true;
                 Psychometrics.sendData();
@@ -1074,7 +1220,7 @@ public class UFO_PuzzleManager : MonoBehaviour
                 GameObject level_data = GameObject.Find("LevelData");
                 Destroy(level_data);
                 Psychometrics.report("H");
-                scorekeep.generate_score();
+                FinishAttempt(AttemptLog.Completed, scorekeep.generate_score());
                 InfoController.GetComponent<GUI_InfoController>().ShowSuccessOverlay();
                 Psychometrics.sendData();
             }

@@ -95,6 +95,6 @@ public class LoginSystem : MonoBehaviour
         Debug.LogWarning("Loading Bunny Menu");
         loginEvents.RemoveAllListeners();
         messageEvents.RemoveAllListeners();
-        GameRootMaster.GSFU.LoadPlayerTable(PlayerData.sheets.bunRecords, () => SceneManager.LoadScene("menu_scene"));
+        SceneManager.LoadScene("menu_scene"); // 2D plays are logged to "attempts"; nothing to load
     }
 }

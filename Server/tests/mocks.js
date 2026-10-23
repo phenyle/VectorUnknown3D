@@ -78,6 +78,8 @@ class MockRange {
     return this;
   }
   setFontWeight() { return this; }
+  setNumberFormat() { return this; }
+  setBackgrounds(colors) { this.sheet.backgrounds = colors; return this; }
   createTextFinder(text) {
     const range = this;
     const f = {
@@ -102,6 +104,9 @@ class MockSheet {
   appendRow(values) { this.getRange(this.getLastRow() + 1, 1, 1, values.length).setValues([values]); }
   hideSheet() { this.hidden = true; }
   setFrozenRows() {}
+  setColumnWidth() {}
+  clear() { this.data = []; }
+  deleteRow(r) { this.data.splice(r - 1, 1); }
   // test helper: rows as objects
   rows() { const h = this.data[0] || []; return this.data.slice(1).map(l => Object.fromEntries(h.map((k, i) => [k, l[i]]))); }
 }
@@ -109,7 +114,8 @@ var MOCK_SS = { sheets: {} };
 var SpreadsheetApp = {
   getActive: () => ({
     getSheetByName: n => MOCK_SS.sheets[n] || null,
-    insertSheet: n => (MOCK_SS.sheets[n] = new MockSheet(n))
+    insertSheet: n => (MOCK_SS.sheets[n] = new MockSheet(n)),
+    deleteSheet: sh => { delete MOCK_SS.sheets[sh.name]; }
   }),
   flush: () => {}
 };
@@ -126,4 +132,14 @@ var ContentService = {
   MimeType: { JSON: 'json' },
   createTextOutput: s => ({ content: s, setMimeType() { return this; }, getContent() { return this.content; } })
 };
-function resetMocks() { MOCK_SS.sheets = {}; for (const k in MOCK_CACHE) delete MOCK_CACHE[k]; }
+var MOCK_TRIGGERS = [];
+var ScriptApp = {
+  getProjectTriggers: () => MOCK_TRIGGERS.slice(),
+  deleteTrigger: t => { MOCK_TRIGGERS.splice(MOCK_TRIGGERS.indexOf(t), 1); },
+  newTrigger: fn => ({ timeBased: () => ({ everyMinutes: m => ({ create: () => {
+    const t = { fn, minutes: m, getHandlerFunction: () => fn };
+    MOCK_TRIGGERS.push(t);
+    return t;
+  } }) }) })
+};
+function resetMocks() { MOCK_SS.sheets = {}; MOCK_TRIGGERS.length = 0; for (const k in MOCK_CACHE) delete MOCK_CACHE[k]; }

@@ -60,12 +60,7 @@ public class Psychometrics : MonoBehaviour
         GameRootMaster.player.bunny.attemptDate = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + 
                                                 "(" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ")";
 
-        GameRootMaster.GSFU.UpdatePlayerTable(true, PlayerData.sheets.bunny, GameRootMaster.player.bunny.usernameAttempt);
-        while (metrics.Count > 255)
-        {
-            metrics.RemoveAt(metrics.Count - 1);
-        }
-        UnityDataConnector.instance.SendDataToSheet((string[])metrics.ToArray(typeof(string)));
+        // the play itself is recorded by UFO_PuzzleManager's AttemptLog ("attempts" tab)
         metrics = new ArrayList();
         logEvent(sessionID);
         logEvent(id);

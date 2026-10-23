@@ -164,17 +164,17 @@ namespace GoogleSheetsForUnity
                 UpdatePlayerTable(create, sheet, GameRootMaster.player.users.username);
         }
 
-        /// <summary>Appends gameplay events (the 2D game's Psychometrics log) to the "statistics" tab.</summary>
-        public void LogStats(string[] values)
+        /// <summary>Adds one play of a level or puzzle to the "attempts" tab (see AttemptLog).</summary>
+        public void LogAttempt(JSONObject attempt)
         {
             if (!GameServer.IsLoggedIn)
+            {
+                Debug.LogWarning("[SendToGoogle] not logged in; attempt not saved");
                 return;
+            }
             JSONObject req = new JSONObject();
-            JSONArray list = new JSONArray();
-            foreach (string v in values)
-                list.Add(v);
-            req["values"] = list;
-            GameServer.Post("logStats", req, null, error => Debug.LogWarning("[SendToGoogle] statistics not saved: " + error));
+            req["attempt"] = attempt;
+            GameServer.Post("logAttempt", req, null, error => Debug.LogWarning("[SendToGoogle] attempt not saved: " + error));
         }
 
         private static string RowJson(PlayerData.sheets sheet)

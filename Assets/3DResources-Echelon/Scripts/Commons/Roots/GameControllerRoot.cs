@@ -6,6 +6,17 @@ public class GameControllerRoot : MonoBehaviour
     protected ResourceService resourceService;
     protected AudioService audioService;
 
+    // the teachers' record of this puzzle play ("attempts" tab); see AttemptLog
+    protected AttemptLog attempt;
+    public AttemptLog Attempt { get { return attempt; } }
+
+    // The puzzle scene is closing. If the play wasn't completed (Pause > Hub/Quit), it was abandoned.
+    protected virtual void OnDestroy()
+    {
+        if (attempt != null)
+            attempt.Finish(AttemptLog.Abandoned);
+    }
+
     public CompleteSplash completeSplash { get; set; }
     public GameControllerPuzzle01 GCP01 { get; set; }
     public GameControllerPuzzle02 GCP02 { get; set; }

@@ -317,7 +317,6 @@ public class gui_select : MonoBehaviour {
                                  attemptNum;
         GameRootMaster.player.bunny.usernameAttempt = usernameAttempt;
         GameRootMaster.player.bunRecords.username = GameRootMaster.player.users.username;
-        GameRootMaster.GSFU.UpdatePlayerTable(true, PlayerData.sheets.bunRecords, GameRootMaster.player.users.username);
     }
 
 	private void puzzle_settings( int attempts, int future_paths, int previous_paths, int game_mode){

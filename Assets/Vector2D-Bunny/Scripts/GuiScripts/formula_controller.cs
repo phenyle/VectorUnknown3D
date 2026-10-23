@@ -234,6 +234,7 @@ public class formula_controller : MonoBehaviour
         )
         {
             log_formula();
+            puzzleManager.GetComponent<UFO_PuzzleManager>().RecordMove(constant_1, vector_1, constant_2, vector_2);
 
             Vector3[] move = new Vector3[2];
             move[0] = constant_1 * new Vector3(vector_1.x, 0f, vector_1.y);

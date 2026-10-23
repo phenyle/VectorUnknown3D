@@ -124,6 +124,11 @@ public class GameControllerPuzzle04 : GameControllerRoot
         foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("p4puzzles"))
             puzzleDatas.Add(obstacle.GetComponent<Puzzle04Controller>());
 
+        // teachers' attempt record: one move per gap crossed
+        attempt = new AttemptLog("3D", "P4", Difficulty, 0,
+                                 "Cross " + puzzleDatas.Count + " gaps: for each target T choose 2 of 4 cards v1, v2 and integer scalars with s1·v1 + s2·v2 = T",
+                                 puzzleDatas.Count, () => tot_puzzleTime);
+
         //Init Components
         // SetActive(endportal, false);
     }
@@ -926,6 +931,16 @@ public class GameControllerPuzzle04 : GameControllerRoot
         GameRoot3D.player.records.p4_totAttempts = GameRoot3D.player.records.p4_1_attempts + GameRoot3D.player.records.p4_2_attempts + GameRoot3D.player.records.p4_3_attempts;
         GameRoot3D.player.records.p4_totTime += tot_puzzleTime;
         GameRoot3D.player.records.sessionID = GameRoot3D.player.users.sessionID;
+
+        // effort = every card/slider change, so efficiency = fewest changes / changes made
+        int ideal = 0, made = 0;
+        foreach (Puzzle04Controller gap in puzzleDatas)
+            if (gap.IsSolved)
+            {
+                ideal += gap.puzzleData.minMoves;
+                made += gap.attempts;
+            }
+        attempt.Finish(AttemptLog.Completed, overallScore, "", made > 0 ? Mathf.Min(1f, (float)ideal / made) : float.NaN);
     }
 
 
