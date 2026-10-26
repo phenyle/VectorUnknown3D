@@ -149,6 +149,8 @@ namespace GoogleSheetsForUnity
                 Debug.LogWarning("[SendToGoogle] not logged in; " + sheetname + " not saved");
                 return;
             }
+            if (!GameServer.SaveData)
+                return;   // the player chose not to save data
 
             string json = RowJson(sheetname);
             Debug.Log("<color=yellow>Saving " + sheetname + "</color>\n" + json);
@@ -172,6 +174,8 @@ namespace GoogleSheetsForUnity
                 Debug.LogWarning("[SendToGoogle] not logged in; attempt not saved");
                 return;
             }
+            if (!GameServer.SaveData)
+                return;   // the player chose not to save data
             JSONObject req = new JSONObject();
             req["attempt"] = attempt;
             GameServer.Post("logAttempt", req, null, error => Debug.LogWarning("[SendToGoogle] attempt not saved: " + error));

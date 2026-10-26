@@ -19,6 +19,12 @@ public class GameServer : MonoBehaviour
     public static string Token { get; private set; }
     public static bool IsLoggedIn { get { return !string.IsNullOrEmpty(Token); } }
 
+    /// <summary>
+    /// False when the player unticked "Save my data" at login: progress and play records are then
+    /// not sent (SendToGoogle checks this). Classroom/expo session players always save.
+    /// </summary>
+    public static bool SaveData = true;
+
     private const float TimeoutSeconds = 30f;
     private static GameServer runner;
     private static string url;

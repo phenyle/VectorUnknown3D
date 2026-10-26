@@ -61,6 +61,7 @@ public class JoinWindow : LoginSystem
         dualLoginWindow.gameObject.SetActive(true);
 
         GameRootMaster.isSession = true;
+        GameServer.SaveData = true;   // session play is always recorded
 
         if (session.isBunny)
             PlayBunny();
