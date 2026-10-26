@@ -67,7 +67,18 @@ public class PauseWindow : WindowRoot
             sliderMouseSense.value = GameRoot3D.player.users.mouseSense;
             sliderSoundFX.value = GameRoot3D.player.users.soundFX;
             sliderVolume.value = GameRoot3D.player.users.soundVol;
+            ShowGraphicsSettings(panelOption);
         }
+    }
+
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex + 1);
+    }
+
+    public void SetFullScreen(bool isFullScreen)
+    {
+        Screen.fullScreen = isFullScreen;
     }
 
     public void ClickSettingsBackBtn()

@@ -173,6 +173,9 @@ public class TitleWindow : WindowRoot
     {
         SetActive(panelMain, false);
         SetActive(panelOptions, true);
+        sliderVolume.value = audioService.bgVolume;
+        sliderSoundFX.value = audioService.UIFXVolume;
+        ShowGraphicsSettings(panelOptions);
         audioService.PlayUIAudio(Constants.audioUIClickBtn);
     }
 
@@ -198,6 +201,10 @@ public class TitleWindow : WindowRoot
 
     public void ClickBackBtn()
     {
+        // keep the choices; they are saved with the player's settings
+        GameRoot3D.player.users.soundVol = sliderVolume.value;
+        GameRoot3D.player.users.soundFX = sliderSoundFX.value;
+
         SetActive(panelOptions, false);
         SetActive(panelMain, true);
         audioService.PlayUIAudio(Constants.audioUIClickBtn);

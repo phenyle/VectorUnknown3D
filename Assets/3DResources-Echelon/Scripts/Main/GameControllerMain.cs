@@ -388,7 +388,7 @@ public class GameControllerMain : GameControllerRoot
 
     public void SetUserSettings()
     {
-        GameRoot3D.instance.audioService.bgVolume = GameRoot3D.player.users.soundVol;
-        GameRoot3D.instance.audioService.UIFXVolume = GameRoot3D.player.users.soundFX;
+        GameRoot3D.instance.audioService.SetBgVolume(GameRoot3D.player.users.soundVol);
+        GameRoot3D.instance.audioService.SetSoundFXVolume(GameRoot3D.player.users.soundFX);
     }
 }

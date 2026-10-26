@@ -15,8 +15,9 @@ public class AudioService : MonoBehaviour
     public void InitService()
     {
         Debug.Log("Init Audio Service");
-        bgVolume = 0.25f;
-        UIFXVolume = 1f;
+        // the player's saved settings (PlayerData defaults: music 0.25, sound FX 1)
+        bgVolume = GameRootMaster.player.users.soundVol;
+        SetSoundFXVolume(GameRootMaster.player.users.soundFX);
     }
 
     public void PlayBgMusic(int trackNum, bool isLoop)

@@ -121,4 +121,16 @@ public class WindowRoot : MonoBehaviour
     #endregion
 
     #endregion
+
+    // Options panels: show the current graphics level (dropdown LOW..VERY HIGH = levels 1-4) and
+    // full screen state, without firing their handlers.
+    protected void ShowGraphicsSettings(Transform optionsPanel)
+    {
+        Dropdown quality = optionsPanel.GetComponentInChildren<Dropdown>(true);
+        if (quality != null)
+            quality.SetValueWithoutNotify(Mathf.Clamp(QualitySettings.GetQualityLevel() - 1, 0, quality.options.Count - 1));
+        Toggle fullScreen = optionsPanel.GetComponentInChildren<Toggle>(true);
+        if (fullScreen != null)
+            fullScreen.SetIsOnWithoutNotify(Screen.fullScreen);
+    }
 }

@@ -5,6 +5,12 @@ using GoogleSheetsForUnity;
 
 public class GameRootMaster : MonoBehaviour
 {
+    // The player keeps running when the browser tab is hidden (Run In Background), so silence it then.
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        AudioListener.pause = !hasFocus;
+    }
+
     public static GameRootMaster masterInstance;
     public static PlayerData player;
     public static SendToGoogle GSFU;
