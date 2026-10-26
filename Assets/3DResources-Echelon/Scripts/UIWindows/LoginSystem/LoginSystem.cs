@@ -36,7 +36,9 @@ public class LoginSystem : MonoBehaviour
         tmp_player = new PlayerData();
 
         // reaching the login screen (first load, or Quit from a game menu) ends any earlier login
+        // and classroom/expo session (JoinWindow sets it again)
         GameServer.Logout();
+        GameRootMaster.isSession = false;
 
         if(dualLoginWindow == null)
             dualLoginWindow = GetComponentInChildren<DualLogin>();

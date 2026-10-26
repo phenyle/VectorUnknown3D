@@ -88,8 +88,8 @@ public class GameRoot3D : GameRootMaster
             loadingWindow.AltInit();
         }
 
-        //3.Enter Menu Scene
-        if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName)
+        //3.Enter Menu Scene (session players go straight to their level, see JoinEchelonLevel)
+        if (SceneManager.GetActiveScene().name == Constants.gameRootSceneName && !GameRootMaster.isSession)
         {
             menuSystem.EnterMenu();
         }
@@ -399,71 +399,40 @@ public class GameRoot3D : GameRootMaster
         instance.score += score;
     }
 
+    // A player who joined a classroom/expo session goes straight to the session's level.
+    // Entering through PuzzleSystem opens the level's window, pause controls and music like the
+    // title screen's Play does. (Calling Start() again here used to destroy this component, which
+    // is what handles Esc and Tab.)
     public void JoinEchelonLevel()
     {
+        string scene = SessionStartScene();
+        if (scene == Constants.mainSceneName)
+            exitPuzzle = 0;
+        puzzleSystem.EnterPuzzle(scene);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    // The scene a session player starts in: the hub (stage 0), or the stage/difficulty the
+    // teacher chose. An unknown stage or difficulty falls back to the hub.
+    public static string SessionStartScene()
+    {
+        int difficulty = GameRootMaster.player.users.difficultyNum;
         switch (GameRootMaster.player.users.stageNum)
         {
-            case 0:
-                GameRootMaster.resourceService.AsynLoadScene(Constants.mainSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                break;
             case 1:
-
-                break;
+                return Constants.puzzle01SceneName;
             case 2:
-                switch (GameRootMaster.player.users.difficultyNum)
-                {
-                    case 1:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 2:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 3:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle02_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
+                return difficulty == 1 ? Constants.puzzle02_1SceneName : difficulty == 2 ? Constants.puzzle02_2SceneName :
+                       difficulty == 3 ? Constants.puzzle02_3SceneName : Constants.mainSceneName;
             case 3:
-                switch (GameRootMaster.player.users.difficultyNum)
-                {
-                    case 1:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 2:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 3:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle03_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
+                return difficulty == 1 ? Constants.puzzle03_1SceneName : difficulty == 2 ? Constants.puzzle03_2SceneName :
+                       difficulty == 3 ? Constants.puzzle03_3SceneName : Constants.mainSceneName;
             case 4:
-                switch (GameRootMaster.player.users.difficultyNum)
-                {
-                    case 1:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_1SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 2:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_2SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    case 3:
-                        GameRootMaster.resourceService.AsynLoadScene(Constants.puzzle04_3SceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
+                return difficulty == 1 ? Constants.puzzle04_1SceneName : difficulty == 2 ? Constants.puzzle04_2SceneName :
+                       difficulty == 3 ? Constants.puzzle04_3SceneName : Constants.mainSceneName;
             default:
-                GameRootMaster.resourceService.AsynLoadScene(Constants.mainSceneName, () => GameObject.Find("GameRoot").GetComponent<GameRoot3D>().Start());
-                break;
-
+                return Constants.mainSceneName;
         }
     }
 }

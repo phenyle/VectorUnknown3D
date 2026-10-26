@@ -132,82 +132,12 @@ public class TitleWindow : WindowRoot
         audioService.PlayUIAudio(Constants.audioUIStartBtn);
         //GameRoot.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);// original 
 
-        if (GameRootMaster.player.users.isClass || GameRootMaster.player.users.isExpo)
-        {
-            switch (GameRootMaster.player.users.stageNum)
-            {
-                case 0: //no level restrictions, join at main hub
-                    GameRoot3D.instance.exitPuzzle = 0;
-                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
-                    break;
-                case 1: //stage 1
-                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle01SceneName);
-                    break;
-
-                case 2: //stage 2
-                    switch (GameRootMaster.player.users.difficultyNum)
-                    {
-                        case 1:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_1SceneName);
-                            break;
-                        case 2:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_2SceneName);
-                            break;
-                        case 3:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle02_3SceneName);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-
-                case 3: //stage 3
-                    switch (GameRootMaster.player.users.difficultyNum)
-                    {
-                        case 1:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_1SceneName);
-                            break;
-                        case 2:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_2SceneName);
-                            break;
-                        case 3:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle03_3SceneName);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-
-                case 4: //stage 4
-                    switch (GameRootMaster.player.users.difficultyNum)
-                    {
-                        case 1:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_1SceneName);
-                            break;
-                        case 2:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_2SceneName);
-                            break;
-                        case 3:
-                            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.puzzle04_3SceneName);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-
-                default:
-                    GameRoot3D.instance.exitPuzzle = 0;
-                    GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);
-                    break;
-            }
-
-        }
-        else
-        {
+        // session players start at the session's level; everyone else at the hub
+        string scene = GameRootMaster.player.users.isClass || GameRootMaster.player.users.isExpo
+            ? GameRoot3D.SessionStartScene() : Constants.mainSceneName;
+        if (scene == Constants.mainSceneName)
             GameRoot3D.instance.exitPuzzle = 0;
-            GameRoot3D.instance.puzzleSystem.EnterPuzzle(Constants.mainSceneName);//added by LaQuez Brown 1-26-21
-        }
-        
+        GameRoot3D.instance.puzzleSystem.EnterPuzzle(scene);
 
         // hides mouse when loading game
         Cursor.visible = false;
