@@ -46,6 +46,7 @@ public class PuzzleSystem : SystemRoot
 
                     titleWindow.SetWindowState(true);
                     audioService.PlayBgMusic(0, true);
+                    GameRoot3D.instance.ShowCursor(true);   // menus always start with a free cursor
                     break;
 
                 case Constants.mainSceneName:

@@ -18,6 +18,7 @@ public class MenuSystem : SystemRoot
             GameRoot3D.ShowTips("", false, false);
             titleWindow.SetWindowState(true);
             audioService.PlayBgMusic(0, true);
+            GameRoot3D.instance.ShowCursor(true);   // menus always start with a free cursor
         });
     }
 }

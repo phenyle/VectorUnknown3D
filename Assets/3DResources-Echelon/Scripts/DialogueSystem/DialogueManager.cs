@@ -161,6 +161,16 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+    // Closes any dialogue when leaving gameplay (quit to a menu): unlike EndDialogue it doesn't hand
+    // control back to the player afterwards, which would lock and hide the cursor on the menu.
+    public void CloseDialogue()
+    {
+        StopAllCoroutines();
+        animator.SetBool("IsOpen", false);
+        uiWindows.gameObject.SetActive(true);
+        isInDialogue = false;
+    }
+
     //Flags for puzzle01 dialogue
     public static bool showP01_00 = true;
     public static bool showP01_01 = true;

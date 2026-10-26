@@ -140,7 +140,7 @@ public class GameRoot3D : GameRootMaster
             {
                 Pause();
             }
-            else
+            else if (instance.isPause)   // on a menu, Esc must not lock the cursor
             {
                 Resume();
             }

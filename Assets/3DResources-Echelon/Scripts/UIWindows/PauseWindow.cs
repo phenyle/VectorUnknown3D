@@ -147,7 +147,7 @@ public class PauseWindow : WindowRoot
             case 1: //Quit to Main Menu
                 popupActive = false;
                 audioService.PlayUIAudio(Constants.audioUIClickBtn);
-                GameObject.Find("DialogueManager").GetComponent<DialogueManager>().EndDialogue();
+                GameObject.Find("DialogueManager").GetComponent<DialogueManager>().CloseDialogue();
                 //Resume can unlock the lock
                 GameRoot3D.instance.isPuzzleLock = false;
 

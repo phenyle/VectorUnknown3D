@@ -39,6 +39,8 @@ public class LoginSystem : MonoBehaviour
         // and classroom/expo session (JoinWindow sets it again)
         GameServer.Logout();
         GameRootMaster.isSession = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         if(dualLoginWindow == null)
             dualLoginWindow = GetComponentInChildren<DualLogin>();
