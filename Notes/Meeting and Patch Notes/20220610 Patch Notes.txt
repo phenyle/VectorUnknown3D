@@ -1,0 +1,58 @@
+--------- Stage 2 -----------
+Stage 2 redesign is in full swing now with all 3 difficulties
+
+Ship positions are now generated as Matrix First.
+4 Matricies are generated for the whole level.
+	All the ships share these same 4 matricies, evenly distributed by the number of ships
+	So one matrix might have two (or more) ships that fall on its lattice
+Added controls to adjust how the lattice matricies (and consequently ship placement) are handled
+	GameController02 now has sliders for:
+		MagRange - This is the range for the magnitude of the first vector
+		ThetaRange - this range defines to what angle the second vector can be from the first
+		AspectRange - this ranged defines what magnitude the second vector is compared to the first
+Each ship has its own set of answer vectors to pair the matrix with
+Top down view can be accessed a number of ways now:
+	Pressing Z on the keyboard
+	Walking to the main mast and pressing E to the prompt
+	Selecting a matrix (cannonballs)
+After selecting a matrix, the camera will autoswitch to top view
+	While selecting the lattice will appear and show how the matrix distorts the grid
+	On Difficulty 3 the lattice is disabled and so is the autoswitch
+	Player can still manually get to topview though by the other means above
+Fixed the Lattice rotation problems
+	Ships were ever so slight "off" from placement on the lattice
+	Turns out that Unity has a float rounding problem in their Vector3.normalize
+	Unity's normalize function lacks the decimal precision needed
+	The lattice only uses the normalize while in animation, then corrects when near position
+Fixed the Main Cannon rotating only in the clockwise direction
+Fixed the bug with "No Cameras Rendering"
+TopDown Camera Controls:
+	when in topdown view the player can now zoom and pan the camera
+	camera controls are for both mouse and/or keyboard
+	to zoom: use the mousewheel or press U/O
+	to pan left/right: rightclick and drag or press J/L
+	to pan up/down: rightclick and drag or press I/K
+
+
+Difficulties changed
+Diff 1
+	7 ships
+	MagRange: 10-16
+	ThetaRange: 60-120
+	AspectRange: 0.75-1.25
+	Lattice View: ENABLED
+	VectorAim View: ENABLED
+Diff 2
+	6 ships
+	MagRange: 10-16
+	ThetaRange: 60-120
+	AspectRange: 0.75-1.25
+	Lattice View: ENABLED
+	VectorAim View: DISABLED (temporarily enabled after firing cannon)
+Diff 3
+	5 ships
+	MagRange: 10-16
+	ThetaRange: 60-120
+	AspectRange: 0.75-1.25
+	Lattice View: DISABLED
+	VectorAim View: DISABLED (temporarily enabled after firing cannon)

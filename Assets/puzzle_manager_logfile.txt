@@ -1,0 +1,14 @@
+grid spacing: 1
+height: 2.5
+player object name: Player
+	(0.0, 2.5, 0.0)
+Goal object name: Goal0
+	(0.0, 2.5, 0.0)
+Choices:
+	(3.0, -1.0)
+	(6.0, -2.0)
+	(-2.0, -10.0)
+	(1.0, 5.0)
+Solution: (8.0, 8.0)
+Goal Positions:
+	(8.0, 2.5, 8.0)

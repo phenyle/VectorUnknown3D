@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d47500a8f005f364c989b60cb1f8fb81, type: 3}
+  m_Name: Intro
+  m_EditorClassIdentifier: 
+  dialogues:
+  - character: {fileID: 11400000, guid: aa5ca46dd3ebae0429769c09e7af7719, type: 2}
+    sentences:
+    - You have crashed your ship onto this Island.
+    - Unfortnately you were out for a very long time and a band of pirates stole
+      all the parts to your ship.
+    - You can fix the hull by solving the first puzzle to the left using vector displacement.
+    - All of your cannons were taken to the second puzzle at the skull cavern.  Use
+      matrix multiplication to sink those theiving pirates.
+    - A trio of pirates stole all your gold at puzzle three.  You can get it back
+      from them using vector spans.
+    - Most importantly all your sails are gone.  They blew away to the islands at
+      puzzle 4.  Aim your grapple hook with vector math to cross the gaps.

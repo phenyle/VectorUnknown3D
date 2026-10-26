@@ -1,0 +1,7 @@
+>>>BUNNY GAME<<<<
+Length of player vs target over each step.
+
+
+>>>>PUZZLE 02 CHANGES <<<<<
+Unified 4 matrices for all the ships
+Smooth Rotation of Lattice (rotate to point rather than lerp)

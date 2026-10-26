@@ -1,0 +1,113 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public class GameControllerRoot : MonoBehaviour
+{
+    protected ResourceService resourceService;
+    protected AudioService audioService;
+
+    // the teachers' record of this puzzle play ("attempts" tab); see AttemptLog
+    protected AttemptLog attempt;
+    public AttemptLog Attempt { get { return attempt; } }
+
+    // The puzzle scene is closing. If the play wasn't completed (Pause > Hub/Quit), it was abandoned.
+    protected virtual void OnDestroy()
+    {
+        if (attempt != null)
+            attempt.Finish(AttemptLog.Abandoned);
+    }
+
+    public CompleteSplash completeSplash { get; set; }
+    public GameControllerPuzzle01 GCP01 { get; set; }
+    public GameControllerPuzzle02 GCP02 { get; set; }
+    public GameControllerPuzzle03 GCP03 { get; set; }
+    public GameControllerPuzzle04 GCP04 { get; set; }
+
+
+
+    public virtual void InitGameController()
+    {
+        resourceService = GameRootMaster.resourceService;
+        audioService = GameRoot3D.instance.audioService;
+    }
+
+    public virtual void InitGameController(MainWindow MW)
+    {
+    }
+    public virtual void InitGameController(Puzzle01Window P01W)
+    {
+    }
+
+    public virtual void InitGameController(Puzzle02Window P02W)
+    {
+    }
+
+    public virtual void InitGameController(Puzzle03Window P03W)
+    {
+    }
+
+    public virtual void InitGameController(Puzzle04Window P04W)
+    {
+    }
+
+    public virtual void SetSplash()
+    {
+        GCP01?.SetSplash();
+        GCP02?.SetSplash();
+        GCP03?.SetSplash();
+        GCP04?.SetSplash();
+    }
+
+    #region Common Tool Functions
+
+    #region SetActive
+    protected void SetActive(GameObject gameObject, bool state = true)
+    {
+        gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Transform transform, bool state = true)
+    {
+        transform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(RectTransform rectTransform, bool state = true)
+    {
+        rectTransform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Image image, bool state = true)
+    {
+        image.transform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Text text, bool state = true)
+    {
+        text.transform.gameObject.SetActive(state);
+    }
+    #endregion
+
+    #region SetText
+    protected void SetText(Text text, string context = "")
+    {
+        text.text = context;
+    }
+
+    protected void SetText(Transform transform, int number = 0)
+    {
+        SetText(transform.GetComponent<Text>(), number);
+    }
+
+    protected void SetText(Transform transform, string context = "")
+    {
+        SetText(transform.GetComponent<Text>(), context);
+    }
+
+    protected void SetText(Text text, int number = 0)
+    {
+        SetText(text, number.ToString());
+    }
+    #endregion
+
+    #endregion
+}

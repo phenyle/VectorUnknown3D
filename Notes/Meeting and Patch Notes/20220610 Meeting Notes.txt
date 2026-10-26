@@ -1,0 +1,19 @@
+>>>>>> IMPORTANT NEED BEFORE JUN 15th <<<<<<<<<
+Revamp and Impliment the "Join Session" system
+create codes ILAS2D and ILAS3D
+
+
+
+ISSUES:
+Slow computers = slow WebGL
+Optimization Pass?  
+Look for redundant Updates 
+Find ways to move to Event system
+
+
+
+NEED TO DO:
+Update scoreboard system
+Update Stage2 Dialogs
+Impliment Stage2 into scorboard
+Troubleshoot award system on stage2 completion
