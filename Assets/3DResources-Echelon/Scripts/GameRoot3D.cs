@@ -246,6 +246,14 @@ public class GameRoot3D : GameRootMaster
 
     public void Resume()
     {
+        Resume(true);
+    }
+
+    // lockCursor: false when leaving gameplay (e.g. quitting to the main menu). On WebGL a cursor lock
+    // requested outside a user input event is deferred to the next click, so locking here would
+    // grab the pointer on the menu's first click even after the menu shows the cursor again.
+    public void Resume(bool lockCursor)
+    {
         //Debug.Log(DialogueManager.isInDialogue);
         //Debug.Log(isPuzzleLock);
 
@@ -255,7 +263,7 @@ public class GameRoot3D : GameRootMaster
         if (!DialogueManager.isInDialogue && !instance.isPuzzleLock)
         {
             LockPlayerAndCam(false);
-            ShowCursor(false);
+            ShowCursor(!lockCursor);
             Debug.Log("Unlock");
         }
         else

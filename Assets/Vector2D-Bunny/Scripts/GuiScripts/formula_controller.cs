@@ -48,15 +48,19 @@ public class formula_controller : MonoBehaviour
         player = GameObject.Find("Player");
 
         line_1 = GameObject.FindGameObjectWithTag("PathToRender").GetComponent<LineRenderer>();
-        line_1_minmap = line_1.transform.Find("futureMinMapArrow").GetComponent<LineRenderer>();
+        line_1_minmap = find_minmap_arrow(line_1, "futureMinMapArrow");
         line_1.positionCount = 3;
-        line_1_minmap.positionCount = 3;
+        if (line_1_minmap != null)
+            line_1_minmap.positionCount = 3;
         line_2 = GameObject.FindGameObjectWithTag("PathPreviouslyRendered").GetComponent<LineRenderer>();
-        line_2_minmap = line_2.transform.Find("prevMinMapArrow").GetComponent<LineRenderer>();
+        line_2_minmap = find_minmap_arrow(line_2, "prevMinMapArrow");
         line_2.positionCount = 1;
-        line_2_minmap.positionCount = 1;
         line_2.SetPosition(0, new Vector3(player.transform.position.x, 0f, player.transform.position.z));
-        line_2_minmap.SetPosition(0, new Vector3(player.transform.position.x, 0f, player.transform.position.z));
+        if (line_2_minmap != null)
+        {
+            line_2_minmap.positionCount = 1;
+            line_2_minmap.SetPosition(0, new Vector3(player.transform.position.x, 0f, player.transform.position.z));
+        }
 
         c1 = formula_panel.transform.GetChild(0);
         constant_1 = c1.GetComponent<constant_counter>().constant;
@@ -68,6 +72,12 @@ public class formula_controller : MonoBehaviour
 
         destination = formula_panel.transform.GetChild(7);
 
+    }
+
+    private static LineRenderer find_minmap_arrow(LineRenderer path, string arrow_name)
+    {// minimap copy of a path arrow; scenes without a minimap arrow (e.g. tutorial) return null
+        Transform arrow = path.transform.Find(arrow_name);
+        return arrow != null ? arrow.GetComponent<LineRenderer>() : null;
     }
 
     void Update()
@@ -174,9 +184,12 @@ public class formula_controller : MonoBehaviour
                 points[1] = constant_1 * new Vector3(vector_1.x, 0.0f, vector_1.y) + points[0];
                 points[2] = constant_2 * new Vector3(vector_2.x, 0.0f, vector_2.y) + points[1];
                 line_1.positionCount = 3;
-                line_1_minmap.positionCount = 3;
                 line_1.SetPositions(points);
-                line_1_minmap.SetPositions(points);
+                if (line_1_minmap != null)
+                {
+                    line_1_minmap.positionCount = 3;
+                    line_1_minmap.SetPositions(points);
+                }
             }
 
         }
@@ -257,17 +270,23 @@ public class formula_controller : MonoBehaviour
         if (constant_1 != 0)
         {
             line_2.positionCount = line_2.positionCount + 1;
-            line_2_minmap.positionCount++;
             line_2.SetPosition(line_2.positionCount - 1, points[1]);
-            line_2_minmap.SetPosition(line_2.positionCount - 1, points[1]);
+            if (line_2_minmap != null)
+            {
+                line_2_minmap.positionCount++;
+                line_2_minmap.SetPosition(line_2_minmap.positionCount - 1, points[1]);
+            }
         }
 
         if (constant_2 != 0)
         {
             line_2.positionCount = line_2.positionCount + 1;
-            line_2_minmap.positionCount++;
             line_2.SetPosition(line_2.positionCount - 1, points[2]);
-            line_2_minmap.SetPosition(line_2.positionCount - 1, points[2]);
+            if (line_2_minmap != null)
+            {
+                line_2_minmap.positionCount++;
+                line_2_minmap.SetPosition(line_2_minmap.positionCount - 1, points[2]);
+            }
         }
     }
 
@@ -277,9 +296,12 @@ public class formula_controller : MonoBehaviour
         /* STEP 3: Clear UI Elements holding formula    */
         /************************************************/
         line_1.positionCount = 1;
-        line_1_minmap.positionCount = 1;
         line_1.SetPosition(0, new Vector3(0, 0, 0));
-        line_1_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        if (line_1_minmap != null)
+        {
+            line_1_minmap.positionCount = 1;
+            line_1_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        }
         reset_constants();
         reset_choices();
     }
@@ -314,14 +336,20 @@ public class formula_controller : MonoBehaviour
     private void reset_line_renderers()
     {// resets both future sight and past path line renderers
         line_1.positionCount = 1;
-        line_1_minmap.positionCount = 1;
         line_1.SetPosition(0, new Vector3(0, 0, 0));
-        line_1_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        if (line_1_minmap != null)
+        {
+            line_1_minmap.positionCount = 1;
+            line_1_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        }
 
         line_2.positionCount = 1;
-        line_2_minmap.positionCount = 1;
         line_2.SetPosition(0, new Vector3(0, 0, 0));
-        line_2_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        if (line_2_minmap != null)
+        {
+            line_2_minmap.positionCount = 1;
+            line_2_minmap.SetPosition(0, new Vector3(0, 0, 0));
+        }
 
     }
 }

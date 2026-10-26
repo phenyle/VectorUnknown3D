@@ -26,6 +26,7 @@ public class TutorialWindow : WindowRoot
 	public GameObject Tab;
     public GameObject FieldInput;
     public GameObject rotateCamera;
+    public GameObject findShipWreck; // "- Find the Ship Wreck on the Island" objective text
 
     public GameObject SelectionTutorial;
     public GameObject findCorrectOption;
@@ -64,6 +65,11 @@ public class TutorialWindow : WindowRoot
 	private bool tabComplete = false;
     private bool rotateComplete = false;
     public bool selectionComplete = false;
+
+    private const string shipWreckName = "SM_Prop_Shipwreck_02";
+    private const float shipWreckReachDistance = 8f; // metres from the hull's bounds
+    private Renderer shipWreck;
+    private bool shipWreckFound = false;
 
     public string inputedText;
     public GameObject player;
@@ -119,6 +125,10 @@ public class TutorialWindow : WindowRoot
 		rotateComplete = false;
 		selectionComplete = false;
 
+		GameObject ship = GameObject.Find(shipWreckName);
+		shipWreck = ship != null ? ship.GetComponent<Renderer>() : null;
+		shipWreckFound = false;
+
 		textInput.text = "Number ...";
 
 		inputedText = "";
@@ -137,6 +147,8 @@ public class TutorialWindow : WindowRoot
 		Tab.GetComponent<Text>().color = Color.black;
 		Z.GetComponent<Text>().color = Color.black;
 		Z2.GetComponent<Text>().color = Color.black;
+		if (findShipWreck != null)
+			findShipWreck.GetComponent<Text>().color = Color.black;
 
 		MovementTutorial.SetActive(true);
 		CameraTutorial.SetActive(false);
@@ -260,6 +272,12 @@ public class TutorialWindow : WindowRoot
 			{
 				Tab.GetComponent<Text>().color = Color.green;
 				tabComplete = true;
+			}
+			if (!shipWreckFound && shipWreck != null && findShipWreck != null
+				&& shipWreck.bounds.SqrDistance(player.transform.position) < shipWreckReachDistance * shipWreckReachDistance)
+			{
+				findShipWreck.GetComponent<Text>().color = Color.green;
+				shipWreckFound = true;
 			}
 			if (inputedText == "5")
             {
