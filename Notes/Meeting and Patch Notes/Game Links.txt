@@ -1,5 +1,5 @@
 Link to Google sheet for 2D game
-https://docs.google.com/spreadsheets/d/11CfWg1CKIitu53hMdbug30ZiqRIyqJYcwNDpPVj8Ads/edit#gid=532625810
+(link removed: the data sheet is private, ask the project lead)
 
 Link to 2D Game
 https://phenyle.github.io/VectorUnknown_Beta/
@@ -8,4 +8,4 @@ Link to 3D Game
 https://sailorfuzz.github.io/VectorBuilds/
 
 Link to Google sheet for 3D Game
-https://docs.google.com/spreadsheets/d/1Y7QdzokYBJbN3IRQWR5PJdfMIGU6EEyvnuyZj1T_plU/edit?usp=sharing
+(link removed: the data sheet is private, ask the project lead)
