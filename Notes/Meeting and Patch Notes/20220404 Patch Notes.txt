@@ -1,0 +1,18 @@
+Major Overhaul and fixes to the Grid System for the 3D game Puzzle4.
+VisVector practically rebuild from the floor up, eliminating old/bad code and improving upon the system.
+Replaced the old system of using stretched and contorted cylinders and instead replaced them with more vibrant LineRenderers.  
+LineRenderers are more lightweight than drawing several hundred 3D shapes.
+Additionally, the Lines are more managable and easier to control with some simple additional methods
+===Broke the VisualVector system into several more manageable scripts for easier code reading and troubleshooting.  
+VisVectController now hosts several services : playerVectors, axis, grid, projections, and anchors.  Each of those services has their own functions and independent update methods relative to their specific components.  
+
+===Fully Migragted the VisVect system from an Update() system to a UnityEvent system.
+VisVect is no longer wasting time recomputing the whole system if nothing has changed.
+Axis and Grid are computed only once upon player entering the question portal.
+PlayerVectors, projections and anchors are only computed if the player makes a change to the answer (moving a scalar slider, picking a card)
+The EventSystem makes it easier to see if there's problems if there's only a very limited number of access points to "Invoke()" a change in VisVect.
+
+Bug Fixes:
+VisVect should properly display in all 1D/2D/3D enviroments.  The quadrant selction system has been tweaked to determine the dimension of the puzzle, then its respective axis/grid line limits
+Several small UI texture bug fixes where found
+Tweaked the Scores/Records UI a bit to better fit different screen sizes (more needs to be done).

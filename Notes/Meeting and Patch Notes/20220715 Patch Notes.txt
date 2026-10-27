@@ -1,0 +1,13 @@
+Stage2 score tracking now added to the database for all 3 difficulty levels
+
+Score UI in Main Hub now has UI fields and information for Stage2 scores
+
+Changed the "Controls" information on the Pause menu from being a purely text-based slog to a more approachable and understandable graphical button guide. 
+Basic Controls now have graphics/sprites to display what the keys/mouse buttons are
+PuzzleControls (specific to Stages 2, 3, and 4) also has been overhauled.
+PuzzleControls now also has a blurb description about what to do in that Stage.
+PuzzleControls also has graphics/sprites showing Stage specific and extra keys/mouse controls.
+
+Dialog fixes to the DialogManager and DialogLibrary system.
+Dialogs system is more concise and needs less tweaking of several different items to add in a simple coversation.
+New Dialogs added for Stage2 as well as some changes

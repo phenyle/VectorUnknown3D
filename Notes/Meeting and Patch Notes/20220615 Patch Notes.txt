@@ -1,0 +1,39 @@
+The Return of the Session System
+
+also, the return of the admin controls login
+
+Join Session----------
+Join session from main login screen now actually does something
+Inputting a valid session code will auto drop a player into that game
+Session codes can be used by multiple people
+They all will share the session code in the database but have their own unique records
+Sessions can also be used to determine which game to go into 2D or 3D
+Session can be limited to a specific stage (VERY EARLY, for the 3D game only)
+
+Admin Login-----------
+User tagged in the database as Admin users will have an additional window when logging in
+The admin window is where session codes can be created
+By clicking the toggle to create a session, options populate the window
+If the admin user doesn't want to create a session, they can play normally under their own login
+After clicking the toggle, you must enter in the required info to before the button is activated
+Created sesssions can be set to expire at a certain date, or never (it actually expires in 100 years)
+Each session needs a session name, BUT:
+	There's no system in place to check for duplicate session names
+	Make sure to check the database first to make sure you're making a unique session name
+Additional Special Rules can be added to sessions to further restrict it
+	Only works for the 3D game right now (and needs more testing)
+	At the moment the only rules are restricting the stage players can play in
+
+
+DATABASE Tidbits----------
+On every sheet in the database is a "sessionID" column
+When a player logs in with a session code their info will be first saved to the users page
+The players "username" will be the sessionID + some random hashing to make each player unique
+Only when a player plays and completes a stage will their name be saved to that sheet 
+	If they have not beaten a stage, then their name will not appear on that sheet until they do.
+	ie: player beats stage 4, level 2, their info is saved on sheet p4-2. 
+The "users" sheet holds all the session rules
+To make a new "Admin" you have to physically goto the database, 
+	find that person's username/account
+		goto the "admin" column and change the value to "TRUE"
+You cannot make or signup as an admin IN-GAME.  It has to be done AFTER an account is created.

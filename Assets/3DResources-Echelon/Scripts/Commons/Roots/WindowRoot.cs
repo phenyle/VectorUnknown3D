@@ -1,0 +1,136 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class WindowRoot : MonoBehaviour
+{
+    protected ResourceService resourceService = null;
+    protected AudioService audioService = null;
+
+    public void SetWindowState(bool isActive)
+    {
+        if (gameObject.activeSelf != isActive)
+        {
+            SetActive(gameObject, isActive);
+        }
+
+        if (isActive)
+        {
+            InitWindow();
+        }
+        else
+        {
+            ClearWindow();
+        }
+    }
+    protected virtual void InitWindow()
+    {
+        resourceService = GameRootMaster.resourceService;
+        audioService = GameRoot3D.instance.audioService;
+        GameRoot3D.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.LockCamera(true);
+        //try
+        //{
+        //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = true;
+        //}
+        //catch { }
+        //try
+        //{
+        //    GameObject.Find("Main Camera").GetComponent<CameraController>().isLock = true;
+        //}
+        //catch { }
+    }
+
+    protected virtual void ClearWindow()
+    {
+        resourceService = null;
+        audioService = null;
+        GameRoot3D.instance.FindPlayerAndCamera();
+        GameRoot3D.instance.LockCamera(false);
+        //try
+        //{
+        //    GameObject.Find("MainCamera").GetComponent<CameraController>().isLock = false;
+        //}
+        //catch { }
+        //try
+        //{
+        //    GameObject.Find("Main Camera").GetComponent<CameraController>().isLock = false;
+        //}
+        //catch { }
+    }
+
+    #region Common Tool Functions
+
+    #region SetActive
+    protected void SetActive(GameObject gameObject, bool state = true)
+    {
+        gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Transform transform, bool state = true)
+    {
+        transform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(RectTransform rectTransform, bool state = true)
+    {
+        rectTransform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Image image, bool state = true)
+    {
+        image.transform.gameObject.SetActive(state);
+    }
+
+    protected void SetActive(Text text, bool state = true)
+    {
+        text.transform.gameObject.SetActive(state);
+    }
+    #endregion
+
+    #region SetText
+    protected void SetText(Text text, string context = "")
+    {
+        text.text = context;
+    }
+
+    protected void SetText(Transform transform, int number = 0)
+    {
+        SetText(transform.GetComponent<Text>(), number);
+    }
+
+    protected void SetText(Transform transform, string context = "")
+    {
+        SetText(transform.GetComponent<Text>(), context);
+    }
+
+    protected void SetText(Text text, int number = 0)
+    {
+        SetText(text, number.ToString());
+    }
+
+    protected void SetText(TextMeshProUGUI text, string context = "")
+    {
+        text.text = context;
+    }
+
+    protected void SetText(TextMeshProUGUI text, int number = 0)
+    {
+        SetText(text, number.ToString());
+    }
+    #endregion
+
+    #endregion
+
+    // Options panels: show the current graphics level (dropdown LOW..VERY HIGH = levels 1-4) and
+    // full screen state, without firing their handlers.
+    protected void ShowGraphicsSettings(Transform optionsPanel)
+    {
+        Dropdown quality = optionsPanel.GetComponentInChildren<Dropdown>(true);
+        if (quality != null)
+            quality.SetValueWithoutNotify(Mathf.Clamp(QualitySettings.GetQualityLevel() - 1, 0, quality.options.Count - 1));
+        Toggle fullScreen = optionsPanel.GetComponentInChildren<Toggle>(true);
+        if (fullScreen != null)
+            fullScreen.SetIsOnWithoutNotify(Screen.fullScreen);
+    }
+}

@@ -1,0 +1,49 @@
+ADMIN/SESSION UPDATES:
+Admin Login now works for both the 3d and the 2d game
+Admins can create Sessions for both 3d/2d Games
+Sessions can be limited to specific levels/stages/difficulty
+
+SCORING UPDATES:
+Stage4 and Stage2 both have new scoring mechanics.
+Stage4:
+Scoring is based similarly to how it is featured in the 2d game
+ - Except in the 3D game, all 4 cards are unique (opposed to the 2d game where 2 cards are just scalars of 2 others)
+Stage4 obstacles now create the puzzle, create the redherring cards and then recalculates the puzzle
+looking at every combination of cards and scalars for the the BEST most IDEAL, LEAST steps to solve the puzzle
+Each player action is then compared to the score as ideal/actual.
+- If the player completes the obstacle perfectly they get 8/8, 6/6, etc or 100%
+- every step OVER the ideal then creates some lower percentage 8/14, 6/20, etc.
+Every obstacle then displays the score for each obstacle as #/5 stars
+At end of the level, every obstacles scores is stored in two ways:
+ - totScore: total ideal steps / total actual steps
+ - avgScore: average score across each individual puzzles
+The end of level portal now has a new pop up showing this total overall score.
+ - new record scores will also be annotated on this end of level popup.
+Stage2:
+Most of everything above with some alterations.
+Stage2 score is calculated by number of steps (chosing a matrix and vector) * timeScore
+The time scaling is taken as a polynomial, equaling 0 points at 90 seconds.
+ - timeScore =  -(time^2 / 90^2) + 1
+ - this gives a more forgiving curve if solved quickly (near 100%)
+
+ScoreBoard:
+Scoreboard now shows #/5 for stage2, 3, and 4.
+Top scores are no longer just "the best run"
+Instead, scores are "best in that category"
+So, best time, least moves, best score.  All 3 could be from different runs.
+
+DATABASE:
+Lots of new things here, epecially with the new scoring system
+Records is much more involved keeping track of best scores and times
+Stage4 has a lot more fields now to save (for each obstacle):
+ - obs#_ans : the vector of the question
+ - obs#_a & obs#_b : the 2 cards expected to be used in the answer
+ - obs#_c & obs#_d : the 2 red herring cards
+ - obs#_x & obs#_y : the 2 scalars expected ( x*a + y*b = ans)
+ - obs#_Ideal : the shortest # of steps that can be taken to solve this obstacles
+ - obs#_steps : the actual # of steps the player took to solve it
+ - obs#_time : the time it took for the player to solve it
+ - obs#_attempts : a line by line recording of each step the player took to solve it
+
+Lots of other Misc bug fixes
+
